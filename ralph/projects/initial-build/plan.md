@@ -311,7 +311,7 @@ Reference docs: `plans/implementation-plan.md`, `plans/ui-design.md`
 
 **Show results after completing a swipe session. Use theme hook for all colors.**
 
-- [ ] Build `app/summary.tsx`:
+- [x] Build `app/summary.tsx`:
   - Receives session stats via route params: `{ total, kept, deleted, year, month }`
   - Large checkmark icon (accent color), "All done!" (H1)
   - "You reviewed {total} photos" (body)
@@ -322,10 +322,19 @@ Reference docs: `plans/implementation-plan.md`, `plans/ui-design.md`
   - "Review Deletions" button (secondary, surface bg) → navigates to `/to-delete`
   - "Back to Home" button (text style) → navigates to `/`
   - Back gesture / back button → home (not back to swipe screen)
-- [ ] Write test:
+- [x] Write test:
   - `__tests__/screens/summary.test.tsx` — renders stats correctly, both navigation buttons work
 
 **Verify:** `npm test` passes. On device: summary shows after completing a batch with correct numbers.
+
+**Observations:**
+- Summary screen receives route params (`total`, `kept`, `deleted`, `year`, `month`) via `useLocalSearchParams` — matches what the swipe screen passes via `router.replace()`.
+- "Back to Home" uses `router.replace('/')` (not `router.back()`) to prevent navigating back to the swipe screen, as specified in the plan.
+- "Review Deletions" uses `router.push('/to-delete')` so the user can navigate back to summary from the deletion review.
+- Used `Number() || 0` for parsing route params to handle missing/invalid values gracefully.
+- All 95 tests pass (5 new summary + 90 prior). The act() warnings in swipe tests are pre-existing from Step 7.
+- Files modified: `app/summary.tsx` (replaced placeholder with full implementation).
+- Files added: `__tests__/screens/summary.test.tsx`.
 
 ---
 
