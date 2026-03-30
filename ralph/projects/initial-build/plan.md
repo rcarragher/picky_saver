@@ -250,18 +250,28 @@ Reference docs: `plans/implementation-plan.md`, `plans/ui-design.md`
 
 **Teach the swipe mechanic on first use.**
 
-- [ ] Create `components/OnboardingOverlay.tsx`:
+- [x] Create `components/OnboardingOverlay.tsx`:
   - Semi-transparent dark backdrop over the swipe screen
   - "← Swipe left to delete" (left side), "Swipe right to keep →" (right side)
   - "You can undo anytime" caption at bottom
   - "Got it!" button (coral, full width) → dismisses overlay
   - "Skip" text button (top-right)
   - Both dismiss and set `AsyncStorage` flag `onboarding_complete: true`
-- [ ] Integrate into swipe screen: show overlay if `!onboarding_complete`, render over the user's actual first photo
-- [ ] Write test:
+- [x] Integrate into swipe screen: show overlay if `!onboarding_complete`, render over the user's actual first photo
+- [x] Write test:
   - `__tests__/components/OnboardingOverlay.test.tsx` — renders instruction text, "Got it!" dismisses, "Skip" dismisses
 
 **Verify:** `npm test` passes. On device: overlay shows on first launch only, never again after dismissal.
+
+**Observations:**
+- `OnboardingOverlay` uses absolute positioning with `zIndex: 100` to render over the swipe card content.
+- Exported `ONBOARDING_KEY` constant from the component for use by the swipe screen (to check AsyncStorage on mount).
+- The swipe screen reads `ONBOARDING_KEY` from AsyncStorage in the same `useEffect` that reads the hint swipe count. If not set to `'true'`, it shows the overlay.
+- Both "Got it!" and "Skip" call the same `dismiss()` function that saves the flag and calls `onDismiss`.
+- React act() warning in swipe tests from the async `setShowOnboarding` — harmless, all tests pass.
+- All 69 tests pass (5 new OnboardingOverlay + 64 prior).
+- Files added: `components/OnboardingOverlay.tsx`, `__tests__/components/OnboardingOverlay.test.tsx`.
+- Files modified: `app/swipe/[year]/[month].tsx`.
 
 ---
 

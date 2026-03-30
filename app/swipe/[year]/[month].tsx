@@ -8,6 +8,7 @@ import { useTheme } from '../../../hooks/useTheme';
 import { useMonthPhotos } from '../../../hooks/usePhotos';
 import { getMonthName } from '../../../services/photoService';
 import { PhotoCard } from '../../../components/PhotoCard';
+import { OnboardingOverlay, ONBOARDING_KEY } from '../../../components/OnboardingOverlay';
 import {
   borderRadius,
   fontSize,
@@ -49,6 +50,7 @@ export default function SwipeScreen() {
   const [deleted, setDeleted] = useState(0);
   const [history, setHistory] = useState<HistoryEntry[]>([]);
   const [showHint, setShowHint] = useState(true);
+  const [showOnboarding, setShowOnboarding] = useState(false);
   const swipeCountRef = useRef(0);
 
   useEffect(() => {
@@ -57,6 +59,11 @@ export default function SwipeScreen() {
       swipeCountRef.current = count;
       if (count >= HINT_THRESHOLD) {
         setShowHint(false);
+      }
+    });
+    AsyncStorage.getItem(ONBOARDING_KEY).then((val) => {
+      if (val !== 'true') {
+        setShowOnboarding(true);
       }
     });
   }, []);
@@ -129,6 +136,11 @@ export default function SwipeScreen() {
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background, paddingTop: insets.top }]}>
+      {/* Onboarding overlay */}
+      {showOnboarding && (
+        <OnboardingOverlay onDismiss={() => setShowOnboarding(false)} />
+      )}
+
       {/* Header */}
       <View style={styles.header}>
         <Pressable
