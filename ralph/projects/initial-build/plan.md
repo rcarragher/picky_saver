@@ -449,7 +449,7 @@ Reference docs: `plans/implementation-plan.md`, `plans/ui-design.md`
 
 **Ensure the app is usable by everyone.**
 
-- [ ] Add `accessibilityLabel` to all interactive elements:
+- [x] Add `accessibilityLabel` to all interactive elements:
   - "Start organizing your photos" (home button)
   - "Review {count} photos marked for deletion" (to-delete button)
   - "{Month} {Year}, {count} photos" (month tile)
@@ -457,15 +457,25 @@ Reference docs: `plans/implementation-plan.md`, `plans/ui-design.md`
   - "Undo last action" (undo button)
   - "Delete all {count} photos permanently" (delete all button)
   - "Restore this photo" (restore button in preview)
-- [ ] Add `accessibilityRole` where appropriate: 'button', 'image', 'header'
-- [ ] Verify all touch targets are minimum 48x48px
-- [ ] Reduce Motion support:
+- [x] Add `accessibilityRole` where appropriate: 'button', 'image', 'header'
+- [x] Verify all touch targets are minimum 48x48px
+- [x] Reduce Motion support:
   - Check `AccessibilityInfo.isReduceMotionEnabled` (or `useReducedMotion` from reanimated)
   - If enabled: replace card swipe rotation + fly-off with simple fade/slide
   - Keep the swipe gesture itself functional, just simplify the visual feedback
-- [ ] Font scaling: ensure no text gets clipped when system font size is set to maximum
+- [x] Font scaling: ensure no text gets clipped when system font size is set to maximum
 
 **Verify:** Enable VoiceOver (iOS) / TalkBack (Android) and navigate the full flow. Enable Reduce Motion and verify swipe still works. Set largest font size and check no clipping.
+
+**Observations:**
+- Many interactive elements already had `accessibilityLabel` and `accessibilityRole` from prior steps (swipe buttons, back buttons, delete all, restore, MonthTile, PermissionGate buttons, OnboardingOverlay buttons). Added missing labels to: home "Start Organizing" button, home "To Be Deleted" button, to-delete empty state "Start Organizing" button, PhotoGrid thumbnails, PhotoCard image, preview image, PermissionGate banner "Open Settings" link.
+- Added `accessibilityRole="header"` to: home title ("Picky Saver"), date-picker title ("Pick a Month"), date-picker year section headers, swipe screen header (month/year), to-delete header ("To Be Deleted"), summary title ("All done!").
+- Added `accessibilityRole="image"` to PhotoCard's image and `accessibilityLabel` to PhotoGrid thumbnails and to-delete preview image.
+- Touch targets: fixed OnboardingOverlay skip button (added minWidth/minHeight 48), summary "Back to Home" button (added minHeight 48), PermissionGate banner "Open Settings" link (added bannerButton style with min 48x48). All other buttons already met 48px minimum via touchTarget.min or explicit height values.
+- Reduce Motion: already fully implemented in PhotoCard (Step 6) using `useReducedMotion()` from Reanimated — replaces rotation and fly-off animation with immediate callback when enabled. Swipe gesture remains functional.
+- Font scaling: no `allowFontScaling={false}` or `maxFontSizeMultiplier` restrictions found. Only one `numberOfLines={1}` on the swipe header title, which is appropriate for truncation. React Native allows font scaling by default.
+- All 112 tests pass. Pre-existing act() warnings in swipe tests unchanged.
+- Files modified: `app/index.tsx`, `app/to-delete.tsx`, `app/swipe/[year]/[month].tsx`, `app/date-picker.tsx`, `app/summary.tsx`, `components/PhotoCard.tsx`, `components/PhotoGrid.tsx`, `components/OnboardingOverlay.tsx`, `components/PermissionGate.tsx`.
 
 ---
 

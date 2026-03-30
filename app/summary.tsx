@@ -38,7 +38,7 @@ export default function SummaryScreen() {
       <Text style={[styles.checkIcon, { color: colors.accent }]}>✓</Text>
 
       {/* Title */}
-      <Text style={[styles.title, { color: colors.textPrimary }]}>All done!</Text>
+      <Text style={[styles.title, { color: colors.textPrimary }]} accessibilityRole="header">All done!</Text>
 
       {/* Subtitle */}
       <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
@@ -148,6 +148,9 @@ const styles = StyleSheet.create({
   },
   homeButton: {
     padding: spacing.md,
+    minHeight: 48,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   homeButtonText: {
     fontSize: fontSize.body,

@@ -62,7 +62,7 @@ function DatePickerContent() {
         >
           <Text style={[styles.backArrow, { color: colors.textPrimary }]}>←</Text>
         </Pressable>
-        <Text style={[styles.headerTitle, { color: colors.textPrimary }]}>Pick a Month</Text>
+        <Text style={[styles.headerTitle, { color: colors.textPrimary }]} accessibilityRole="header">Pick a Month</Text>
       </View>
 
       {isLoading ? (
@@ -81,7 +81,7 @@ function DatePickerContent() {
           renderItem={({ item }) => {
             if (item.type === 'header') {
               return (
-                <Text style={[styles.yearHeader, { color: colors.textSecondary }]}>
+                <Text style={[styles.yearHeader, { color: colors.textSecondary }]} accessibilityRole="header">
                   {item.year}
                 </Text>
               );

@@ -161,7 +161,7 @@ export default function SwipeScreen() {
         >
           <Text style={[styles.backArrow, { color: colors.textPrimary }]}>←</Text>
         </Pressable>
-        <Text style={[styles.headerTitle, { color: colors.textPrimary }]} numberOfLines={1}>
+        <Text style={[styles.headerTitle, { color: colors.textPrimary }]} numberOfLines={1} accessibilityRole="header">
           {headerTitle}
         </Text>
         {!isLoading && photos.length > 0 && (

@@ -121,6 +121,8 @@ export function PhotoCard({ asset, onSwipeLeft, onSwipeRight }: Props) {
           style={[styles.image, { aspectRatio }]}
           contentFit="cover"
           testID="photo-image"
+          accessibilityLabel="Photo to review"
+          accessibilityRole="image"
         />
         <SwipeOverlay animatedOpacity={keepOpacity} direction="keep" />
         <SwipeOverlay animatedOpacity={deleteOpacity} direction="delete" />

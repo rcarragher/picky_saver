@@ -83,6 +83,10 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: -80,
     right: screenMargin,
+    minWidth: 48,
+    minHeight: 48,
+    justifyContent: 'center',
+    alignItems: 'center',
     padding: spacing.sm,
   },
   skipText: {

@@ -46,7 +46,10 @@ export default function HomeScreen() {
       >
         <View style={styles.content}>
           <Text style={[styles.icon, { color: colors.accent }]}>📷</Text>
-          <Text style={[styles.title, { color: colors.textPrimary }]}>
+          <Text
+            style={[styles.title, { color: colors.textPrimary }]}
+            accessibilityRole="header"
+          >
             Picky Saver
           </Text>
           <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
@@ -69,6 +72,8 @@ export default function HomeScreen() {
               <Pressable
                 style={[styles.primaryButton, { backgroundColor: colors.accent }]}
                 onPress={() => router.push('/date-picker')}
+                accessibilityRole="button"
+                accessibilityLabel="Start organizing your photos"
               >
                 <Text style={styles.primaryButtonText}>Start Organizing →</Text>
               </Pressable>
@@ -80,6 +85,8 @@ export default function HomeScreen() {
                     { backgroundColor: colors.surface },
                   ]}
                   onPress={() => router.push('/to-delete')}
+                  accessibilityRole="button"
+                  accessibilityLabel={`Review ${markedCount} photos marked for deletion`}
                 >
                   <Text
                     style={[

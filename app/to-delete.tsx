@@ -82,7 +82,7 @@ function ToDeleteContent() {
         >
           <Text style={[styles.backArrow, { color: colors.textPrimary }]}>←</Text>
         </Pressable>
-        <Text style={[styles.headerTitle, { color: colors.textPrimary }]}>To Be Deleted</Text>
+        <Text style={[styles.headerTitle, { color: colors.textPrimary }]} accessibilityRole="header">To Be Deleted</Text>
         {markedCount > 0 && (
           <View style={[styles.countBadge, { backgroundColor: colors.delete }]}>
             <Text style={styles.countBadgeText}>{markedCount}</Text>
@@ -103,6 +103,7 @@ function ToDeleteContent() {
             onPress={() => router.replace('/date-picker')}
             style={[styles.startButton, { backgroundColor: colors.accent }]}
             accessibilityRole="button"
+            accessibilityLabel="Start organizing your photos"
           >
             <Text style={styles.startButtonText}>Start Organizing</Text>
           </Pressable>
@@ -156,6 +157,7 @@ function ToDeleteContent() {
               style={styles.previewImage}
               contentFit="contain"
               testID="preview-image"
+              accessibilityLabel="Photo preview"
             />
           )}
 

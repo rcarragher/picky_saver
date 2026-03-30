@@ -23,8 +23,17 @@ export function PhotoGrid({ assets, onTap }: Props) {
       contentContainerStyle={styles.container}
       columnWrapperStyle={styles.row}
       renderItem={({ item }) => (
-        <Pressable onPress={() => onTap(item)} testID={`grid-photo-${item.id}`}>
-          <Image source={{ uri: item.uri }} style={styles.thumbnail} />
+        <Pressable
+          onPress={() => onTap(item)}
+          testID={`grid-photo-${item.id}`}
+          accessibilityRole="button"
+          accessibilityLabel="View photo"
+        >
+          <Image
+            source={{ uri: item.uri }}
+            style={styles.thumbnail}
+            accessibilityLabel="Photo thumbnail"
+          />
         </Pressable>
       )}
     />

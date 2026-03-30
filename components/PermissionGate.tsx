@@ -31,7 +31,12 @@ export function PermissionGate({ children }: Props) {
           <Text style={[styles.bannerText, { color: colors.textSecondary }]}>
             For best results, allow full photo access in Settings
           </Text>
-          <Pressable onPress={() => Linking.openSettings()} accessibilityRole="button">
+          <Pressable
+            onPress={() => Linking.openSettings()}
+            accessibilityRole="button"
+            accessibilityLabel="Open settings for full photo access"
+            style={styles.bannerButton}
+          >
             <Text style={[styles.bannerLink, { color: colors.accent }]}>Open Settings</Text>
           </Pressable>
         </View>
@@ -121,6 +126,12 @@ const styles = StyleSheet.create({
     fontSize: fontSize.small,
     flex: 1,
     marginRight: spacing.sm,
+  },
+  bannerButton: {
+    minWidth: 48,
+    minHeight: 48,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   bannerLink: {
     fontSize: fontSize.small,
