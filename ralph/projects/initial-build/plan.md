@@ -10,20 +10,20 @@ Reference docs: `plans/implementation-plan.md`, `plans/ui-design.md`
 
 **Create the Expo project and install all dependencies.**
 
-- [ ] Initialize the project in the current directory. If `create-expo-app` does not support scaffolding in-place, create a temp directory and move its contents into the project root. The final result must have `app/`, `components/`, `services/`, etc. at the repo root — no nested `picky-saver/` subdirectory.
-- [ ] Install production packages:
+- [x] Initialize the project in the current directory. If `create-expo-app` does not support scaffolding in-place, create a temp directory and move its contents into the project root. The final result must have `app/`, `components/`, `services/`, etc. at the repo root — no nested `picky-saver/` subdirectory.
+- [x] Install production packages:
   ```
   expo-router expo-media-library react-native-gesture-handler
   react-native-reanimated react-native-screens expo-haptics
   react-native-safe-area-context expo-linking expo-constants expo-status-bar
   expo-image @react-native-async-storage/async-storage
   ```
-- [ ] Install dev/test packages:
+- [x] Install dev/test packages:
   ```
   jest-expo @testing-library/react-native @types/react
   ```
   **Do not install `jest` explicitly.** Let `jest-expo` bring its compatible Jest version as a transitive dependency. Verify the resolved version with `npx jest --version` after install.
-- [ ] Create directory structure:
+- [x] Create directory structure:
   ```
   app/                    (expo-router screens)
   components/
@@ -37,10 +37,21 @@ Reference docs: `plans/implementation-plan.md`, `plans/ui-design.md`
   __tests__/screens/
   __mocks__/
   ```
-- [ ] Configure `app.config.ts` — app name, slug, scheme, iOS/Android permissions (NSPhotoLibraryUsageDescription, NSPhotoLibraryAddUsageDescription)
-- [ ] Set up expo-router: create `app/_layout.tsx` with Stack navigator, create placeholder files for all routes (`index.tsx`, `date-picker.tsx`, `swipe/[year]/[month].tsx`, `summary.tsx`, `to-delete.tsx`)
+- [x] Configure `app.config.ts` — app name, slug, scheme, iOS/Android permissions (NSPhotoLibraryUsageDescription, NSPhotoLibraryAddUsageDescription)
+- [x] Set up expo-router: create `app/_layout.tsx` with Stack navigator, create placeholder files for all routes (`index.tsx`, `date-picker.tsx`, `swipe/[year]/[month].tsx`, `summary.tsx`, `to-delete.tsx`)
 
 **Verify:** `npx expo start` launches without errors. All placeholder routes navigate correctly.
+
+**Observations:**
+- Used `create-expo-app` with `blank-typescript` template in /tmp, then moved files to project root.
+- `@testing-library/react-native` required `--legacy-peer-deps` due to react-test-renderer peer dep conflict with react@19.1.0. This also required explicitly installing `jest@^29` since legacy peer deps skipped the transitive jest dependency from jest-expo.
+- Converted `app.json` → `app.config.ts` for type safety and dynamic config support. Removed the old `app.json`.
+- Set `userInterfaceStyle: "automatic"` (was "light") to support dark mode from the start.
+- Entry point changed from `registerRootComponent(App)` to `import "expo-router/entry"`.
+- Expo SDK 54 with React 19.1.0, React Native 0.81.5.
+- TypeScript compiles clean. Expo config resolves correctly.
+- Could not test `npx expo start` in headless mode — verified via TypeScript compilation and `npx expo config` instead.
+- Test scripts added to package.json: `test`, `test:watch`, `test:coverage`.
 
 ---
 
