@@ -10,6 +10,7 @@ import { getMonthName } from '../../../services/photoService';
 import { markForDeletion, restore } from '../../../services/deletionAlbumService';
 import { PhotoCard } from '../../../components/PhotoCard';
 import { OnboardingOverlay, ONBOARDING_KEY } from '../../../components/OnboardingOverlay';
+import { AnimatedPressable } from '../../../components/AnimatedPressable';
 import {
   borderRadius,
   fontSize,
@@ -221,17 +222,17 @@ export default function SwipeScreen() {
       {!isLoading && currentPhoto && (
         <View style={styles.controls}>
           {/* Delete button */}
-          <Pressable
+          <AnimatedPressable
             onPress={handleSwipeLeft}
             style={[styles.actionButton, { backgroundColor: colors.surface }]}
             accessibilityLabel="Delete this photo"
             accessibilityRole="button"
           >
             <Text style={[styles.actionIcon, { color: colors.delete }]}>✕</Text>
-          </Pressable>
+          </AnimatedPressable>
 
           {/* Undo button */}
-          <Pressable
+          <AnimatedPressable
             onPress={handleUndo}
             style={[
               styles.undoButton,
@@ -245,17 +246,17 @@ export default function SwipeScreen() {
             accessibilityRole="button"
           >
             <Text style={[styles.undoText, { color: colors.textSecondary }]}>↩ Undo</Text>
-          </Pressable>
+          </AnimatedPressable>
 
           {/* Keep button */}
-          <Pressable
+          <AnimatedPressable
             onPress={handleSwipeRight}
             style={[styles.actionButton, { backgroundColor: colors.surface }]}
             accessibilityLabel="Keep this photo"
             accessibilityRole="button"
           >
             <Text style={[styles.actionIcon, { color: colors.keep }]}>✓</Text>
-          </Pressable>
+          </AnimatedPressable>
         </View>
       )}
 

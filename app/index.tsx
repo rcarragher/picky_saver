@@ -7,6 +7,7 @@ import { useDeletionAlbum } from '../hooks/useDeletionAlbum';
 import { useAvailableMonths } from '../hooks/usePhotos';
 import { useAppStateRefresh } from '../hooks/useAppStateRefresh';
 import { PermissionGate } from '../components/PermissionGate';
+import { AnimatedPressable } from '../components/AnimatedPressable';
 import {
   borderRadius,
   fontSize,
@@ -69,17 +70,17 @@ export default function HomeScreen() {
             </Text>
           ) : (
             <>
-              <Pressable
+              <AnimatedPressable
                 style={[styles.primaryButton, { backgroundColor: colors.accent }]}
                 onPress={() => router.push('/date-picker')}
                 accessibilityRole="button"
                 accessibilityLabel="Start organizing your photos"
               >
                 <Text style={styles.primaryButtonText}>Start Organizing →</Text>
-              </Pressable>
+              </AnimatedPressable>
 
               {markedCount > 0 && (
-                <Pressable
+                <AnimatedPressable
                   style={[
                     styles.secondaryButton,
                     { backgroundColor: colors.surface },
@@ -96,7 +97,7 @@ export default function HomeScreen() {
                   >
                     To Be Deleted ({markedCount} photos)
                   </Text>
-                </Pressable>
+                </AnimatedPressable>
               )}
             </>
           )}

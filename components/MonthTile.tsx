@@ -1,6 +1,7 @@
 import React from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { useTheme } from '../hooks/useTheme';
+import { AnimatedPressable } from './AnimatedPressable';
 import { borderRadius, fontSize, fontWeight, spacing } from '../constants/theme';
 import { getMonthName } from '../services/photoService';
 
@@ -16,7 +17,7 @@ export function MonthTile({ year, month, count, onPress }: Props) {
   const colors = useTheme();
 
   return (
-    <Pressable
+    <AnimatedPressable
       style={[styles.container, { backgroundColor: colors.surface }]}
       onPress={() => onPress(year, month)}
       accessibilityRole="button"
@@ -31,7 +32,7 @@ export function MonthTile({ year, month, count, onPress }: Props) {
         </Text>
       </View>
       <Text style={[styles.chevron, { color: colors.textSecondary }]}>→</Text>
-    </Pressable>
+    </AnimatedPressable>
   );
 }
 

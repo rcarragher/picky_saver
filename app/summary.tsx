@@ -3,6 +3,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../hooks/useTheme';
+import { AnimatedPressable } from '../components/AnimatedPressable';
 import {
   borderRadius,
   fontSize,
@@ -63,7 +64,7 @@ export default function SummaryScreen() {
       <View style={styles.spacer} />
 
       {/* Review Deletions button */}
-      <Pressable
+      <AnimatedPressable
         onPress={() => router.push('/to-delete')}
         style={[styles.reviewButton, { backgroundColor: colors.surface }]}
         accessibilityLabel="Review deletions"
@@ -72,10 +73,10 @@ export default function SummaryScreen() {
         <Text style={[styles.reviewButtonText, { color: colors.textPrimary }]}>
           Review Deletions
         </Text>
-      </Pressable>
+      </AnimatedPressable>
 
       {/* Back to Home button */}
-      <Pressable
+      <AnimatedPressable
         onPress={() => router.replace('/')}
         style={styles.homeButton}
         accessibilityLabel="Back to home"
@@ -84,7 +85,7 @@ export default function SummaryScreen() {
         <Text style={[styles.homeButtonText, { color: colors.textSecondary }]}>
           Back to Home
         </Text>
-      </Pressable>
+      </AnimatedPressable>
 
       <View style={{ height: insets.bottom + spacing.md }} />
     </View>

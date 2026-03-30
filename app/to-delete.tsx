@@ -15,6 +15,7 @@ import { useDeletionAlbum } from '../hooks/useDeletionAlbum';
 import { useAppStateRefresh } from '../hooks/useAppStateRefresh';
 import { PermissionGate } from '../components/PermissionGate';
 import { PhotoGrid } from '../components/PhotoGrid';
+import { AnimatedPressable } from '../components/AnimatedPressable';
 import {
   borderRadius,
   fontSize,
@@ -99,14 +100,14 @@ function ToDeleteContent() {
           <Text style={[styles.emptyBody, { color: colors.textSecondary }]}>
             Start organizing to mark photos for deletion.
           </Text>
-          <Pressable
+          <AnimatedPressable
             onPress={() => router.replace('/date-picker')}
             style={[styles.startButton, { backgroundColor: colors.accent }]}
             accessibilityRole="button"
             accessibilityLabel="Start organizing your photos"
           >
             <Text style={styles.startButtonText}>Start Organizing</Text>
-          </Pressable>
+          </AnimatedPressable>
         </View>
       ) : (
         <View style={styles.gridContainer}>
@@ -117,7 +118,7 @@ function ToDeleteContent() {
       {/* Delete All button */}
       {!isEmpty && !isLoading && (
         <View style={[styles.bottomBar, { paddingBottom: insets.bottom + spacing.md }]}>
-          <Pressable
+          <AnimatedPressable
             onPress={handleDeleteAll}
             style={[styles.deleteAllButton, { backgroundColor: colors.delete }]}
             accessibilityRole="button"
@@ -125,7 +126,7 @@ function ToDeleteContent() {
             testID="delete-all-button"
           >
             <Text style={styles.deleteAllText}>Delete All ({markedCount})</Text>
-          </Pressable>
+          </AnimatedPressable>
         </View>
       )}
 
@@ -162,7 +163,7 @@ function ToDeleteContent() {
           )}
 
           <View style={[styles.previewActions, { paddingBottom: insets.bottom + spacing.lg }]}>
-            <Pressable
+            <AnimatedPressable
               onPress={() => previewAsset && handleRestore(previewAsset)}
               style={[styles.restoreButton, { backgroundColor: colors.surface }]}
               accessibilityRole="button"
@@ -172,7 +173,7 @@ function ToDeleteContent() {
               <Text style={[styles.restoreButtonText, { color: colors.textPrimary }]}>
                 ↩ Restore Photo
               </Text>
-            </Pressable>
+            </AnimatedPressable>
           </View>
         </View>
       </Modal>

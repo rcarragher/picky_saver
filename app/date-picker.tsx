@@ -1,5 +1,5 @@
-import React from 'react';
-import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
+import React, { useCallback, useState } from 'react';
+import { FlatList, Pressable, RefreshControl, StyleSheet, Text, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../hooks/useTheme';
@@ -44,6 +44,13 @@ function DatePickerContent() {
   const insets = useSafeAreaInsets();
   const { months, isLoading, refresh } = useAvailableMonths();
   useAppStateRefresh(refresh);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await refresh();
+    setRefreshing(false);
+  }, [refresh]);
 
   const sections = buildSections(months);
 
@@ -78,6 +85,13 @@ function DatePickerContent() {
             item.type === 'header' ? `header-${item.year}` : `month-${item.data.year}-${item.data.month}`
           }
           contentContainerStyle={styles.listContent}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              tintColor={colors.accent}
+            />
+          }
           renderItem={({ item }) => {
             if (item.type === 'header') {
               return (

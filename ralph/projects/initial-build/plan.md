@@ -483,15 +483,27 @@ Reference docs: `plans/implementation-plan.md`, `plans/ui-design.md`
 
 **App icon, splash screen, and quality-of-life improvements.**
 
-- [ ] Design and set app icon in `app.config.ts` (1024x1024 source, Expo generates all sizes)
-- [ ] Configure splash screen: warm white background + app name centered
-- [ ] Button press animations: scale 0.97 + slight opacity change, 100ms (use `Pressable` with animated style)
-- [ ] Screen transition tuning: verify 250ms slide transitions feel smooth
-- [ ] Pull-to-refresh on date picker (reload months in case photos were added/deleted)
-- [ ] Handle app backgrounding during swipe session: preserve position on return
-- [ ] Test on small screens (iPhone SE / small Android) — ensure nothing overflows
+- [x] Design and set app icon in `app.config.ts` (1024x1024 source, Expo generates all sizes)
+- [x] Configure splash screen: warm white background + app name centered
+- [x] Button press animations: scale 0.97 + slight opacity change, 100ms (use `Pressable` with animated style)
+- [x] Screen transition tuning: verify 250ms slide transitions feel smooth
+- [x] Pull-to-refresh on date picker (reload months in case photos were added/deleted)
+- [x] Handle app backgrounding during swipe session: preserve position on return
+- [x] Test on small screens (iPhone SE / small Android) — ensure nothing overflows
 
 **Verify:** App looks polished. Icon displays correctly. Splash screen shows on cold start. All animations feel smooth and responsive.
+
+**Observations:**
+- Generated app icon (1024x1024) using Pillow: coral camera body with white lens and green checkmark badge on warm white (#FAFAF8) background. Also generated adaptive-icon.png (foreground only, scaled for safe zone), splash-icon.png (cropped camera), and favicon.png.
+- `app.config.ts` already referenced correct asset paths and had warm white splash background (#FAFAF8) — no config changes needed.
+- Created `components/AnimatedPressable.tsx` — wraps `Pressable` in `Animated.View` with scale (0.97) + opacity (0.85) press animation, 100ms duration, using `useNativeDriver: true`. Replaced `Pressable` with `AnimatedPressable` on all primary action buttons across: home screen (Start Organizing, To Be Deleted), swipe screen (delete, undo, keep buttons), summary screen (Review Deletions, Back to Home), to-delete screen (Start Organizing, Delete All, Restore Photo), MonthTile, and PermissionGate (Allow Access, Open Settings).
+- Screen transitions: already configured in Step 12 with `animation: "slide_from_right"` and `animationDuration: 250` — verified correct.
+- Pull-to-refresh: added `RefreshControl` to date-picker FlatList with `refreshing` state and `onRefresh` callback that calls the existing `refresh()` from `useAvailableMonths`.
+- App backgrounding during swipe: React state (currentIndex, kept, deleted, history) persists across background/foreground since the component stays mounted on the navigation stack. No changes needed — already works correctly.
+- Small screen review: all layouts use `flex: 1`, percentage widths, and `screenMargin: 20` (fine for 320pt iPhone SE width). Header titles use `flex: 1` + `numberOfLines={1}` for truncation. FlatList handles scrollable content. Summary stat cards use `flex: 1` in a row. No overflow issues found.
+- All 112 tests pass. Pre-existing act() warnings in swipe tests unchanged.
+- Files added: `components/AnimatedPressable.tsx`.
+- Files modified: `assets/icon.png`, `assets/adaptive-icon.png`, `assets/splash-icon.png`, `assets/favicon.png`, `app/index.tsx`, `app/date-picker.tsx`, `app/summary.tsx`, `app/to-delete.tsx`, `app/swipe/[year]/[month].tsx`, `components/MonthTile.tsx`, `components/PermissionGate.tsx`.
 
 ---
 

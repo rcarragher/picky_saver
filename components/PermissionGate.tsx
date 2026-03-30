@@ -2,6 +2,7 @@ import React from 'react';
 import { ActivityIndicator, Linking, Pressable, StyleSheet, Text, View } from 'react-native';
 import { usePermissions, type PermissionStatus } from '../hooks/usePermissions';
 import { useTheme } from '../hooks/useTheme';
+import { AnimatedPressable } from './AnimatedPressable';
 import { borderRadius, fontSize, fontWeight, screenMargin, spacing, touchTarget } from '../constants/theme';
 
 type Props = {
@@ -52,14 +53,14 @@ export function PermissionGate({ children }: Props) {
         <Text style={[styles.body, { color: colors.textSecondary }]}>
           Picky Saver needs access to your photo library to help you organize and clean up your photos.
         </Text>
-        <Pressable
+        <AnimatedPressable
           style={[styles.button, { backgroundColor: colors.accent }]}
           onPress={requestPermission}
           accessibilityRole="button"
           accessibilityLabel="Allow photo access"
         >
           <Text style={styles.buttonText}>Allow Access</Text>
-        </Pressable>
+        </AnimatedPressable>
       </View>
     );
   }
@@ -71,14 +72,14 @@ export function PermissionGate({ children }: Props) {
       <Text style={[styles.body, { color: colors.textSecondary }]}>
         Picky Saver needs photo library access to work. Please enable it in your device settings.
       </Text>
-      <Pressable
+      <AnimatedPressable
         style={[styles.button, { backgroundColor: colors.accent }]}
         onPress={() => Linking.openSettings()}
         accessibilityRole="button"
         accessibilityLabel="Open device settings"
       >
         <Text style={styles.buttonText}>Open Settings</Text>
-      </Pressable>
+      </AnimatedPressable>
     </View>
   );
 }
