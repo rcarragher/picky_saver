@@ -379,7 +379,7 @@ Reference docs: `plans/implementation-plan.md`, `plans/ui-design.md`
 
 **Wire up the entry point — the first thing users see. Use theme hook for all colors.**
 
-- [ ] Build `app/index.tsx`:
+- [x] Build `app/index.tsx`:
   - Centered layout, vertically distributed
   - App icon placeholder (can be a simple styled text/icon for now)
   - "Picky Saver" (H1, primary color)
@@ -388,10 +388,19 @@ Reference docs: `plans/implementation-plan.md`, `plans/ui-design.md`
   - "To Be Deleted ({count} photos)" button: surface background, primary text, full width, 48px tall → navigates to `/to-delete`. Only visible when count > 0. Uses `useDeletionAlbum().markedCount`.
   - Wrapped in `PermissionGate`
   - Empty device state: if no photos at all, show "No photos found on this device" instead of buttons
-- [ ] Write test:
+- [x] Write test:
   - `__tests__/screens/home.test.tsx` — renders title and tagline, shows both buttons, hides deletion button when count is 0, navigates correctly
 
 **Verify:** `npm test` passes. On device: home screen shows correctly, deletion count updates after swipe sessions, both buttons navigate to correct screens.
+
+**Observations:**
+- Home screen uses `useAvailableMonths()` to detect whether the device has any photos — if `months.length === 0` and not loading, shows "No photos found" empty state instead of buttons.
+- App icon placeholder uses a camera emoji (📷) as a simple visual. Will be replaced with a proper icon in Step 14.
+- Layout uses flex: content area centered vertically for title/tagline, buttons pinned to bottom.
+- "Start Organizing →" button always visible when photos exist; "To Be Deleted" button conditionally shown when `markedCount > 0`.
+- All 112 tests pass (6 new home + 106 prior). Pre-existing act() warnings in swipe tests unchanged.
+- Files modified: `app/index.tsx` (replaced placeholder with full implementation).
+- Files added: `__tests__/screens/home.test.tsx`.
 
 ---
 
