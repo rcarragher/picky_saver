@@ -17,6 +17,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   ios: {
     supportsTablet: false,
+    bundleIdentifier: "com.pickysaver.app",
     infoPlist: {
       NSPhotoLibraryUsageDescription:
         "Picky Saver needs access to your photos so you can organize them by swiping.",
@@ -25,6 +26,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     },
   },
   android: {
+    package: "com.pickysaver.app",
     adaptiveIcon: {
       foregroundImage: "./assets/adaptive-icon.png",
       backgroundColor: "#FAFAF8",
