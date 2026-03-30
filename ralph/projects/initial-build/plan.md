@@ -342,11 +342,11 @@ Reference docs: `plans/implementation-plan.md`, `plans/ui-design.md`
 
 **Let users review, restore, or permanently delete marked photos. Use theme hook for all colors.**
 
-- [ ] Create `components/PhotoGrid.tsx`:
+- [x] Create `components/PhotoGrid.tsx`:
   - 3-column FlatList grid, 4px gaps between thumbnails
   - Each cell: square thumbnail via `expo-image`'s `<Image>`, tap opens full-screen preview
   - Uses `numColumns={3}` on FlatList
-- [ ] Build `app/to-delete.tsx`:
+- [x] Build `app/to-delete.tsx`:
   - Header: back arrow + "To Be Deleted" + count badge
   - Wrapped in `PermissionGate`
   - `PhotoGrid` displaying `markedPhotos` from `useDeletionAlbum()`
@@ -358,10 +358,20 @@ Reference docs: `plans/implementation-plan.md`, `plans/ui-design.md`
     - On success: show brief "Deleted {count} photos" message, navigate home
   - Loading state: grid of shimmer squares
   - Empty state: "Nothing here yet. Start organizing to mark photos for deletion." + "Start Organizing" button
-- [ ] Write tests:
+- [x] Write tests:
   - `__tests__/screens/toDelete.test.tsx` — renders grid of photos, restore removes photo from list, delete all triggers confirmation, empty state renders correctly
 
 **Verify:** `npm test` passes. On device: grid shows marked photos, tap opens preview, restore works, delete triggers OS dialog.
+
+**Observations:**
+- `PhotoGrid` is a simple reusable component — takes `assets` and `onTap` props. Tile size computed from screen width divided by 3 columns minus gaps.
+- Full-screen preview uses React Native `Modal` with `animationType="fade"` and a near-opaque black backdrop. Close button (✕) top-left, Restore Photo button at bottom.
+- Delete All shows a success message ("Deleted N photos") for 1.5s, then navigates home via `router.replace('/')`.
+- Empty state shows "Nothing here yet" message and a "Start Organizing" button that navigates to `/date-picker`.
+- Count badge only shows when `markedCount > 0`.
+- All 106 tests pass (11 new toDelete + 95 prior). Pre-existing act() warnings in swipe tests unchanged.
+- Files added: `components/PhotoGrid.tsx`, `__tests__/screens/toDelete.test.tsx`.
+- Files modified: `app/to-delete.tsx` (replaced placeholder with full implementation).
 
 ---
 
