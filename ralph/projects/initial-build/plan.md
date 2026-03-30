@@ -130,19 +130,26 @@ Reference docs: `plans/implementation-plan.md`, `plans/ui-design.md`
 
 **Build the permission layer — the first thing every user encounters. Use theme hook for all colors.**
 
-- [ ] Create `hooks/usePermissions.ts`:
+- [x] Create `hooks/usePermissions.ts`:
   - On mount: call `MediaLibrary.getPermissionsAsync()`
   - Expose: `status` ('granted' | 'denied' | 'undetermined' | 'limited'), `requestPermission()`, `isLoading`
-- [ ] Create `components/PermissionGate.tsx`:
+- [x] Create `components/PermissionGate.tsx`:
   - If granted/limited → render children
   - If undetermined → show explanation screen with "Allow Access" button (coral accent, 56px tall) that calls `requestPermission()`
   - If denied → show explanation + "Open Settings" button using `Linking.openSettings()`
   - If limited (iOS) → show subtle banner: "For best results, allow full photo access in Settings"
-- [ ] Write tests:
+- [x] Write tests:
   - `__tests__/hooks/usePermissions.test.ts` — returns correct status for each permission state, calls requestPermissionsAsync on request
   - `__tests__/components/PermissionGate.test.tsx` — renders children when granted, shows request button when undetermined, shows settings link when denied
 
 **Verify:** `npm test` passes. On device/simulator: permission dialog appears, denied state shows settings button.
+
+**Observations:**
+- The `__mocks__/expo-media-library.ts` mock only exports `jest.fn()` functions — it doesn't export enums like `PermissionStatus`. Tests for `usePermissions` use string literals instead of the enum values.
+- `usePermissions` maps the MediaLibrary permission response using a helper `mapStatus()` function that checks `granted`, `accessPrivileges`, and `canAskAgain` fields to derive the simplified 4-state status.
+- `PermissionGate` uses `Linking.openSettings()` (from react-native) for the denied state — no need for `expo-linking`.
+- Limited permission state shows a banner above children (not a blocking screen), with an "Open Settings" link.
+- All 17 tests pass (6 usePermissions + 7 PermissionGate + 3 useTheme + 1 smoke).
 
 ---
 
