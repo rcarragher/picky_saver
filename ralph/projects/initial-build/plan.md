@@ -408,28 +408,40 @@ Reference docs: `plans/implementation-plan.md`, `plans/ui-design.md`
 
 **Tighten up the full flow and handle edge cases.**
 
-- [ ] Configure `app/_layout.tsx` stack options:
+- [x] Configure `app/_layout.tsx` stack options:
   - Screen transitions: slide from right (forward), slide from left (back) — 250ms native
   - Header hidden globally (each screen manages its own header inline)
   - Background color matches theme
-- [ ] Back behavior adjustments:
+- [x] Back behavior adjustments:
   - Summary screen: back goes to home (not back to swipe). Use `router.replace` or reset the stack.
   - Swipe screen: back goes to date picker. If user has progress, it's preserved (photos marked are already in the album).
-- [ ] Handle stale state via `AppState` listener:
+- [x] Handle stale state via `AppState` listener:
   - When the app returns to foreground, re-fetch photo data (month list, current swipe batch, deletion album contents). This handles photos added or deleted outside the app while backgrounded. **Do not filter query results** — `MediaLibrary.getAssetsAsync()` only returns assets that currently exist, so stale references are only an in-memory concern.
   - Album deleted outside app: `getOrCreateAlbum()` returns null, resets to "no marked photos" state
-- [ ] Loading states everywhere:
+- [x] Loading states everywhere:
   - Date picker: 4 shimmer tiles while months load
   - Swipe screen: shimmer card while first photo loads
   - Deletion review: shimmer grid while album loads
   - Home: brief shimmer while deletion count loads
-- [ ] Empty states:
+- [x] Empty states:
   - No photos on device: home shows message, no buttons
   - No photos in selected month: (shouldn't happen — hidden months) but fallback message + back button
   - Empty deletion album: message + "Start Organizing" button
-- [ ] Status bar: adapt to light/dark mode
+- [x] Status bar: adapt to light/dark mode
 
 **Verify:** Full flow works end-to-end on device. Back button behavior is correct at every screen. Stale state handled gracefully.
+
+**Observations:**
+- `_layout.tsx` now uses `useColorScheme()` to set themed background color via `contentStyle` and configures `animation: "slide_from_right"` with 250ms duration. Summary screen has `gestureEnabled: false` to prevent back-swipe to swipe screen.
+- `StatusBar` from `expo-status-bar` added to `_layout.tsx` — adapts style to light/dark mode automatically.
+- Created `hooks/useAppStateRefresh.ts` — a reusable hook that calls a callback when app transitions from background to foreground. Wired into home (refreshes months + deletion count), date-picker (refreshes months), and to-delete (refreshes deletion album).
+- Swipe screen intentionally skipped for AppState refresh — re-fetching mid-session could break the index-based navigation. `expo-image` handles missing URIs gracefully if a photo was deleted externally.
+- Back behavior was already correct: summary uses `router.replace('/')` (from Step 9), swipe uses `router.back()` to return to date-picker.
+- Loading states: date-picker, swipe, and to-delete already had shimmer states from prior steps. Added shimmer button placeholders to home screen during initial load.
+- Added empty month fallback to swipe screen — shows "No photos found" message with "Pick Another Month" back button when a month has zero photos.
+- All 112 tests pass. Pre-existing act() warnings in swipe tests unchanged.
+- Files added: `hooks/useAppStateRefresh.ts`.
+- Files modified: `app/_layout.tsx`, `app/index.tsx`, `app/date-picker.tsx`, `app/to-delete.tsx`, `app/swipe/[year]/[month].tsx`.
 
 ---
 

@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../hooks/useTheme';
 import { useDeletionAlbum } from '../hooks/useDeletionAlbum';
 import { useAvailableMonths } from '../hooks/usePhotos';
+import { useAppStateRefresh } from '../hooks/useAppStateRefresh';
 import { PermissionGate } from '../components/PermissionGate';
 import {
   borderRadius,
@@ -19,8 +20,14 @@ export default function HomeScreen() {
   const colors = useTheme();
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const { markedCount, isLoading: deletionLoading } = useDeletionAlbum();
-  const { months, isLoading: monthsLoading } = useAvailableMonths();
+  const { markedCount, isLoading: deletionLoading, refresh: refreshDeletion } = useDeletionAlbum();
+  const { months, isLoading: monthsLoading, refresh: refreshMonths } = useAvailableMonths();
+
+  const handleForeground = useCallback(() => {
+    refreshDeletion();
+    refreshMonths();
+  }, [refreshDeletion, refreshMonths]);
+  useAppStateRefresh(handleForeground);
 
   const hasPhotos = months.length > 0;
   const isLoading = deletionLoading || monthsLoading;
@@ -48,7 +55,12 @@ export default function HomeScreen() {
         </View>
 
         <View style={styles.buttons}>
-          {!isLoading && !hasPhotos ? (
+          {isLoading ? (
+            <View style={styles.shimmerButtons}>
+              <View style={[styles.shimmerButton, { backgroundColor: colors.surface }]} />
+              <View style={[styles.shimmerButtonSmall, { backgroundColor: colors.surface }]} />
+            </View>
+          ) : !hasPhotos ? (
             <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
               No photos found on this device
             </Text>
@@ -144,5 +156,18 @@ const styles = StyleSheet.create({
   emptyText: {
     fontSize: fontSize.body,
     textAlign: 'center',
+  },
+  shimmerButtons: {
+    gap: spacing.md,
+  },
+  shimmerButton: {
+    width: '100%',
+    height: 56,
+    borderRadius: borderRadius.md,
+  },
+  shimmerButtonSmall: {
+    width: '100%',
+    height: 48,
+    borderRadius: borderRadius.md,
   },
 });

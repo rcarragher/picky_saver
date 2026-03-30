@@ -4,6 +4,7 @@ import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../hooks/useTheme';
 import { useAvailableMonths } from '../hooks/usePhotos';
+import { useAppStateRefresh } from '../hooks/useAppStateRefresh';
 import { PermissionGate } from '../components/PermissionGate';
 import { MonthTile } from '../components/MonthTile';
 import { borderRadius, fontSize, fontWeight, screenMargin, spacing, touchTarget } from '../constants/theme';
@@ -41,7 +42,8 @@ function DatePickerContent() {
   const colors = useTheme();
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const { months, isLoading } = useAvailableMonths();
+  const { months, isLoading, refresh } = useAvailableMonths();
+  useAppStateRefresh(refresh);
 
   const sections = buildSections(months);
 

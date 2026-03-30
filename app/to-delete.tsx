@@ -12,6 +12,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as MediaLibrary from 'expo-media-library';
 import { useTheme } from '../hooks/useTheme';
 import { useDeletionAlbum } from '../hooks/useDeletionAlbum';
+import { useAppStateRefresh } from '../hooks/useAppStateRefresh';
 import { PermissionGate } from '../components/PermissionGate';
 import { PhotoGrid } from '../components/PhotoGrid';
 import {
@@ -43,7 +44,9 @@ function ToDeleteContent() {
     isLoading,
     restore,
     permanentlyDeleteAll,
+    refresh,
   } = useDeletionAlbum();
+  useAppStateRefresh(refresh);
 
   const [previewAsset, setPreviewAsset] = useState<MediaLibrary.Asset | null>(null);
   const [deleteMessage, setDeleteMessage] = useState<string | null>(null);

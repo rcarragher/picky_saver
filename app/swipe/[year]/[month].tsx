@@ -181,6 +181,25 @@ export default function SwipeScreen() {
           <Text style={[styles.errorText, { color: colors.delete }]}>
             Failed to load photos
           </Text>
+        ) : !currentPhoto && photos.length === 0 ? (
+          <View style={styles.emptyState}>
+            <Text style={[styles.emptyTitle, { color: colors.textPrimary }]}>
+              No photos found
+            </Text>
+            <Text style={[styles.emptyBody, { color: colors.textSecondary }]}>
+              This month doesn't have any photos to organize.
+            </Text>
+            <Pressable
+              onPress={() => router.back()}
+              style={[styles.emptyBackButton, { backgroundColor: colors.surface }]}
+              accessibilityLabel="Go back to month picker"
+              accessibilityRole="button"
+            >
+              <Text style={[styles.emptyBackText, { color: colors.textPrimary }]}>
+                ← Pick Another Month
+              </Text>
+            </Pressable>
+          </View>
         ) : currentPhoto ? (
           <PhotoCard
             key={currentPhoto.id}
@@ -291,6 +310,31 @@ const styles = StyleSheet.create({
   errorText: {
     fontSize: fontSize.body,
     textAlign: 'center',
+  },
+  emptyState: {
+    alignItems: 'center',
+    paddingHorizontal: screenMargin,
+  },
+  emptyTitle: {
+    fontSize: fontSize.h2,
+    fontWeight: fontWeight.semibold,
+    marginBottom: spacing.sm,
+  },
+  emptyBody: {
+    fontSize: fontSize.body,
+    textAlign: 'center',
+    marginBottom: spacing.xl,
+  },
+  emptyBackButton: {
+    width: '100%',
+    height: touchTarget.min,
+    borderRadius: borderRadius.md,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  emptyBackText: {
+    fontSize: fontSize.body,
+    fontWeight: fontWeight.medium,
   },
   hintText: {
     fontSize: fontSize.caption,
