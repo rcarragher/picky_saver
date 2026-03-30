@@ -98,7 +98,7 @@ Reference docs: `plans/implementation-plan.md`, `plans/ui-design.md`
 
 **Implement the design system from the UI spec as code constants. All subsequent steps that build screens/components must use the theme hook — dark mode is built-in from the start, not bolted on later.**
 
-- [ ] Create `constants/theme.ts` with:
+- [x] Create `constants/theme.ts` with:
   - Light mode colors: background `#FAFAF8`, surface `#F2F0EC`, textPrimary `#1C1C1E`, textSecondary `#6B6B6B`, accent `#E8725A`, keep `#4CAF7D`, delete `#E05555`, border `#E5E3DF`
   - Dark mode colors: background `#141414`, surface `#1E1E1E`, textPrimary `#F0F0F0`, textSecondary `#9A9A9A`, accent `#E8725A`, keep `#5BC88A`, delete `#E86060`
   - Spacing: xs=4, sm=8, md=16, lg=24, xl=32, xxl=48
@@ -107,16 +107,22 @@ Reference docs: `plans/implementation-plan.md`, `plans/ui-design.md`
   - Border radii: sm=8, md=12, lg=16, full=9999
   - `screenMargin: 20`
   - `touchTarget: { min: 48 }`
-- [ ] Create `types/index.ts` with shared types:
+- [x] Create `types/index.ts` with shared types:
   - `MonthBatch` — `{ year: number; month: number; count: number }`. **Convention: `month` is 1-based (1 = January, 12 = December).** Document this in a JSDoc comment on the type.
   - `SwipeDirection` — `'left' | 'right'`
   - `SwipeSession` — `{ kept: number; deleted: number; total: number }`
-- [ ] Create `hooks/useTheme.ts`:
+- [x] Create `hooks/useTheme.ts`:
   - Uses `useColorScheme()` from react-native
   - Returns the correct color set from `theme.ts`
   - All screens and components built in subsequent steps must use this hook for every color value
 
 **Verify:** Theme hook returns correct colors in both modes. Types compile without errors.
+
+**Observations:**
+- Used explicit `Colors` type interface instead of `as const` inference for color objects — the literal string types from `as const` made light/dark incompatible as return types.
+- Dark mode `border` color was not in the plan spec — added `#2A2A2A` as a sensible dark mode border color.
+- Fixed `react-test-renderer` version mismatch (had 19.2.0, needed 19.1.0 to match react@19.1.0). Installed with `--legacy-peer-deps`.
+- All 4 tests pass (3 useTheme tests + 1 smoke test). TypeScript compiles clean for source files.
 
 ---
 
