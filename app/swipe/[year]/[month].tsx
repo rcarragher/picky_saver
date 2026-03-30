@@ -7,6 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useTheme } from '../../../hooks/useTheme';
 import { useMonthPhotos } from '../../../hooks/usePhotos';
 import { getMonthName } from '../../../services/photoService';
+import { markForDeletion, restore } from '../../../services/deletionAlbumService';
 import { PhotoCard } from '../../../components/PhotoCard';
 import { OnboardingOverlay, ONBOARDING_KEY } from '../../../components/OnboardingOverlay';
 import {
@@ -96,11 +97,15 @@ export default function SwipeScreen() {
   }, [currentIndex, incrementSwipeCount]);
 
   const handleSwipeLeft = useCallback(() => {
+    const asset = photos[currentIndex];
+    if (asset) {
+      markForDeletion(asset);
+    }
     setHistory((prev) => [...prev, { index: currentIndex, action: 'delete' }]);
     setDeleted((d) => d + 1);
     setCurrentIndex((i) => i + 1);
     incrementSwipeCount();
-  }, [currentIndex, incrementSwipeCount]);
+  }, [currentIndex, photos, incrementSwipeCount]);
 
   const handleUndo = useCallback(() => {
     if (history.length === 0) return;
@@ -110,9 +115,13 @@ export default function SwipeScreen() {
     if (last.action === 'keep') {
       setKept((k) => k - 1);
     } else {
+      const asset = photos[last.index];
+      if (asset) {
+        restore(asset);
+      }
       setDeleted((d) => d - 1);
     }
-  }, [history]);
+  }, [history, photos]);
 
   // Navigate to summary when complete
   useEffect(() => {

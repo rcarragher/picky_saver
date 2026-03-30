@@ -279,7 +279,7 @@ Reference docs: `plans/implementation-plan.md`, `plans/ui-design.md`
 
 **Implement the "To Be Deleted" album management — the persistence layer for marked photos. Use theme hook for all colors in any UI elements.**
 
-- [ ] Create `services/deletionAlbumService.ts`:
+- [x] Create `services/deletionAlbumService.ts`:
   - `getOrCreateAlbum()` — look up "Picky Saver - To Delete" via `MediaLibrary.getAlbumAsync()`. If null, cache that it needs creation (album can only be created with an asset). Return album or null.
   - `markForDeletion(asset)` — if album doesn't exist, create it with `MediaLibrary.createAlbumAsync("Picky Saver - To Delete", asset)`. If album exists, `MediaLibrary.addAssetsToAlbumAsync([asset], album, false)`. Cache album reference.
   - `restore(asset)` — `MediaLibrary.removeAssetsFromAlbumAsync([asset], album)`
@@ -287,14 +287,23 @@ Reference docs: `plans/implementation-plan.md`, `plans/ui-design.md`
   - `getMarkedCount()` — quick count without loading all assets
   - `permanentlyDelete(assets)` — `MediaLibrary.deleteAssetsAsync(assetIds)`. Returns success/failure. OS shows confirmation dialog.
   - Handle edge case: album deleted outside app → `getOrCreateAlbum()` detects null, resets cache
-- [ ] Create `hooks/useDeletionAlbum.ts`:
+- [x] Create `hooks/useDeletionAlbum.ts`:
   - Exposes: `markedPhotos`, `markedCount`, `isLoading`, `markForDeletion(asset)`, `restore(asset)`, `permanentlyDeleteAll()`, `refresh()`
-- [ ] Wire into swipe screen: replace stub `markForDeletion()` call with real service
-- [ ] Write tests:
+- [x] Wire into swipe screen: replace stub `markForDeletion()` call with real service
+- [x] Write tests:
   - `__tests__/services/deletionAlbumService.test.ts` — creates album on first mark, reuses on subsequent marks, restore calls removeAssetsFromAlbumAsync, permanentlyDelete calls deleteAssetsAsync, handles missing album gracefully
   - `__tests__/hooks/useDeletionAlbum.test.ts` — tracks count, mark/restore update state
 
 **Verify:** `npm test` passes. On device: swipe left creates album visible in system Photos app, photos appear in it, album persists across app restarts.
+
+**Observations:**
+- `deletionAlbumService.ts` caches the album reference but re-verifies via `getAlbumAsync` on each call to handle external deletion. Exported `_resetCache()` for test isolation.
+- `markForDeletion` in the swipe screen is fire-and-forget (not awaited) — the UI advances immediately while the album operation completes in the background. Same for `restore` on undo.
+- `useDeletionAlbum` optimistically updates local state (count/photos array) on mark/restore without waiting for a refresh from the service, for snappy UI.
+- `permanentlyDelete` maps assets to their IDs before calling `deleteAssetsAsync`, matching the MediaLibrary API which expects string IDs.
+- All 90 tests pass (15 deletionAlbumService + 6 useDeletionAlbum + 69 prior).
+- Files added: `services/deletionAlbumService.ts`, `hooks/useDeletionAlbum.ts`, `__tests__/services/deletionAlbumService.test.ts`, `__tests__/hooks/useDeletionAlbum.test.ts`.
+- Files modified: `app/swipe/[year]/[month].tsx` (imported and wired `markForDeletion` and `restore`).
 
 ---
 
