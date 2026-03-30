@@ -59,7 +59,7 @@ Reference docs: `plans/implementation-plan.md`, `plans/ui-design.md`
 
 **Set up the testing framework so every subsequent step can include tests.**
 
-- [ ] Create `jest.config.js`:
+- [x] Create `jest.config.js`:
   ```javascript
   module.exports = {
     preset: 'jest-expo',
@@ -73,17 +73,24 @@ Reference docs: `plans/implementation-plan.md`, `plans/ui-design.md`
     ],
   };
   ```
-- [ ] Create `jest-setup.js`:
+- [x] Create `jest-setup.js`:
   ```javascript
   import 'react-native-gesture-handler/jestSetup';
   import { setUpTests } from 'react-native-reanimated';
   setUpTests({ fps: 60 });
   ```
-- [ ] Create `__mocks__/expo-media-library.ts` with jest.fn() mocks for: `requestPermissionsAsync`, `getPermissionsAsync`, `getAssetsAsync`, `getAlbumAsync`, `createAlbumAsync`, `addAssetsToAlbumAsync`, `removeAssetsFromAlbumAsync`, `deleteAssetsAsync`
-- [ ] Add npm scripts: `"test"`, `"test:watch"`, `"test:coverage"`
-- [ ] Write a trivial smoke test (`__tests__/smoke.test.ts`) that passes
+- [x] Create `__mocks__/expo-media-library.ts` with jest.fn() mocks for: `requestPermissionsAsync`, `getPermissionsAsync`, `getAssetsAsync`, `getAlbumAsync`, `createAlbumAsync`, `addAssetsToAlbumAsync`, `removeAssetsFromAlbumAsync`, `deleteAssetsAsync`
+- [x] Add npm scripts: `"test"`, `"test:watch"`, `"test:coverage"`
+- [x] Write a trivial smoke test (`__tests__/smoke.test.ts`) that passes
 
 **Verify:** `npm test` runs and passes the smoke test.
+
+**Observations:**
+- Plan had typo: `setupFilesAfterSetup` → corrected to `setupFilesAfterEnv` (the actual Jest config key).
+- Reanimated v4 with react-native-worklets can't run `setUpTests()` in Jest (native module not available). Used `moduleNameMapper` to point `react-native-reanimated` to its bundled `mock.js` instead. Removed `setUpTests` call from jest-setup.js — just importing the gesture handler setup is sufficient.
+- Had to install `react-native-worklets` (dependency of reanimated v4) with `--legacy-peer-deps`.
+- Test scripts already existed from Step 1 — no changes needed to package.json scripts.
+- Smoke test passes: `npm test` runs successfully.
 
 ---
 
