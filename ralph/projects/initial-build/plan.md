@@ -157,30 +157,37 @@ Reference docs: `plans/implementation-plan.md`, `plans/ui-design.md`
 
 **Load photos from the library grouped by month, and build the date picker UI. Use theme hook for all colors.**
 
-- [ ] Create `services/photoService.ts`:
+- [x] Create `services/photoService.ts`:
   - `getAvailableMonths()` — paginate through all assets via `MediaLibrary.getAssetsAsync({ sortBy: ['creationTime'], first: 500 })`, group by year/month, return `MonthBatch[]` sorted newest-first. **Month values are 1-based** (extract via `date.getMonth() + 1`). For large libraries, implement progressive loading: yield/return results as each page is processed so the UI can render visible months while background pagination continues for accurate counts.
   - `getPhotosForMonth(year, month)` — **`month` param is 1-based.** Convert to 0-based for the Date constructor: `createdAfter: new Date(year, month - 1, 1).getTime()` and `createdBefore: new Date(year, month, 0, 23, 59, 59).getTime()`. Return Asset array.
-- [ ] Create `hooks/usePhotos.ts`:
+- [x] Create `hooks/usePhotos.ts`:
   - `useAvailableMonths()` — calls `getAvailableMonths()` on mount, returns `{ months, isLoading, error }`
   - `useMonthPhotos(year, month)` — calls `getPhotosForMonth()`, returns `{ photos, isLoading, error }`
-- [ ] Create `components/MonthTile.tsx`:
+- [x] Create `components/MonthTile.tsx`:
   - Surface-colored card (themed), full width, 24px padding
   - Month name + year in H2 style, photo count in caption style, right chevron (→)
   - Year section headers when months span multiple years
   - Tap handler receives year + month
-- [ ] Build `app/date-picker.tsx`:
+- [x] Build `app/date-picker.tsx`:
   - Header: back arrow + "Pick a Month" (H1)
   - Wrapped in `PermissionGate`
   - `FlatList` of `MonthTile` components
   - Loading state: 4 shimmer placeholder tiles
   - Tap a tile → `router.push(\`/swipe/${year}/${month}\`)`
-- [ ] Write tests:
+- [x] Write tests:
   - `__tests__/services/photoService.test.ts` — groups assets by month correctly **(verify months are 1-based in output)**, passes correct date params **(verify 0-based conversion in Date constructor)**, handles empty library, handles pagination (hasNextPage)
   - `__tests__/hooks/usePhotos.test.ts` — loading/loaded/error states
   - `__tests__/components/MonthTile.test.tsx` — renders month, year, count; calls onPress
   - `__tests__/screens/datePicker.test.tsx` — renders month list, hides empty months, navigates on tap
 
 **Verify:** `npm test` passes. On device: date picker shows months with correct photo counts.
+
+**Observations:**
+- `getAvailableMonths()` uses simple async pagination (not progressive/streaming) — sufficient for initial build. Progressive loading can be added later if performance is an issue with very large libraries.
+- `getMonthName()` exported from photoService for reuse by MonthTile component.
+- Year section headers are implemented in the date-picker screen via a `buildSections()` helper that interleaves header items into the FlatList data, rather than using SectionList (simpler FlatList approach).
+- `useAvailableMonths` exposes a `refresh()` callback for pull-to-refresh (Step 14).
+- All 45 tests pass (8 photoService + 8 usePhotos + 6 MonthTile + 7 datePicker + 17 prior tests + 1 smoke).
 
 ---
 
