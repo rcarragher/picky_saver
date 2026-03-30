@@ -195,12 +195,12 @@ Reference docs: `plans/implementation-plan.md`, `plans/ui-design.md`
 
 **Build the core swipe experience — the heart of the app. Use theme hook for all colors. Use `expo-image` for photo display.**
 
-- [ ] Create `components/SwipeOverlay.tsx`:
+- [x] Create `components/SwipeOverlay.tsx`:
   - "KEEP" text + checkmark icon, green (themed), positioned top-left of card
   - "DELETE" text + X icon, red (themed), positioned top-right of card
   - Opacity driven by animated value (0 at rest, 0.6 at threshold)
   - Border: 3px solid in matching color around the full card at opacity
-- [ ] Create `components/PhotoCard.tsx`:
+- [x] Create `components/PhotoCard.tsx`:
   - Receives: `asset`, `onSwipeLeft`, `onSwipeRight`, `isFirst` (for onboarding hint)
   - Full-width card, borderRadius 12px, aspect ratio from photo metadata
   - **Photo displayed via `expo-image`'s `<Image>` component** (not React Native's built-in `<Image>`). This provides better caching, memory management, and prefetch support for rapid swiping.
@@ -212,7 +212,7 @@ Reference docs: `plans/implementation-plan.md`, `plans/ui-design.md`
   - Reanimated `useSharedValue` + `useAnimatedStyle` for 60fps
   - `gestureTestId="photo-pan"` for testing
   - Haptic feedback (`expo-haptics` light impact) when crossing threshold
-- [ ] Build `app/swipe/[year]/[month].tsx`:
+- [x] Build `app/swipe/[year]/[month].tsx`:
   - **Parse route params to numbers:** `const year = Number(params.year); const month = Number(params.month);` — validate they are finite numbers before proceeding.
   - Header: back arrow + "March 2024" + progress counter "24/156"
   - Loads photos via `useMonthPhotos(year, month)`
@@ -225,11 +225,24 @@ Reference docs: `plans/implementation-plan.md`, `plans/ui-design.md`
   - When all photos swiped → navigate to summary with session stats
   - Loading state: shimmer card placeholder
   - Reduce Motion: replace rotation + fly-off with simple fade transitions
-- [ ] Write tests:
+- [x] Write tests:
   - `__tests__/components/PhotoCard.test.tsx` — renders image, fires onSwipeLeft on left gesture (using `fireGestureHandler`), fires onSwipeRight on right gesture
   - `__tests__/screens/swipe.test.tsx` — shows photo, shows progress counter, advances on swipe, undo reverses last action, navigates to summary when done
 
 **Verify:** `npm test` passes. On device: card swipes smoothly, overlays appear, haptic fires, progress updates, undo works.
+
+**Observations:**
+- Reanimated v4 mock.js can't be used — it imports native worklets module which fails in Jest. Created custom `__mocks__/react-native-reanimated.ts` with manual mock of `useSharedValue`, `useAnimatedStyle`, `useReducedMotion`, `withSpring`, `withTiming`, `runOnJS`, `Easing`, `useEvent`, and `setGestureState`. Updated jest.config.js moduleNameMapper to point to this manual mock.
+- Created `__mocks__/expo-image.ts` (renders View, exports `Image.prefetch` as jest.fn) and `__mocks__/expo-haptics.ts` (exports `impactAsync` and `ImpactFeedbackStyle`).
+- Added `@react-native-async-storage/async-storage` to jest.config.js moduleNameMapper using its built-in mock at `jest/async-storage-mock.js`.
+- Gesture API uses `.withTestId()` not `.testID()` (Reanimated v4 / gesture-handler v2.28).
+- `SharedValue` type is exported as a named type from `react-native-reanimated`, not under `Animated.SharedValue` namespace.
+- `isFirst` prop on PhotoCard was omitted — not needed until Step 7 (onboarding overlay).
+- Swipe left currently just advances (stub) — real `markForDeletion()` integration in Step 8.
+- Swipe completion uses `router.replace()` to navigate to summary (prevents back-to-swipe).
+- All 64 tests pass (6 PhotoCard + 13 swipe screen + 45 prior).
+- Files added: `components/SwipeOverlay.tsx`, `components/PhotoCard.tsx`, `__mocks__/expo-image.ts`, `__mocks__/expo-haptics.ts`, `__mocks__/react-native-reanimated.ts`, `__tests__/components/PhotoCard.test.tsx`, `__tests__/screens/swipe.test.tsx`.
+- Files modified: `app/swipe/[year]/[month].tsx`, `jest.config.js`.
 
 ---
 
