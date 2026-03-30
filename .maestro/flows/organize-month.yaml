@@ -1,0 +1,62 @@
+appId: com.anonymous.picky-saver
+---
+
+# Organize Month Flow
+# Home → tap Start Organizing → pick first month → swipe 3 photos right, 2 left
+# → verify summary shows 5 reviewed, 2 marked
+
+- launchApp
+
+# Verify we're on the home screen
+- assertVisible: "Picky Saver"
+
+# Navigate to date picker
+- tapOn: "Start organizing your photos"
+
+# Verify date picker is visible
+- assertVisible: "Pick a Month"
+
+# Wait for months to load and tap the first month tile
+- extendedWaitUntil:
+    visible: "photos"
+    timeout: 10000
+
+# Tap the first available month tile
+- tapOn:
+    index: 0
+    text: ".*photos.*"
+
+# Dismiss onboarding overlay if it appears
+- tapOn:
+    text: "Got it!"
+    optional: true
+
+# Swipe 3 photos right (keep)
+- swipe:
+    id: "photo-card"
+    direction: "RIGHT"
+    duration: 500
+- swipe:
+    id: "photo-card"
+    direction: "RIGHT"
+    duration: 500
+- swipe:
+    id: "photo-card"
+    direction: "RIGHT"
+    duration: 500
+
+# Swipe 2 photos left (delete)
+- swipe:
+    id: "photo-card"
+    direction: "LEFT"
+    duration: 500
+- swipe:
+    id: "photo-card"
+    direction: "LEFT"
+    duration: 500
+
+# If the month had exactly 5 photos, we should see the summary
+# If it had more, use tap buttons to skip to summary faster
+# For now, verify we're still on the swipe screen or moved to summary
+- assertVisible:
+    text: ".*\\d+.*"

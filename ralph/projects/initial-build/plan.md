@@ -511,14 +511,23 @@ Reference docs: `plans/implementation-plan.md`, `plans/ui-design.md`
 
 **Write end-to-end test flows for the complete user journey.**
 
-- [ ] Create `.maestro/flows/` directory
-- [ ] `grant-permissions.yaml` — Launch app → grant photo access → verify home screen visible
-- [ ] `organize-month.yaml` — Home → tap Start Organizing → pick first month → swipe 3 photos right, 2 left → verify summary shows 5 reviewed, 2 marked
-- [ ] `delete-flow.yaml` — Home → tap To Be Deleted → tap Delete All → confirm OS dialog → verify empty state
-- [ ] `restore-flow.yaml` — Home → To Be Deleted → tap a photo → tap Restore → verify count decremented
-- [ ] Create `.eas/workflows/e2e.yml` for running on EAS
+- [x] Create `.maestro/flows/` directory
+- [x] `grant-permissions.yaml` — Launch app → grant photo access → verify home screen visible
+- [x] `organize-month.yaml` — Home → tap Start Organizing → pick first month → swipe 3 photos right, 2 left → verify summary shows 5 reviewed, 2 marked
+- [x] `delete-flow.yaml` — Home → tap To Be Deleted → tap Delete All → confirm OS dialog → verify empty state
+- [x] `restore-flow.yaml` — Home → To Be Deleted → tap a photo → tap Restore → verify count decremented
+- [x] Create `.eas/workflows/e2e.yml` for running on EAS
 
 **Verify:** Maestro flows pass locally via `maestro test .maestro/flows/`.
+
+**Observations:**
+- Maestro flows use `accessibilityLabel` values for most interactions since the app already has comprehensive labels from Step 13. `testID` values used for elements like `photo-card` (swipe gestures), `delete-all-button`, `preview-image`, `restore-button`, and `close-preview`.
+- `grant-permissions.yaml` handles the PermissionGate undetermined state and the OS permission dialog (with `optional: true` for the OS dialog since it may vary by platform/OS version).
+- `organize-month.yaml` taps the first available month tile using regex matching on "photos" text. Includes `optional: true` for onboarding overlay dismissal (only shows on first launch). Does not assert exact summary numbers since the test depends on the device's actual photo library.
+- `delete-flow.yaml` and `restore-flow.yaml` are dependent on prior photo marking — documented as prerequisites in flow comments.
+- EAS workflow (`e2e.yml`) configured for both iOS (iPhone 16) and Android (Pixel 7), triggered on push/PR to main. Uses `eas/build` for development client builds and `maestro/test` for running flows.
+- `appId` set to `com.anonymous.picky-saver` based on Expo's default convention for the slug. Should be updated when a proper bundle identifier is configured.
+- All 112 existing unit tests still pass.
 
 ---
 

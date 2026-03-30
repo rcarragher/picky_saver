@@ -1,0 +1,44 @@
+name: E2E Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  e2e-ios:
+    name: Maestro E2E (iOS)
+    runs-on: macos
+    steps:
+      - name: Build iOS development client
+        uses: eas/build
+        with:
+          platform: ios
+          profile: development
+
+      - name: Run Maestro tests
+        uses: maestro/test
+        with:
+          flow: .maestro/flows/
+          device:
+            platform: ios
+            model: iPhone 16
+
+  e2e-android:
+    name: Maestro E2E (Android)
+    runs-on: ubuntu
+    steps:
+      - name: Build Android development client
+        uses: eas/build
+        with:
+          platform: android
+          profile: development
+
+      - name: Run Maestro tests
+        uses: maestro/test
+        with:
+          flow: .maestro/flows/
+          device:
+            platform: android
+            model: Pixel 7

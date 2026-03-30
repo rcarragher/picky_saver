@@ -1,0 +1,41 @@
+appId: com.anonymous.picky-saver
+---
+
+# Restore Flow
+# Home → To Be Deleted → tap a photo → tap Restore → verify count decremented
+#
+# Prerequisite: Some photos must already be marked for deletion
+# (run organize-month.yaml first to mark some photos)
+
+- launchApp
+
+# Verify we're on the home screen
+- assertVisible: "Picky Saver"
+
+# Wait for deletion count to load
+- extendedWaitUntil:
+    visible: ".*marked for deletion.*"
+    timeout: 10000
+
+# Navigate to deletion review
+- tapOn:
+    text: ".*marked for deletion.*"
+
+# Verify we're on the deletion review screen
+- assertVisible: "To Be Deleted"
+
+# Tap the first photo in the grid to open preview
+- tapOn:
+    text: "View photo"
+    index: 0
+
+# Verify preview is open
+- assertVisible:
+    id: "preview-image"
+
+# Tap Restore
+- tapOn:
+    id: "restore-button"
+
+# Verify we're back on the grid (preview dismissed)
+- assertVisible: "To Be Deleted"
