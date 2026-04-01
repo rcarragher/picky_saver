@@ -50,6 +50,11 @@ jest.mock('../../hooks/usePhotos', () => ({
   useAvailableMonths: () => mockUseAvailableMonths(),
 }));
 
+const mockUseReviewHistory = jest.fn();
+jest.mock('../../hooks/useReviewHistory', () => ({
+  useReviewHistory: () => mockUseReviewHistory(),
+}));
+
 describe('HomeScreen', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -62,6 +67,15 @@ describe('HomeScreen', () => {
       months: [{ year: 2024, month: 3, count: 20 }],
       isLoading: false,
       refresh: jest.fn(),
+    });
+    mockUseReviewHistory.mockReturnValue({
+      records: [],
+      isLoading: false,
+      refresh: jest.fn(),
+      saveReview: jest.fn(),
+      clearReview: jest.fn(),
+      isReviewed: jest.fn(() => false),
+      getRecord: jest.fn(() => undefined),
     });
   });
 
@@ -144,5 +158,39 @@ describe('HomeScreen', () => {
     const { getByText, queryByText } = render(<HomeScreen />);
     expect(getByText('No photos found on this device')).toBeTruthy();
     expect(queryByText('Start Organizing →')).toBeNull();
+  });
+
+  it('shows Review History button when records exist', () => {
+    mockUseReviewHistory.mockReturnValue({
+      records: [{ year: 2024, month: 3, kept: 18, deleted: 7, total: 25, reviewedAt: '2024-03-15T10:00:00.000Z' }],
+      isLoading: false,
+      refresh: jest.fn(),
+      saveReview: jest.fn(),
+      clearReview: jest.fn(),
+      isReviewed: jest.fn(() => true),
+      getRecord: jest.fn(),
+    });
+    const { getByText } = render(<HomeScreen />);
+    expect(getByText('Review History')).toBeTruthy();
+  });
+
+  it('hides Review History button when no records', () => {
+    const { queryByText } = render(<HomeScreen />);
+    expect(queryByText('Review History')).toBeNull();
+  });
+
+  it('navigates to /history on Review History press', () => {
+    mockUseReviewHistory.mockReturnValue({
+      records: [{ year: 2024, month: 3, kept: 18, deleted: 7, total: 25, reviewedAt: '2024-03-15T10:00:00.000Z' }],
+      isLoading: false,
+      refresh: jest.fn(),
+      saveReview: jest.fn(),
+      clearReview: jest.fn(),
+      isReviewed: jest.fn(() => true),
+      getRecord: jest.fn(),
+    });
+    const { getByText } = render(<HomeScreen />);
+    fireEvent.press(getByText('Review History'));
+    expect(mockPush).toHaveBeenCalledWith('/history');
   });
 });

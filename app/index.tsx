@@ -5,6 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../hooks/useTheme';
 import { useDeletionAlbum } from '../hooks/useDeletionAlbum';
 import { useAvailableMonths } from '../hooks/usePhotos';
+import { useReviewHistory } from '../hooks/useReviewHistory';
 import { useAppStateRefresh } from '../hooks/useAppStateRefresh';
 import { PermissionGate } from '../components/PermissionGate';
 import { AnimatedPressable } from '../components/AnimatedPressable';
@@ -23,11 +24,13 @@ export default function HomeScreen() {
   const insets = useSafeAreaInsets();
   const { markedCount, isLoading: deletionLoading, refresh: refreshDeletion } = useDeletionAlbum();
   const { months, isLoading: monthsLoading, refresh: refreshMonths } = useAvailableMonths();
+  const { records, refresh: refreshReview } = useReviewHistory();
 
   const handleForeground = useCallback(() => {
     refreshDeletion();
     refreshMonths();
-  }, [refreshDeletion, refreshMonths]);
+    refreshReview();
+  }, [refreshDeletion, refreshMonths, refreshReview]);
   useAppStateRefresh(handleForeground);
 
   useFocusEffect(handleForeground);
@@ -98,6 +101,19 @@ export default function HomeScreen() {
                     ]}
                   >
                     To Be Deleted ({markedCount} photos)
+                  </Text>
+                </AnimatedPressable>
+              )}
+
+              {records.length > 0 && (
+                <AnimatedPressable
+                  style={[styles.secondaryButton, { backgroundColor: colors.surface }]}
+                  onPress={() => router.push('/history')}
+                  accessibilityRole="button"
+                  accessibilityLabel="Review history"
+                >
+                  <Text style={[styles.secondaryButtonText, { color: colors.textPrimary }]}>
+                    Review History
                   </Text>
                 </AnimatedPressable>
               )}

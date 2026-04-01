@@ -1,8 +1,8 @@
 # Month Review Progress Tracking — Execution Plan
 
 > **Design document:** [design.md](./design.md)
-> **Status:** In progress
-> **Current phase:** Phase 6 complete
+> **Status:** Complete
+> **Current phase:** Phase 7 complete (all phases done)
 
 ---
 
@@ -404,7 +404,7 @@ Implement month-level review progress tracking across 8 phases: data layer (type
 
 ### Tasks
 
-- [ ] **7.1** Add "Review History" button to home screen
+- [x] **7.1** Add "Review History" button to home screen
   - File: `app/index.tsx`
   - Import `useReviewHistory` from `../hooks/useReviewHistory`
   - In `HomeScreen`, call `useReviewHistory()` to get `records` and `refresh`
@@ -426,7 +426,7 @@ Implement month-level review progress tracking across 8 phases: data layer (type
     ```
   - Reuse the existing `secondaryButton` / `secondaryButtonText` styles (same as "To Be Deleted" button)
 
-- [ ] **7.2** Update home screen tests
+- [x] **7.2** Update home screen tests
   - File: `__tests__/screens/home.test.tsx`
   - Add mock for `useReviewHistory`:
     ```typescript
@@ -442,7 +442,7 @@ Implement month-level review progress tracking across 8 phases: data layer (type
     - `'navigates to /history on Review History press'` — assert `mockPush` called with `'/history'`
   - Verify all existing home screen tests still pass (they should — just need the new mock in `beforeEach`)
 
-- [ ] **7.3** Accessibility verification
+- [x] **7.3** Accessibility verification
   - Review all new/modified files for correct `accessibilityRole`, `accessibilityLabel` usage:
     - `components/CelebrationBurst.tsx` — decorative, should not be announced
     - `components/HistoryTile.tsx` — buttons labeled, stats readable
@@ -450,7 +450,7 @@ Implement month-level review progress tracking across 8 phases: data layer (type
     - `app/history.tsx` — header has `accessibilityRole="header"`, buttons labeled
     - `app/summary.tsx` — title still has `accessibilityRole="header"`
 
-- [ ] **7.4** Design compliance check
+- [x] **7.4** Design compliance check
   - Read `ralph/projects/progress-tracking/design.md` and verify:
     - All files listed in "Files Changed" table have been created/modified
     - `ReviewRecord` type matches the design spec
@@ -462,11 +462,16 @@ Implement month-level review progress tracking across 8 phases: data layer (type
     - Summary screen uses `useRef` guard against double-save
     - CelebrationBurst is a standalone component (easy to swap)
 
-- [ ] **7.5** Final build + test gate: `npx expo export --platform ios 2>&1 | head -5 && npm test`
+- [x] **7.5** Final build + test gate: `npx expo export --platform ios 2>&1 | head -5 && npm test`
 
 ### Observations
 
-<!-- Agent: write notes here during execution -->
+- All 5 tasks completed. Home screen now imports `useReviewHistory`, adds `refreshReview` to the `handleForeground` callback, and renders a conditional "Review History" button (shown when `records.length > 0`) using the same `secondaryButton` style as "To Be Deleted".
+- 3 new home screen tests: shows button when records exist, hides button when no records, navigates to `/history` on press. All existing home tests pass with the new `useReviewHistory` mock added to `beforeEach`.
+- Accessibility verification: all new/modified components have correct `accessibilityRole`, `accessibilityLabel` usage. CelebrationBurst is decorative (hidden from accessibility tree). HistoryTile buttons labeled. MonthTile updated label includes "reviewed". History screen header has `accessibilityRole="header"`. Summary title has `accessibilityRole="header"`.
+- Design compliance check: all files from design spec's "Files Changed" table created/modified. ReviewRecord type, service functions, hook API all match design. "Clear" naming used consistently. Upsert behavior correct. No partial state saved. Summary uses `useRef` guard. CelebrationBurst is standalone.
+- Build (expo export) and full test suite (155 tests, 20 suites) pass cleanly. Pre-existing `act(...)` warnings in swipe tests are unrelated.
+- Files modified: `app/index.tsx`, `__tests__/screens/home.test.tsx`
 
 ---
 
