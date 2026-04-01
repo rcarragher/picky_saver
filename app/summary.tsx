@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../hooks/useTheme';
+import { useReviewHistory } from '../hooks/useReviewHistory';
 import { AnimatedPressable } from '../components/AnimatedPressable';
 import {
   borderRadius,
@@ -25,9 +26,24 @@ export default function SummaryScreen() {
   const insets = useSafeAreaInsets();
   const colors = useTheme();
 
+  const { saveReview } = useReviewHistory();
+
   const total = Number(params.total) || 0;
   const kept = Number(params.kept) || 0;
   const deleted = Number(params.deleted) || 0;
+
+  const hasSavedRef = useRef(false);
+  useEffect(() => {
+    if (hasSavedRef.current) return;
+    hasSavedRef.current = true;
+    saveReview({
+      year: Number(params.year),
+      month: Number(params.month),
+      kept,
+      deleted,
+      total,
+    });
+  }, []);
 
   return (
     <View

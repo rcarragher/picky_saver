@@ -2,7 +2,7 @@
 
 > **Design document:** [design.md](./design.md)
 > **Status:** In progress
-> **Current phase:** Phase 1 complete
+> **Current phase:** Phase 2 complete
 
 ---
 
@@ -144,7 +144,7 @@ Implement month-level review progress tracking across 8 phases: data layer (type
 
 ### Tasks
 
-- [ ] **2.1** Modify summary screen to save review record on mount
+- [x] **2.1** Modify summary screen to save review record on mount
   - File: `app/summary.tsx`
   - Import `useReviewHistory` from `../hooks/useReviewHistory`
   - Add a `useRef(false)` guard (`hasSavedRef`)
@@ -155,7 +155,7 @@ Implement month-level review progress tracking across 8 phases: data layer (type
   - Dependency array: `[]` (run once on mount; values come from route params which don't change)
   - **Do not change** any other behavior yet — celebration animation comes in Phase 3
 
-- [ ] **2.2** Update summary screen tests
+- [x] **2.2** Update summary screen tests
   - File: `__tests__/screens/summary.test.tsx`
   - Add mock for `useReviewHistory`:
     ```typescript
@@ -175,11 +175,14 @@ Implement month-level review progress tracking across 8 phases: data layer (type
   - Add test: `saveReview` is called on mount with correct params (`{ year: 2024, month: 3, kept: 18, deleted: 7, total: 25 }`)
   - Verify all existing tests still pass (the "All done!" title test will be updated in Phase 3)
 
-- [ ] **2.3** Build + test gate: `npx expo export --platform ios 2>&1 | head -5 && npm test`
+- [x] **2.3** Build + test gate: `npx expo export --platform ios 2>&1 | head -5 && npm test`
 
 ### Observations
 
-<!-- Agent: write notes here during execution -->
+- All 3 tasks completed. Summary screen now imports `useReviewHistory` and calls `saveReview` on mount with a `useRef(false)` guard to prevent double-save.
+- Added `useReviewHistory` mock to summary tests and a new test verifying `saveReview` is called with correct params (`{ year: 2024, month: 3, kept: 18, deleted: 7, total: 25 }`).
+- All existing summary tests pass unchanged. Build (expo export) and full test suite (135 tests, 18 suites) pass cleanly.
+- Files modified: `app/summary.tsx`, `__tests__/screens/summary.test.tsx`
 
 ---
 
