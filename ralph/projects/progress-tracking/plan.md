@@ -2,7 +2,7 @@
 
 > **Design document:** [design.md](./design.md)
 > **Status:** In progress
-> **Current phase:** Phase 5 complete
+> **Current phase:** Phase 6 complete
 
 ---
 
@@ -345,12 +345,12 @@ Implement month-level review progress tracking across 8 phases: data layer (type
 
 ### Tasks
 
-- [ ] **6.1** Register history route in layout
+- [x] **6.1** Register history route in layout
   - File: `app/_layout.tsx`
   - Add `<Stack.Screen name="history" />` to the `Stack` component, after the `to-delete` entry
   - This maintains consistency with the existing pattern — every route in the app is explicitly registered as a `Stack.Screen` in `_layout.tsx`
 
-- [ ] **6.2** Create history screen
+- [x] **6.2** Create history screen
   - File: `app/history.tsx`
   - Follow `app/date-picker.tsx` structure closely:
     - Wrap in `PermissionGate` (consistent with other screens)
@@ -369,7 +369,7 @@ Implement month-level review progress tracking across 8 phases: data layer (type
     - Message: `"This will remove the reviewed status for [Month Year]. Your photos won't be affected."`
     - Buttons: Cancel (default), Clear (destructive)
 
-- [ ] **6.3** Create history screen tests
+- [x] **6.3** Create history screen tests
   - File: `__tests__/screens/history.test.tsx`
   - Mock pattern: follow `__tests__/screens/home.test.tsx` structure
   - Mock `useReviewHistory`, `expo-router`, `react-native-safe-area-context`, `useTheme`, `usePermissions`
@@ -381,11 +381,20 @@ Implement month-level review progress tracking across 8 phases: data layer (type
     - "Review Again" navigates to correct swipe route
     - "Clear" shows confirmation alert (mock `Alert.alert`)
 
-- [ ] **6.4** Build + test gate: `npx expo export --platform ios 2>&1 | head -5 && npm test`
+- [x] **6.4** Build + test gate: `npx expo export --platform ios 2>&1 | head -5 && npm test`
 
 ### Observations
 
-<!-- Agent: write notes here during execution -->
+- All 4 tasks completed. History screen created at `app/history.tsx` following `date-picker.tsx` structure closely.
+- Route registered in `app/_layout.tsx` after `to-delete`.
+- Screen features: header with back button + "Review History" title, FlatList with year-grouped sections (records sorted newest-first by year then month), summary banner as `ListHeaderComponent` showing total months/kept/deleted, pull-to-refresh via `RefreshControl`, `useFocusEffect` to refresh on focus.
+- Empty state renders "No months reviewed yet" + "Start Organizing →" button routing to `/date-picker`.
+- "Review Again" navigates to `/swipe/${year}/${month}`. "Clear" shows `Alert.alert` confirmation with destructive style, then calls `clearReview(year, month)`.
+- Local `buildSections` and `groupAndSort` functions handle year grouping — records are sorted by year desc then month desc (not by `reviewedAt`) for logical display order.
+- 8 unit tests all passing: header rendering, summary banner totals, HistoryTile rendering, empty state, Review Again navigation, Clear alert display, Clear confirmation calls clearReview, empty state Start Organizing navigation.
+- Build (expo export) and full test suite (152 tests, 20 suites) pass cleanly. Pre-existing `act(...)` warnings in swipe tests are unrelated.
+- Files added: `app/history.tsx`, `__tests__/screens/history.test.tsx`
+- Files modified: `app/_layout.tsx`
 
 ---
 

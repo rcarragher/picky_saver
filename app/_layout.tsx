@@ -30,6 +30,7 @@ export default function RootLayout() {
           }}
         />
         <Stack.Screen name="to-delete" />
+        <Stack.Screen name="history" />
       </Stack>
     </GestureHandlerRootView>
   );
