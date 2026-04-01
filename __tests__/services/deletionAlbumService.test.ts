@@ -10,6 +10,7 @@ import {
   getOrCreateAlbum,
   markForDeletion,
   restore,
+  restoreAll,
   getMarkedAssets,
   getMarkedCount,
   permanentlyDelete,
@@ -106,6 +107,32 @@ describe('deletionAlbumService', () => {
 
       await restore(fakeAsset);
 
+      expect(mockRemoveAssets).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('restoreAll', () => {
+    it('calls removeAssetsFromAlbumAsync with all assets', async () => {
+      mockGetAlbum.mockResolvedValue(fakeAlbum);
+      mockRemoveAssets.mockResolvedValue(true as any);
+
+      await restoreAll([fakeAsset, fakeAsset2]);
+
+      expect(mockRemoveAssets).toHaveBeenCalledWith([fakeAsset, fakeAsset2], fakeAlbum);
+    });
+
+    it('does nothing when album does not exist', async () => {
+      mockGetAlbum.mockResolvedValue(null as any);
+
+      await restoreAll([fakeAsset]);
+
+      expect(mockRemoveAssets).not.toHaveBeenCalled();
+    });
+
+    it('does nothing for empty array', async () => {
+      await restoreAll([]);
+
+      expect(mockGetAlbum).not.toHaveBeenCalled();
       expect(mockRemoveAssets).not.toHaveBeenCalled();
     });
   });

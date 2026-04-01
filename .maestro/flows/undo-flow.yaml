@@ -1,0 +1,63 @@
+appId: com.pickysaver.app
+---
+
+# Undo Flow
+# Swipe a photo, then tap undo, verify the photo card reappears
+# and the undo button state changes.
+#
+# Prerequisite: Simulator seeded with test photos
+
+- launchApp
+
+# Home screen
+- assertVisible: "Picky Saver"
+- tapOn: "Start organizing your photos"
+
+# Date picker — select first month
+- assertVisible: "Pick a Month"
+- extendedWaitUntil:
+    visible: ".*photos.*"
+    timeout: 10000
+- tapOn:
+    index: 0
+    text: ".*photos.*"
+
+# Dismiss onboarding if shown
+- tapOn:
+    text: ".*Dismiss onboarding.*"
+    optional: true
+
+# Verify photo card is visible
+- extendedWaitUntil:
+    visible:
+      id: "photo-card"
+    timeout: 5000
+
+# Swipe one photo left (delete)
+- swipe:
+    id: "photo-card"
+    direction: "LEFT"
+    duration: 500
+
+# Verify undo button is available and tap it
+- tapOn: "Undo last action"
+
+# Verify photo card is visible again (undo worked)
+- extendedWaitUntil:
+    visible:
+      id: "photo-card"
+    timeout: 3000
+
+# Swipe one right (keep), then undo
+- swipe:
+    id: "photo-card"
+    direction: "RIGHT"
+    duration: 500
+
+- tapOn: "Undo last action"
+
+# Verify photo card reappears
+- extendedWaitUntil:
+    visible:
+      id: "photo-card"
+    timeout: 3000

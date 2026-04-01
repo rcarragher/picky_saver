@@ -1,0 +1,43 @@
+appId: com.pickysaver.app
+---
+
+# Delete Success Toast Flow
+# Mark photos for deletion, then delete all and verify the success
+# toast message appears before navigating home.
+#
+# Prerequisite: Some photos must be marked for deletion
+# (run organize-month.yaml first to mark some)
+
+- launchApp
+
+# Home screen
+- assertVisible: "Picky Saver"
+
+# Navigate to To Be Deleted
+- extendedWaitUntil:
+    visible: ".*marked for deletion.*"
+    timeout: 10000
+- tapOn:
+    text: ".*marked for deletion.*"
+
+# Verify To Be Deleted screen
+- assertVisible: "To Be Deleted"
+
+# Tap Delete All
+- tapOn:
+    id: "delete-all-button"
+
+# Confirm the OS deletion dialog
+- tapOn:
+    text: "^Delete$"
+    optional: true
+
+# Verify success toast appears
+- extendedWaitUntil:
+    visible: ".*Deleted.*photos.*"
+    timeout: 5000
+
+# After toast, should navigate to home
+- extendedWaitUntil:
+    visible: "Picky Saver"
+    timeout: 5000

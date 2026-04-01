@@ -1,0 +1,64 @@
+appId: com.pickysaver.app
+---
+
+# Summary Navigation Flow
+# Complete swiping a month, then test buttons on the summary screen:
+# "Review Deletions" → To Delete screen
+
+- launchApp
+
+# Home screen
+- assertVisible: "Picky Saver"
+- tapOn: "Start organizing your photos"
+
+# Date picker — select a month
+- assertVisible: "Pick a Month"
+- extendedWaitUntil:
+    visible: ".*photos.*"
+    timeout: 10000
+- tapOn:
+    text: ".*photos.*"
+    index: 0
+
+# Dismiss onboarding if shown
+- tapOn:
+    text: ".*Dismiss onboarding.*"
+    optional: true
+
+# Swipe one left (delete) so we have something to review
+- swipe:
+    id: "photo-card"
+    direction: "LEFT"
+    duration: 400
+
+# Swipe remaining photos right to complete the month
+- repeat:
+    times: 20
+    commands:
+      - swipe:
+          id: "photo-card"
+          direction: "RIGHT"
+          duration: 400
+          optional: true
+
+# Summary screen
+- extendedWaitUntil:
+    visible: "All done!"
+    timeout: 10000
+
+# Test "Review Deletions" button
+- tapOn: "Review deletions"
+
+# Verify we're on the To Delete screen
+- extendedWaitUntil:
+    visible: "To Be Deleted"
+    timeout: 5000
+
+# Go back
+- tapOn: "Go back"
+
+# Navigate home — re-launch to get back to a clean state
+- launchApp
+
+# Verify home screen
+- assertVisible: "Picky Saver"

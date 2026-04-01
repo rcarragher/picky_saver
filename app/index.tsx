@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useFocusEffect, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../hooks/useTheme';
 import { useDeletionAlbum } from '../hooks/useDeletionAlbum';
@@ -29,6 +29,8 @@ export default function HomeScreen() {
     refreshMonths();
   }, [refreshDeletion, refreshMonths]);
   useAppStateRefresh(handleForeground);
+
+  useFocusEffect(handleForeground);
 
   const hasPhotos = months.length > 0;
   const isLoading = deletionLoading || monthsLoading;
@@ -142,6 +144,7 @@ const styles = StyleSheet.create({
     borderRadius: borderRadius.md,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingHorizontal: spacing.xl,
     minHeight: touchTarget.min,
   },
   primaryButtonText: {
@@ -151,10 +154,11 @@ const styles = StyleSheet.create({
   },
   secondaryButton: {
     width: '100%',
-    height: 48,
+    height: 56,
     borderRadius: borderRadius.md,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingHorizontal: spacing.xl,
     minHeight: touchTarget.min,
   },
   secondaryButtonText: {
@@ -175,7 +179,7 @@ const styles = StyleSheet.create({
   },
   shimmerButtonSmall: {
     width: '100%',
-    height: 48,
+    height: 56,
     borderRadius: borderRadius.md,
   },
 });

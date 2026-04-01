@@ -1,4 +1,4 @@
-appId: com.anonymous.picky-saver
+appId: com.pickysaver.app
 ---
 
 # Organize Month Flow
@@ -18,18 +18,28 @@ appId: com.anonymous.picky-saver
 
 # Wait for months to load and tap the first month tile
 - extendedWaitUntil:
-    visible: "photos"
+    visible: ".*photos.*"
     timeout: 10000
 
 # Tap the first available month tile
 - tapOn:
-    index: 0
     text: ".*photos.*"
+    index: 0
 
 # Dismiss onboarding overlay if it appears
 - tapOn:
-    text: "Got it!"
+    text: ".*Dismiss onboarding.*"
     optional: true
+
+# Swipe 2 photos left (delete) FIRST to ensure they are marked
+- swipe:
+    id: "photo-card"
+    direction: "LEFT"
+    duration: 500
+- swipe:
+    id: "photo-card"
+    direction: "LEFT"
+    duration: 500
 
 # Swipe 3 photos right (keep)
 - swipe:
@@ -43,16 +53,6 @@ appId: com.anonymous.picky-saver
 - swipe:
     id: "photo-card"
     direction: "RIGHT"
-    duration: 500
-
-# Swipe 2 photos left (delete)
-- swipe:
-    id: "photo-card"
-    direction: "LEFT"
-    duration: 500
-- swipe:
-    id: "photo-card"
-    direction: "LEFT"
     duration: 500
 
 # If the month had exactly 5 photos, we should see the summary

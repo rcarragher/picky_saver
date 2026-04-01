@@ -10,6 +10,7 @@ import {
   fontWeight,
   screenMargin,
   spacing,
+  touchTarget,
 } from '../constants/theme';
 
 export default function SummaryScreen() {
@@ -137,11 +138,13 @@ const styles = StyleSheet.create({
   },
   reviewButton: {
     width: '100%',
-    height: 48,
+    height: 56,
     borderRadius: borderRadius.md,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingHorizontal: spacing.xl,
     marginBottom: spacing.md,
+    minHeight: touchTarget.min,
   },
   reviewButtonText: {
     fontSize: fontSize.body,

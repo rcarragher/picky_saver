@@ -44,6 +44,7 @@ function ToDeleteContent() {
     markedCount,
     isLoading,
     restore,
+    restoreAll,
     permanentlyDeleteAll,
     refresh,
   } = useDeletionAlbum();
@@ -55,6 +56,10 @@ function ToDeleteContent() {
   const handleRestore = async (asset: MediaLibrary.Asset) => {
     await restore(asset);
     setPreviewAsset(null);
+  };
+
+  const handleRestoreAll = async () => {
+    await restoreAll();
   };
 
   const handleDeleteAll = async () => {
@@ -115,9 +120,20 @@ function ToDeleteContent() {
         </View>
       )}
 
-      {/* Delete All button */}
+      {/* Bottom action buttons */}
       {!isEmpty && !isLoading && (
         <View style={[styles.bottomBar, { paddingBottom: insets.bottom + spacing.md }]}>
+          <AnimatedPressable
+            onPress={handleRestoreAll}
+            style={[styles.restoreAllButton, { backgroundColor: colors.surface }]}
+            accessibilityRole="button"
+            accessibilityLabel={`Restore all ${markedCount} photos`}
+            testID="restore-all-button"
+          >
+            <Text style={[styles.restoreAllText, { color: colors.textPrimary }]}>
+              ↩ Restore All ({markedCount})
+            </Text>
+          </AnimatedPressable>
           <AnimatedPressable
             onPress={handleDeleteAll}
             style={[styles.deleteAllButton, { backgroundColor: colors.delete }]}
@@ -262,6 +278,7 @@ const styles = StyleSheet.create({
     borderRadius: borderRadius.md,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingHorizontal: spacing.xl,
   },
   startButtonText: {
     color: '#FFFFFF',
@@ -271,6 +288,20 @@ const styles = StyleSheet.create({
   bottomBar: {
     paddingHorizontal: screenMargin,
     paddingTop: spacing.md,
+    gap: spacing.sm,
+  },
+  restoreAllButton: {
+    width: '100%',
+    height: 56,
+    borderRadius: borderRadius.md,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: spacing.xl,
+    minHeight: touchTarget.min,
+  },
+  restoreAllText: {
+    fontSize: fontSize.body,
+    fontWeight: fontWeight.semibold,
   },
   deleteAllButton: {
     width: '100%',
@@ -278,6 +309,7 @@ const styles = StyleSheet.create({
     borderRadius: borderRadius.md,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingHorizontal: spacing.xl,
     minHeight: touchTarget.min,
   },
   deleteAllText: {
@@ -337,6 +369,7 @@ const styles = StyleSheet.create({
     borderRadius: borderRadius.md,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingHorizontal: spacing.xl,
     minHeight: touchTarget.min,
   },
   restoreButtonText: {

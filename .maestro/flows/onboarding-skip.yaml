@@ -1,0 +1,62 @@
+appId: com.pickysaver.app
+---
+
+# Onboarding Skip Flow
+# Navigate to the swipe screen, tap "Skip" on the onboarding overlay
+# (instead of "Got it!"), verify it dismisses and doesn't reappear.
+#
+# Note: Uses clearState to ensure onboarding hasn't been dismissed yet.
+
+- launchApp:
+    clearState: true
+
+# Wait for home screen (permissions should be pre-granted)
+- extendedWaitUntil:
+    visible: "Picky Saver"
+    timeout: 10000
+
+- tapOn: "Start organizing your photos"
+
+# Date picker
+- assertVisible: "Pick a Month"
+- extendedWaitUntil:
+    visible: ".*photos.*"
+    timeout: 10000
+- tapOn:
+    index: 0
+    text: ".*photos.*"
+
+# Onboarding overlay should appear — verify its content
+- extendedWaitUntil:
+    visible: ".*Swipe left to delete.*"
+    timeout: 5000
+- assertVisible: ".*Swipe right to keep.*"
+- assertVisible: "You can undo anytime"
+
+# Tap Skip instead of "Got it!" (accessibilityLabel is "Skip onboarding")
+- tapOn: "Skip onboarding"
+
+# Verify overlay is dismissed and photo card is visible
+- extendedWaitUntil:
+    visible:
+      id: "photo-card"
+    timeout: 3000
+
+# Go back and re-enter the swipe screen to verify onboarding doesn't reappear
+- tapOn: "Go back"
+- extendedWaitUntil:
+    visible: "Pick a Month"
+    timeout: 5000
+
+- tapOn:
+    index: 0
+    text: ".*photos.*"
+
+# Onboarding should NOT appear — photo card should be immediately visible
+- extendedWaitUntil:
+    visible:
+      id: "photo-card"
+    timeout: 5000
+
+# Verify onboarding text is NOT visible
+- assertNotVisible: "Swipe left to delete"

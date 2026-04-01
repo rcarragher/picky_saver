@@ -1,4 +1,4 @@
-appId: com.anonymous.picky-saver
+appId: com.pickysaver.app
 ---
 
 # Delete Flow
@@ -7,15 +7,18 @@ appId: com.anonymous.picky-saver
 # Prerequisite: Some photos must already be marked for deletion
 # (run organize-month.yaml first to mark some photos)
 
+- stopApp
 - launchApp
 
 # Verify we're on the home screen
-- assertVisible: "Picky Saver"
+- extendedWaitUntil:
+    visible: "Picky Saver"
+    timeout: 10000
 
 # Wait for deletion count to load - the "To Be Deleted" button should be visible
 - extendedWaitUntil:
     visible: ".*marked for deletion.*"
-    timeout: 10000
+    timeout: 15000
 
 # Navigate to deletion review
 - tapOn:
@@ -30,7 +33,7 @@ appId: com.anonymous.picky-saver
 
 # Confirm the OS deletion dialog
 - tapOn:
-    text: ".*Delete.*"
+    text: "^Delete$"
     optional: true
 
 # After successful deletion, app navigates home

@@ -1,6 +1,7 @@
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useColorScheme } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { colors } from "../constants/theme";
 
 export default function RootLayout() {
@@ -8,7 +9,7 @@ export default function RootLayout() {
   const themeColors = scheme === "dark" ? colors.dark : colors.light;
 
   return (
-    <>
+    <GestureHandlerRootView style={{ flex: 1 }}>
       <StatusBar style={scheme === "dark" ? "light" : "dark"} />
       <Stack
         screenOptions={{
@@ -20,7 +21,7 @@ export default function RootLayout() {
       >
         <Stack.Screen name="index" />
         <Stack.Screen name="date-picker" />
-        <Stack.Screen name="swipe/[year]/[month]" />
+        <Stack.Screen name="swipe" />
         <Stack.Screen
           name="summary"
           options={{
@@ -30,6 +31,6 @@ export default function RootLayout() {
         />
         <Stack.Screen name="to-delete" />
       </Stack>
-    </>
+    </GestureHandlerRootView>
   );
 }

@@ -4,8 +4,15 @@ import HomeScreen from '../../app/index';
 
 const mockPush = jest.fn();
 
+let focusCallback: (() => void) | null = null;
 jest.mock('expo-router', () => ({
   useRouter: () => ({ push: mockPush }),
+  useFocusEffect: (cb: () => void) => {
+    // Capture the callback so we can simulate focus events
+    focusCallback = cb;
+    // Call it on mount like the real implementation does
+    cb();
+  },
 }));
 
 jest.mock('react-native-safe-area-context', () => ({
@@ -49,10 +56,12 @@ describe('HomeScreen', () => {
     mockUseDeletionAlbum.mockReturnValue({
       markedCount: 5,
       isLoading: false,
+      refresh: jest.fn(),
     });
     mockUseAvailableMonths.mockReturnValue({
       months: [{ year: 2024, month: 3, count: 20 }],
       isLoading: false,
+      refresh: jest.fn(),
     });
   });
 
@@ -74,6 +83,7 @@ describe('HomeScreen', () => {
     mockUseDeletionAlbum.mockReturnValue({
       markedCount: 0,
       isLoading: false,
+      refresh: jest.fn(),
     });
     const { getByText, queryByText } = render(<HomeScreen />);
     expect(getByText('Start Organizing →')).toBeTruthy();
@@ -92,14 +102,44 @@ describe('HomeScreen', () => {
     expect(mockPush).toHaveBeenCalledWith('/to-delete');
   });
 
+  it('refreshes deletion count when screen gains focus', () => {
+    const mockRefreshDeletion = jest.fn();
+    const mockRefreshMonths = jest.fn();
+    mockUseDeletionAlbum.mockReturnValue({
+      markedCount: 5,
+      isLoading: false,
+      refresh: mockRefreshDeletion,
+    });
+    mockUseAvailableMonths.mockReturnValue({
+      months: [{ year: 2024, month: 3, count: 20 }],
+      isLoading: false,
+      refresh: mockRefreshMonths,
+    });
+
+    render(<HomeScreen />);
+
+    // Clear calls from initial mount/focus
+    mockRefreshDeletion.mockClear();
+    mockRefreshMonths.mockClear();
+
+    // Simulate screen regaining focus (e.g., navigating back from to-delete)
+    expect(focusCallback).not.toBeNull();
+    focusCallback!();
+
+    expect(mockRefreshDeletion).toHaveBeenCalled();
+    expect(mockRefreshMonths).toHaveBeenCalled();
+  });
+
   it('shows empty state when no photos on device', () => {
     mockUseAvailableMonths.mockReturnValue({
       months: [],
       isLoading: false,
+      refresh: jest.fn(),
     });
     mockUseDeletionAlbum.mockReturnValue({
       markedCount: 0,
       isLoading: false,
+      refresh: jest.fn(),
     });
     const { getByText, queryByText } = render(<HomeScreen />);
     expect(getByText('No photos found on this device')).toBeTruthy();

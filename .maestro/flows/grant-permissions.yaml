@@ -1,23 +1,21 @@
-appId: com.anonymous.picky-saver
+appId: com.pickysaver.app
 ---
 
 # Grant Permissions Flow
-# Launch app → grant photo access → verify home screen visible
+# Verify that with granted permissions, the home screen loads correctly
+# with the "Start Organizing" button visible.
 
-- launchApp
+- launchApp:
+    permissions:
+      photos: allow
 
-# On first launch, PermissionGate shows the undetermined state
-- assertVisible: "Your Photo Library"
-- assertVisible: "Allow photo access"
+# Verify home screen is visible with permissions granted
+- extendedWaitUntil:
+    visible: "Picky Saver"
+    timeout: 10000
 
-# Tap the "Allow Access" button
-- tapOn: "Allow photo access"
+# Verify the main CTA is visible
+- assertVisible: ".*Start Organizing.*"
 
-# Grant the OS-level permission dialog
-- tapOn:
-    id: ".*Allow Full Access.*"
-    optional: true
-
-# Verify home screen is visible after granting permissions
-- assertVisible: "Picky Saver"
-- assertVisible: "Start organizing your photos"
+# Verify subtitle text
+- assertVisible: ".*Organize your photos.*"

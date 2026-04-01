@@ -17,6 +17,7 @@ describe('useDeletionAlbum', () => {
     mockService.getMarkedCount.mockResolvedValue(1);
     mockService.markForDeletion.mockResolvedValue(undefined);
     mockService.restore.mockResolvedValue(undefined);
+    mockService.restoreAll.mockResolvedValue(undefined);
     mockService.permanentlyDelete.mockResolvedValue(true);
   });
 
@@ -78,7 +79,28 @@ describe('useDeletionAlbum', () => {
     });
 
     expect(success!).toBe(true);
+    // permanentlyDeleteAll now fetches fresh assets from the service
+    expect(mockService.getMarkedAssets).toHaveBeenCalled();
     expect(mockService.permanentlyDelete).toHaveBeenCalledWith([fakeAsset1]);
+    expect(result.current.markedPhotos).toEqual([]);
+    expect(result.current.markedCount).toBe(0);
+  });
+
+  it('restoreAll calls service and clears state', async () => {
+    mockService.getMarkedAssets.mockResolvedValue([fakeAsset1, fakeAsset2]);
+    mockService.getMarkedCount.mockResolvedValue(2);
+
+    const { result } = renderHook(() => useDeletionAlbum());
+
+    await waitFor(() => {
+      expect(result.current.isLoading).toBe(false);
+    });
+
+    await act(async () => {
+      await result.current.restoreAll();
+    });
+
+    expect(mockService.restoreAll).toHaveBeenCalledWith([fakeAsset1, fakeAsset2]);
     expect(result.current.markedPhotos).toEqual([]);
     expect(result.current.markedCount).toBe(0);
   });

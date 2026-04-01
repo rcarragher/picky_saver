@@ -1,0 +1,27 @@
+appId: com.pickysaver.app
+---
+
+# Pull-to-Refresh Flow
+# Test pull-to-refresh on the date picker screen to reload month data.
+
+- launchApp
+
+# Home screen
+- assertVisible: "Picky Saver"
+- tapOn: "Start organizing your photos"
+
+# Date picker
+- assertVisible: "Pick a Month"
+- extendedWaitUntil:
+    visible: ".*photos.*"
+    timeout: 10000
+
+# Pull down to refresh the month list
+- swipe:
+    direction: "DOWN"
+    duration: 1000
+
+# Verify months are still visible after refresh
+- extendedWaitUntil:
+    visible: ".*photos.*"
+    timeout: 10000

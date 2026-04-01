@@ -1,0 +1,40 @@
+appId: com.pickysaver.app
+---
+
+# Preview Close Flow
+# Open a photo preview in the To Be Deleted screen, then close it
+# via the X button (not restore).
+#
+# Prerequisite: Some photos must be marked for deletion
+# (run organize-month.yaml or summary-navigation.yaml first)
+
+- launchApp
+
+# Home screen
+- assertVisible: "Picky Saver"
+
+# Navigate to To Be Deleted
+- extendedWaitUntil:
+    visible: ".*marked for deletion.*"
+    timeout: 10000
+- tapOn:
+    text: ".*marked for deletion.*"
+
+# Verify To Be Deleted screen
+- assertVisible: "To Be Deleted"
+
+# Tap the first photo to open preview
+- tapOn:
+    text: "View photo"
+    index: 0
+
+# Verify preview is open
+- assertVisible:
+    id: "preview-image"
+
+# Close via X button
+- tapOn:
+    id: "close-preview"
+
+# Verify we're back on the grid
+- assertVisible: "To Be Deleted"

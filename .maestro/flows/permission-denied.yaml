@@ -1,0 +1,19 @@
+appId: com.pickysaver.app
+---
+
+# Permission Denied Flow
+# Verify the "Photo Access Required" screen when permissions are denied.
+#
+# Uses Maestro's permissions parameter to deny photo access on launch.
+
+- launchApp:
+    permissions:
+      photos: deny
+
+# PermissionGate should show the denied state
+- extendedWaitUntil:
+    visible: "Photo Access Required"
+    timeout: 10000
+
+# Verify the "Open Settings" button is visible
+- assertVisible: "Open device settings"

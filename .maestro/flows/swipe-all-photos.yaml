@@ -1,0 +1,46 @@
+appId: com.pickysaver.app
+---
+
+# Swipe All Photos Flow
+# Navigate to a month, swipe through ALL photos,
+# verify auto-navigation to summary screen.
+
+- launchApp
+
+# Home screen
+- assertVisible: "Picky Saver"
+- tapOn: "Start organizing your photos"
+
+# Date picker — tap the last month (fewest photos)
+- assertVisible: "Pick a Month"
+- extendedWaitUntil:
+    visible: ".*photos.*"
+    timeout: 10000
+
+# Tap a month tile
+- tapOn:
+    text: ".*photos.*"
+    index: 0
+
+# Dismiss onboarding if shown
+- tapOn:
+    text: ".*Dismiss onboarding.*"
+    optional: true
+
+# Swipe all photos right (keep) — repeat enough times to clear any month
+- repeat:
+    times: 20
+    commands:
+      - swipe:
+          id: "photo-card"
+          direction: "RIGHT"
+          duration: 400
+          optional: true
+
+# Should auto-navigate to summary
+- extendedWaitUntil:
+    visible: "All done!"
+    timeout: 10000
+
+- assertVisible: ".*reviewed.*photos.*"
+- assertVisible: "Kept"

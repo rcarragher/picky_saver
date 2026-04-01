@@ -51,6 +51,16 @@ export async function restore(asset: MediaLibrary.Asset): Promise<void> {
 }
 
 /**
+ * Restore all assets by removing them from the deletion album.
+ */
+export async function restoreAll(assets: MediaLibrary.Asset[]): Promise<void> {
+  if (assets.length === 0) return;
+  const album = await getOrCreateAlbum();
+  if (!album) return;
+  await MediaLibrary.removeAssetsFromAlbumAsync(assets, album);
+}
+
+/**
  * Get all assets currently marked for deletion.
  * Paginates internally to return the full list.
  */

@@ -109,6 +109,7 @@ const styles = StyleSheet.create({
     borderRadius: borderRadius.md,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingHorizontal: spacing.xl,
     minHeight: touchTarget.min,
   },
   buttonText: {

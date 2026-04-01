@@ -1,0 +1,57 @@
+appId: com.pickysaver.app
+---
+
+# Summary Assertions Flow
+# Navigate to a month, swipe all photos (mix of keep and delete),
+# verify summary screen shows correct structure and buttons.
+
+- launchApp
+
+# Home screen
+- assertVisible: "Picky Saver"
+- tapOn: "Start organizing your photos"
+
+# Date picker — select a month
+- assertVisible: "Pick a Month"
+- extendedWaitUntil:
+    visible: ".*photos.*"
+    timeout: 10000
+- tapOn:
+    text: ".*photos.*"
+    index: 0
+
+# Dismiss onboarding if shown
+- tapOn:
+    text: ".*Dismiss onboarding.*"
+    optional: true
+
+# Swipe photos — mix of right (keep) and left (delete)
+- swipe:
+    id: "photo-card"
+    direction: "RIGHT"
+    duration: 400
+- swipe:
+    id: "photo-card"
+    direction: "LEFT"
+    duration: 400
+
+# Swipe remaining photos right to complete the month
+- repeat:
+    times: 20
+    commands:
+      - swipe:
+          id: "photo-card"
+          direction: "RIGHT"
+          duration: 400
+          optional: true
+
+# Should auto-navigate to summary — verify content
+- extendedWaitUntil:
+    visible: "All done!"
+    timeout: 10000
+
+- assertVisible: ".*reviewed.*photos.*"
+- assertVisible: "Kept"
+- assertVisible: ".*deletion.*"
+- assertVisible: "Review Deletions"
+- assertVisible: "Back to Home"

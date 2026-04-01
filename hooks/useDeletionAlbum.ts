@@ -5,6 +5,7 @@ import {
   getMarkedCount,
   markForDeletion as markService,
   restore as restoreService,
+  restoreAll as restoreAllService,
   permanentlyDelete,
 } from '../services/deletionAlbumService';
 
@@ -51,14 +52,24 @@ export function useDeletionAlbum() {
     [],
   );
 
+  const restoreAll = useCallback(async () => {
+    await restoreAllService(markedPhotos);
+    setMarkedPhotos([]);
+    setMarkedCount(0);
+  }, [markedPhotos]);
+
   const permanentlyDeleteAll = useCallback(async (): Promise<boolean> => {
-    const success = await permanentlyDelete(markedPhotos);
+    // Fetch fresh assets from the album to avoid stale closure state
+    // (e.g. after restoring photos, the captured markedPhotos may be outdated)
+    const freshAssets = await getMarkedAssets();
+    if (freshAssets.length === 0) return true;
+    const success = await permanentlyDelete(freshAssets);
     if (success) {
       setMarkedPhotos([]);
       setMarkedCount(0);
     }
     return success;
-  }, [markedPhotos]);
+  }, []);
 
   return {
     markedPhotos,
@@ -66,6 +77,7 @@ export function useDeletionAlbum() {
     isLoading,
     markForDeletion,
     restore,
+    restoreAll,
     permanentlyDeleteAll,
     refresh,
   };
