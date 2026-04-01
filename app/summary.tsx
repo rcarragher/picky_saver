@@ -36,6 +36,7 @@ export default function SummaryScreen() {
   const hasSavedRef = useRef(false);
   useEffect(() => {
     if (hasSavedRef.current) return;
+    if (!params.year || !params.month) return;
     hasSavedRef.current = true;
     saveReview({
       year: Number(params.year),
