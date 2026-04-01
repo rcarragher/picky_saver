@@ -2,7 +2,7 @@
 
 > **Design document:** [design.md](./design.md)
 > **Status:** In progress
-> **Current phase:** Phase 0 complete
+> **Current phase:** Phase 1 complete
 
 ---
 
@@ -101,7 +101,7 @@ Implement month-level review progress tracking across 8 phases: data layer (type
 
 ### Tasks
 
-- [ ] **1.1** Create `hooks/useReviewHistory.ts`
+- [x] **1.1** Create `hooks/useReviewHistory.ts`
   - File: `hooks/useReviewHistory.ts`
   - Follow the `useDeletionAlbum` hook pattern exactly (see `hooks/useDeletionAlbum.ts`):
     - State: `records: ReviewRecord[]` (sorted by `reviewedAt` descending), `isLoading: boolean`
@@ -114,7 +114,7 @@ Implement month-level review progress tracking across 8 phases: data layer (type
   - **Important:** Wrap `refresh`, `saveReview`, and `clearReview` in `useCallback` with correct dependency arrays, exactly as `useDeletionAlbum` does for all its methods. This prevents infinite re-render loops when these functions are used as deps in `useEffect` or `useFocusEffect` in consuming screens.
   - Silently catch errors in `refresh()` (matching `useDeletionAlbum` pattern: `try { ... } catch { } finally { setIsLoading(false) }`)
 
-- [ ] **1.2** Create unit tests for `useReviewHistory`
+- [x] **1.2** Create unit tests for `useReviewHistory`
   - File: `__tests__/hooks/useReviewHistory.test.ts`
   - Mock `../../services/reviewService` (follow `__tests__/hooks/useDeletionAlbum.test.ts` pattern)
   - Use `renderHook` from `@testing-library/react-native`
@@ -127,11 +127,14 @@ Implement month-level review progress tracking across 8 phases: data layer (type
     - `refresh` reloads from service
     - Records are sorted by `reviewedAt` descending
 
-- [ ] **1.3** Build + test gate: `npx expo export --platform ios 2>&1 | head -5 && npm test`
+- [x] **1.3** Build + test gate: `npx expo export --platform ios 2>&1 | head -5 && npm test`
 
 ### Observations
 
-<!-- Agent: write notes here during execution -->
+- All 3 tasks completed. `useReviewHistory` hook created following `useDeletionAlbum` pattern exactly: state with `records` and `isLoading`, load on mount via `useEffect`, all methods wrapped in `useCallback` with correct dependency arrays.
+- 7 unit tests all passing. Tests cover mount loading, sort order, saveReview, clearReview, isReviewed, getRecord, and refresh.
+- Build (expo export) and full test suite (134 tests, 18 suites) pass cleanly. Pre-existing `act(...)` warnings in swipe tests are unrelated.
+- Files added: `hooks/useReviewHistory.ts`, `__tests__/hooks/useReviewHistory.test.ts`
 
 ---
 
