@@ -16,3 +16,14 @@ export type SwipeSession = {
   deleted: number;
   total: number;
 };
+
+export type ReviewRecord = {
+  year: number;
+  /** 1-based month number (1 = January, 12 = December) */
+  month: number;
+  kept: number;
+  deleted: number;
+  total: number;
+  /** ISO 8601 date string */
+  reviewedAt: string;
+};
