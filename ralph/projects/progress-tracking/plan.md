@@ -2,7 +2,7 @@
 
 > **Design document:** [design.md](./design.md)
 > **Status:** In progress
-> **Current phase:** Phase 2 complete
+> **Current phase:** Phase 3 complete
 
 ---
 
@@ -192,7 +192,7 @@ Implement month-level review progress tracking across 8 phases: data layer (type
 
 ### Tasks
 
-- [ ] **3.1** Update reanimated mock to support `Animated.Text`
+- [x] **3.1** Update reanimated mock to support `Animated.Text`
   - File: `__mocks__/react-native-reanimated.ts`
   - The existing mock only defines `Animated.View` and `Animated.createAnimatedComponent` — `Animated.Text` is missing
   - Import `Text` from `react-native` at the top of the file
@@ -205,7 +205,7 @@ Implement month-level review progress tracking across 8 phases: data layer (type
   - Add to the `Animated` object: `Text: AnimatedText`
   - If using `withDelay` for staggered emoji burst, also add: `const withDelay = (_delay: any, anim: any) => anim;` and export it
 
-- [ ] **3.2** Create `CelebrationBurst` component
+- [x] **3.2** Create `CelebrationBurst` component
   - File: `components/CelebrationBurst.tsx`
   - Self-contained, no props — plays on mount
   - Implementation:
@@ -220,22 +220,28 @@ Implement month-level review progress tracking across 8 phases: data layer (type
     - Export this as part of the component: render a large "✓" that springs in, with the emoji burst around it
   - Use `colors.accent` for the checkmark (from `useTheme`)
 
-- [ ] **3.3** Integrate `CelebrationBurst` into summary screen
+- [x] **3.3** Integrate `CelebrationBurst` into summary screen
   - File: `app/summary.tsx`
   - Replace the static `<Text style={[styles.checkIcon, { color: colors.accent }]}>✓</Text>` with `<CelebrationBurst />`
   - Change title from `"All done!"` to `"Month Complete!"`
   - Remove the `checkIcon` style (no longer needed — CelebrationBurst handles its own styling)
 
-- [ ] **3.4** Update summary screen test for new title
+- [x] **3.4** Update summary screen test for new title
   - File: `__tests__/screens/summary.test.tsx`
   - Update the test `'renders the completion title'` to check for `'Month Complete!'` instead of `'All done!'`
   - The reanimated mock was updated in task 3.1 — verify `Animated.Text` renders correctly in tests
 
-- [ ] **3.5** Build + test gate: `npx expo export --platform ios 2>&1 | head -5 && npm test`
+- [x] **3.5** Build + test gate: `npx expo export --platform ios 2>&1 | head -5 && npm test`
 
 ### Observations
 
-<!-- Agent: write notes here during execution -->
+- All 5 tasks completed. Created `CelebrationBurst` component with 6 emoji particles that burst outward on mount using `withTiming` + `withDelay` stagger, plus a checkmark that springs in via `withSpring`.
+- Updated reanimated mock: added `AnimatedText` (forwardRef mirroring `AnimatedView`), `withDelay` mock, and `Text` import from react-native.
+- Summary screen: replaced static "✓" with `<CelebrationBurst />`, changed title from "All done!" to "Month Complete!", removed unused `checkIcon` style.
+- Summary test updated to assert "Month Complete!" title. All 135 tests pass. Build succeeds.
+- `CelebrationBurst` uses `accessibilityElementsHidden` and `importantForAccessibility="no-hide-descendants"` on the checkmark to keep it decorative (the title "Month Complete!" conveys the info).
+- Files added: `components/CelebrationBurst.tsx`
+- Files modified: `__mocks__/react-native-reanimated.ts`, `app/summary.tsx`, `__tests__/screens/summary.test.tsx`
 
 ---
 

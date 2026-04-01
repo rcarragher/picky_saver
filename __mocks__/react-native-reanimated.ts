@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 
 const useSharedValue = (init: any) => ({ value: init });
 const useAnimatedStyle = (fn: () => any) => fn();
@@ -9,6 +9,7 @@ const withTiming = (val: any, _config?: any, callback?: any) => {
   if (callback) callback(true);
   return val;
 };
+const withDelay = (_delay: any, anim: any) => anim;
 const runOnJS = (fn: any) => fn;
 const Easing = {
   out: (fn: any) => fn,
@@ -25,8 +26,13 @@ const AnimatedView = React.forwardRef((props: any, ref: any) =>
   React.createElement(View, { ...props, ref }),
 );
 
+const AnimatedText = React.forwardRef((props: any, ref: any) =>
+  React.createElement(Text, { ...props, ref }),
+);
+
 const Animated = {
   View: AnimatedView,
+  Text: AnimatedText,
   createAnimatedComponent: (comp: any) => comp,
 };
 
@@ -36,6 +42,7 @@ export {
   useReducedMotion,
   withSpring,
   withTiming,
+  withDelay,
   runOnJS,
   Easing,
   useEvent,

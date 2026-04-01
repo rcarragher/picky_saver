@@ -53,7 +53,7 @@ describe('SummaryScreen', () => {
 
   it('renders the completion title', () => {
     const { getByText } = render(<SummaryScreen />);
-    expect(getByText('All done!')).toBeTruthy();
+    expect(getByText('Month Complete!')).toBeTruthy();
   });
 
   it('renders the total reviewed count', () => {

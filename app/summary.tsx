@@ -4,6 +4,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../hooks/useTheme';
 import { useReviewHistory } from '../hooks/useReviewHistory';
+import { CelebrationBurst } from '../components/CelebrationBurst';
 import { AnimatedPressable } from '../components/AnimatedPressable';
 import {
   borderRadius,
@@ -52,11 +53,11 @@ export default function SummaryScreen() {
         { backgroundColor: colors.background, paddingTop: insets.top + spacing.xl },
       ]}
     >
-      {/* Checkmark icon */}
-      <Text style={[styles.checkIcon, { color: colors.accent }]}>✓</Text>
+      {/* Celebration animation */}
+      <CelebrationBurst />
 
       {/* Title */}
-      <Text style={[styles.title, { color: colors.textPrimary }]} accessibilityRole="header">All done!</Text>
+      <Text style={[styles.title, { color: colors.textPrimary }]} accessibilityRole="header">Month Complete!</Text>
 
       {/* Subtitle */}
       <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
@@ -114,10 +115,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     paddingHorizontal: screenMargin,
-  },
-  checkIcon: {
-    fontSize: 64,
-    marginBottom: spacing.md,
   },
   title: {
     fontSize: fontSize.h1,
