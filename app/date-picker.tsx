@@ -1,9 +1,10 @@
 import React, { useCallback, useState } from 'react';
 import { FlatList, Pressable, RefreshControl, StyleSheet, Text, View } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useFocusEffect, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../hooks/useTheme';
 import { useAvailableMonths } from '../hooks/usePhotos';
+import { useReviewHistory } from '../hooks/useReviewHistory';
 import { useAppStateRefresh } from '../hooks/useAppStateRefresh';
 import { PermissionGate } from '../components/PermissionGate';
 import { MonthTile } from '../components/MonthTile';
@@ -43,14 +44,22 @@ function DatePickerContent() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { months, isLoading, refresh } = useAvailableMonths();
-  useAppStateRefresh(refresh);
+  const { isReviewed, refresh: refreshReview } = useReviewHistory();
   const [refreshing, setRefreshing] = useState(false);
+
+  const handleForeground = useCallback(() => {
+    refresh();
+    refreshReview();
+  }, [refresh, refreshReview]);
+
+  useAppStateRefresh(handleForeground);
+  useFocusEffect(handleForeground);
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
-    await refresh();
+    await Promise.all([refresh(), refreshReview()]);
     setRefreshing(false);
-  }, [refresh]);
+  }, [refresh, refreshReview]);
 
   const sections = buildSections(months);
 
@@ -106,6 +115,7 @@ function DatePickerContent() {
                 month={item.data.month}
                 count={item.data.count}
                 onPress={handleMonthPress}
+                reviewed={isReviewed(item.data.year, item.data.month)}
               />
             );
           }}

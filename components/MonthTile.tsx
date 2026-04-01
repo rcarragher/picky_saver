@@ -11,24 +11,33 @@ type Props = {
   month: number;
   count: number;
   onPress: (year: number, month: number) => void;
+  reviewed?: boolean;
 };
 
-export function MonthTile({ year, month, count, onPress }: Props) {
+export function MonthTile({ year, month, count, onPress, reviewed }: Props) {
   const colors = useTheme();
+  const photoText = `${count} ${count === 1 ? 'photo' : 'photos'}`;
 
   return (
     <AnimatedPressable
-      style={[styles.container, { backgroundColor: colors.surface }]}
+      style={[
+        styles.container,
+        { backgroundColor: colors.surface },
+        reviewed && { borderLeftWidth: 3, borderLeftColor: colors.keep },
+      ]}
       onPress={() => onPress(year, month)}
       accessibilityRole="button"
-      accessibilityLabel={`${getMonthName(month)} ${year}, ${count} photos`}
+      accessibilityLabel={`${getMonthName(month)} ${year}, ${photoText}${reviewed ? ', reviewed' : ''}`}
     >
       <View style={styles.textContainer}>
         <Text style={[styles.title, { color: colors.textPrimary }]}>
           {getMonthName(month)} {year}
         </Text>
         <Text style={[styles.caption, { color: colors.textSecondary }]}>
-          {count} {count === 1 ? 'photo' : 'photos'}
+          {photoText}
+          {reviewed && (
+            <Text style={{ color: colors.keep }}> · ✓ Reviewed</Text>
+          )}
         </Text>
       </View>
       <Text style={[styles.chevron, { color: colors.textSecondary }]}>→</Text>

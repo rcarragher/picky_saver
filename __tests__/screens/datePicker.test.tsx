@@ -8,6 +8,19 @@ const mockBack = jest.fn();
 
 jest.mock('expo-router', () => ({
   useRouter: () => ({ push: mockPush, back: mockBack }),
+  useFocusEffect: jest.fn(),
+}));
+
+jest.mock('../../hooks/useReviewHistory', () => ({
+  useReviewHistory: () => ({
+    records: [],
+    isLoading: false,
+    saveReview: jest.fn(),
+    clearReview: jest.fn(),
+    isReviewed: jest.fn(() => false),
+    getRecord: jest.fn(() => undefined),
+    refresh: jest.fn(),
+  }),
 }));
 
 jest.mock('react-native-safe-area-context', () => ({

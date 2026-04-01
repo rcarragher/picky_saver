@@ -2,7 +2,7 @@
 
 > **Design document:** [design.md](./design.md)
 > **Status:** In progress
-> **Current phase:** Phase 3 complete
+> **Current phase:** Phase 4 complete
 
 ---
 
@@ -251,7 +251,7 @@ Implement month-level review progress tracking across 8 phases: data layer (type
 
 ### Tasks
 
-- [ ] **4.1** Add `reviewed` prop to `MonthTile`
+- [x] **4.1** Add `reviewed` prop to `MonthTile`
   - File: `components/MonthTile.tsx`
   - Add optional prop: `reviewed?: boolean` to the `Props` type
   - When `reviewed` is true:
@@ -261,7 +261,7 @@ Implement month-level review progress tracking across 8 phases: data layer (type
   - When `reviewed` is false/undefined: no change to existing rendering
   - Update accessibility label to include "reviewed" when applicable
 
-- [ ] **4.2** Wire date picker to pass review status
+- [x] **4.2** Wire date picker to pass review status
   - File: `app/date-picker.tsx`
   - Import `useReviewHistory` from `../hooks/useReviewHistory`
   - Import `useFocusEffect` from `expo-router` (not currently imported — the date picker only imports `useRouter`)
@@ -270,7 +270,7 @@ Implement month-level review progress tracking across 8 phases: data layer (type
   - **Important:** `useFocusEffect` requires a stable callback — do NOT pass an inline arrow function. Either pass the `useCallback`-wrapped handler directly, or pass `refreshReview` directly if it's stable from `useCallback` in the hook.
   - In the `renderItem` callback, when rendering a `MonthTile`, pass `reviewed={isReviewed(item.data.year, item.data.month)}`
 
-- [ ] **4.3** Add tests for MonthTile reviewed state
+- [x] **4.3** Add tests for MonthTile reviewed state
   - File: `__tests__/components/MonthTile.test.tsx`
   - Add to existing describe block:
     - `'shows reviewed indicator when reviewed is true'` — render with `reviewed={true}`, assert "✓ Reviewed" text is present
@@ -278,11 +278,16 @@ Implement month-level review progress tracking across 8 phases: data layer (type
     - `'does not show reviewed indicator when reviewed is omitted'` — render without prop, assert "✓ Reviewed" is absent
     - `'includes reviewed in accessibility label when reviewed'` — check updated a11y label
 
-- [ ] **4.4** Build + test gate: `npx expo export --platform ios 2>&1 | head -5 && npm test`
+- [x] **4.4** Build + test gate: `npx expo export --platform ios 2>&1 | head -5 && npm test`
 
 ### Observations
 
-<!-- Agent: write notes here during execution -->
+- All 4 tasks completed. `MonthTile` now accepts optional `reviewed` prop: when true, adds a green left border (`borderLeftWidth: 3, borderLeftColor: colors.keep`) and appends " · ✓ Reviewed" in green to the caption. Accessibility label includes ", reviewed" when applicable.
+- Date picker now imports `useReviewHistory` and `useFocusEffect` from `expo-router`. Created a unified `handleForeground` callback that refreshes both photo data and review data, used by both `useAppStateRefresh` and `useFocusEffect`. Pull-to-refresh also refreshes both via `Promise.all`.
+- `MonthTile` renders `reviewed` prop inline via `isReviewed(item.data.year, item.data.month)`.
+- Date picker test file updated: added `useFocusEffect` to expo-router mock and added `useReviewHistory` mock. All existing date picker tests pass unchanged.
+- 4 new MonthTile tests added (reviewed indicator shown/hidden, accessibility label). All 139 tests pass. Build succeeds.
+- Files modified: `components/MonthTile.tsx`, `app/date-picker.tsx`, `__tests__/components/MonthTile.test.tsx`, `__tests__/screens/datePicker.test.tsx`
 
 ---
 

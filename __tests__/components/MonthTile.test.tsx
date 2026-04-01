@@ -58,4 +58,24 @@ describe('MonthTile', () => {
     const { getByLabelText } = render(<MonthTile {...defaultProps} />);
     expect(getByLabelText('March 2024, 42 photos')).toBeTruthy();
   });
+
+  it('shows reviewed indicator when reviewed is true', () => {
+    const { getByText } = render(<MonthTile {...defaultProps} reviewed={true} />);
+    expect(getByText(' · ✓ Reviewed')).toBeTruthy();
+  });
+
+  it('does not show reviewed indicator when reviewed is false', () => {
+    const { queryByText } = render(<MonthTile {...defaultProps} reviewed={false} />);
+    expect(queryByText(' · ✓ Reviewed')).toBeNull();
+  });
+
+  it('does not show reviewed indicator when reviewed is omitted', () => {
+    const { queryByText } = render(<MonthTile {...defaultProps} />);
+    expect(queryByText(' · ✓ Reviewed')).toBeNull();
+  });
+
+  it('includes reviewed in accessibility label when reviewed', () => {
+    const { getByLabelText } = render(<MonthTile {...defaultProps} reviewed={true} />);
+    expect(getByLabelText('March 2024, 42 photos, reviewed')).toBeTruthy();
+  });
 });
