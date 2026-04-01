@@ -2,7 +2,7 @@
 
 > **Design document:** [design.md](./design.md)
 > **Status:** In progress
-> **Current phase:** Phase 4 complete
+> **Current phase:** Phase 5 complete
 
 ---
 
@@ -297,7 +297,7 @@ Implement month-level review progress tracking across 8 phases: data layer (type
 
 ### Tasks
 
-- [ ] **5.1** Create `HistoryTile` component
+- [x] **5.1** Create `HistoryTile` component
   - File: `components/HistoryTile.tsx`
   - Props (per design):
     ```typescript
@@ -317,7 +317,7 @@ Implement month-level review progress tracking across 8 phases: data layer (type
       - "Clear" — `AnimatedPressable`, text-only/ghost style, `fontSize.small`, `colors.textSecondary`
   - Accessibility: `accessibilityLabel` on each button, `accessibilityRole="button"`
 
-- [ ] **5.2** Create unit tests for `HistoryTile`
+- [x] **5.2** Create unit tests for `HistoryTile`
   - File: `__tests__/components/HistoryTile.test.tsx`
   - Mock `useTheme` (follow `__tests__/components/MonthTile.test.tsx` pattern)
   - Test cases:
@@ -327,11 +327,15 @@ Implement month-level review progress tracking across 8 phases: data layer (type
     - "Review Again" button calls `onReviewAgain` with correct year and month
     - "Clear" button calls `onClear` with correct year and month
 
-- [ ] **5.3** Build + test gate: `npx expo export --platform ios 2>&1 | head -5 && npm test`
+- [x] **5.3** Build + test gate: `npx expo export --platform ios 2>&1 | head -5 && npm test`
 
 ### Observations
 
-<!-- Agent: write notes here during execution -->
+- All 3 tasks completed. `HistoryTile` component created with month name title (via `getMonthName`), formatted review date subtitle, colored kept/deleted stats, and two action buttons ("Review Again" with border style, "Clear" with ghost/text-only style).
+- 5 unit tests all passing: renders month name, renders formatted review date, renders kept/deleted stats, Review Again calls `onReviewAgain` with correct args, Clear calls `onClear` with correct args.
+- Component follows `MonthTile` patterns: uses `useTheme`, `AnimatedPressable`, same theme constants (`borderRadius.md`, `spacing.lg`, `fontSize`). Both buttons have `accessibilityRole="button"` and `accessibilityLabel`.
+- Build (expo export) and full test suite (144 tests, 19 suites) pass cleanly.
+- Files added: `components/HistoryTile.tsx`, `__tests__/components/HistoryTile.test.tsx`
 
 ---
 
