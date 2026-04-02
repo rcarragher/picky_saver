@@ -24,13 +24,9 @@
   "submit": {
     "production": {
       "ios": {
-        "appleId": "",
-        "ascAppId": "",
-        "appleTeamId": ""
-      },
-      "android": {
-        "serviceAccountKeyPath": "",
-        "track": "production"
+        "appleId": "rcarragher@gmail.com",
+        "ascAppId": "6761508005",
+        "appleTeamId": "F728TBJHKR"
       }
     }
   }

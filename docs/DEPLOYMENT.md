@@ -1,4 +1,4 @@
-# Deployment Guide — TestFlight via EAS
+# Deployment Guide
 
 ## Prerequisites
 
@@ -13,65 +13,71 @@ Before your first deployment:
    - EAS can auto-manage certificates and provisioning profiles.
    - Or provide your own if you prefer manual management.
 
-## Manual deployment (one command)
+## Build (self-hosted Mac Mini)
 
-Build and submit to TestFlight in one step:
+iOS builds run locally on the Mac Mini via `eas build --local`. EAS still manages code signing and version tracking — only the compute is local.
+
+### Via GitHub Actions
+
+Trigger the **Build iOS (Local)** workflow from the Actions tab. Select a build profile (`development`, `preview`, or `production`). The built artifact is uploaded and retained for 14 days.
+
+### Manual command
+
+    eas build --platform ios --profile production --local
+
+## Submit to TestFlight
+
+After a successful build:
+
+    eas submit --platform ios --latest
+
+Or build and submit in one step (uses EAS cloud for the build):
 
     eas build --platform ios --profile production --auto-submit
 
-This will:
+## E2E Tests (self-hosted Mac Mini)
 
-1. Build the iOS app on EAS cloud
-2. Sign it with your provisioning profile
-3. Upload the .ipa to App Store Connect
-4. It appears in TestFlight once Apple finishes processing (~5-30 min)
+E2E tests run on the Mac Mini using Maestro. The workflow triggers on push to `main` and `workflow_dispatch`.
 
-## Automated deployment (GitHub Actions)
+### Via GitHub Actions
 
-Once manual deployment works, add this workflow:
+Trigger the **E2E Tests (Self-Hosted)** workflow from the Actions tab, or push to `main`. Maestro test artifacts are uploaded and retained for 7 days.
 
-File: `.github/workflows/deploy.yml`
+### Manual command
 
-    name: Deploy to TestFlight
-
-    on:
-      workflow_dispatch:
-      push:
-        tags:
-          - 'v*'
-
-    jobs:
-      deploy:
-        name: Build & Submit
-        runs-on: ubuntu-latest
-        timeout-minutes: 60
-        steps:
-          - uses: actions/checkout@v4
-          - uses: actions/setup-node@v4
-            with:
-              node-version-file: '.nvmrc'
-              cache: 'npm'
-          - run: npm ci
-          - name: Build and submit to TestFlight
-            run: npx eas-cli build --platform ios --profile production --auto-submit --non-interactive
-            env:
-              EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
-
-Trigger options:
-
-- **Manual:** Click "Run workflow" in GitHub Actions UI
-- **On tag:** Push a version tag (`git tag v1.0.0 && git push --tags`)
+    npm run test:e2e
 
 ## Version management
 
 EAS auto-increments the build number (`autoIncrement: true` in `eas.json`).
 Update the user-facing version in `app.config.ts` (`version` field) before major releases.
 
+## What EAS services are still in use
+
+| Service                 | Purpose                                                        |
+| ----------------------- | -------------------------------------------------------------- |
+| Code signing management | Certificates and provisioning profiles for `eas build --local` |
+| Version tracking        | `appVersionSource: "remote"` auto-increments build numbers     |
+| `eas submit`            | Uploads .ipa to App Store Connect / TestFlight                 |
+| `EXPO_TOKEN` secret     | Authenticates the runner with EAS for builds and submissions   |
+
+## Self-hosted runner prerequisites
+
+The Mac Mini runner needs:
+
+- Xcode + Command Line Tools
+- An iOS simulator runtime (e.g., iPhone 16)
+- Node.js (version matching `.nvmrc`)
+- CocoaPods
+- Maestro CLI
+- ImageMagick + ExifTool (for E2E fixture generation)
+
 ## Troubleshooting
 
 - "No matching provisioning profile" — Run `eas credentials` to regenerate
 - "App record not found" — Create it in App Store Connect first
 - Build succeeds but not in TestFlight — Check App Store Connect for compliance issues
+- E2E fails to boot simulator — Verify a compatible iPhone simulator is installed (`xcrun simctl list devices available`)
 
 ## Branch Protection (one-time setup)
 

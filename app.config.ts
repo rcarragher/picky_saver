@@ -37,5 +37,10 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     ],
     edgeToEdgeEnabled: true,
   },
+  extra: {
+    eas: {
+      projectId: '126fc482-5e9e-4e90-9199-73611c2a27cf',
+    },
+  },
   plugins: ['expo-router'],
 });

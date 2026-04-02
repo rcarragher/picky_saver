@@ -14,8 +14,8 @@ for runtime, devices in data['devices'].items():
 print('', file=sys.stderr)
 sys.exit(1)
 " 2>/dev/null) || {
-  echo "Error: No booted simulator found."
-  exit 1
+  echo "No booted simulator found — skipping reset (already clean)."
+  exit 0
 }
 
 echo "Resetting simulator $DEVICE_UDID..."
