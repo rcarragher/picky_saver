@@ -2,7 +2,7 @@
 
 > **Design document:** [design.md](./design.md)
 > **Status:** In progress
-> **Current phase:** Phase 6
+> **Current phase:** Phase 7
 
 ---
 
@@ -240,18 +240,20 @@ This plan adds ESLint, Prettier, Husky pre-commit hooks, a GitHub Actions CI pip
 
 ### Tasks
 
-- [ ] **6.1** Create `docs/` directory
+- [x] **6.1** Create `docs/` directory
   - Run: `mkdir -p docs`
 
-- [ ] **6.2** Create `docs/DEPLOYMENT.md`
+- [x] **6.2** Create `docs/DEPLOYMENT.md`
   - File: `docs/DEPLOYMENT.md`
   - Content from design doc: prerequisites (Apple Developer Program, App Store Connect, EAS credentials), manual deployment command (`eas build --platform ios --profile production --auto-submit`), automated deployment workflow reference (`.github/workflows/deploy.yml` — to be created later), version management notes, troubleshooting section.
 
-- [ ] **6.3** Build + test gate: `npm run lint && npm run format:check && npm run type-check && npm test`
+- [x] **6.3** Build + test gate: `npm run lint && npm run format:check && npm run type-check && npm test`
 
 ### Observations
 
-<!-- Agent: write notes here during execution -->
+- Created `docs/DEPLOYMENT.md` matching the design doc exactly — prerequisites (Apple Developer Program, App Store Connect, EAS credentials), manual deployment command, automated deployment workflow reference, version management, and troubleshooting.
+- No code changes outside the new docs file — this phase is documentation only.
+- Full gate passes: lint, format:check, type-check, and all 155 tests across 20 suites.
 
 ---
 
