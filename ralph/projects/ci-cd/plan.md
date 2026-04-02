@@ -2,7 +2,7 @@
 
 > **Design document:** [design.md](./design.md)
 > **Status:** In progress
-> **Current phase:** Phase 1
+> **Current phase:** Phase 2
 
 ---
 
@@ -87,18 +87,18 @@ This plan adds ESLint, Prettier, Husky pre-commit hooks, a GitHub Actions CI pip
 
 ### Tasks
 
-- [ ] **2.1** Install Husky and lint-staged
+- [x] **2.1** Install Husky and lint-staged
   - Run: `npm install --save-dev husky lint-staged`
 
-- [ ] **2.2** Initialize Husky
+- [x] **2.2** Initialize Husky
   - Run: `npx husky init`
   - This creates `.husky/` directory and adds `"prepare": "husky"` to `package.json` scripts.
 
-- [ ] **2.3** Configure the pre-commit hook
+- [x] **2.3** Configure the pre-commit hook
   - File: `.husky/pre-commit` (created by `husky init` — overwrite its contents)
   - Content: `npx lint-staged`
 
-- [ ] **2.4** Add lint-staged config to `package.json`
+- [x] **2.4** Add lint-staged config to `package.json`
   - Add at the top level of `package.json` (not inside `scripts`):
     ```json
     "lint-staged": {
@@ -107,18 +107,23 @@ This plan adds ESLint, Prettier, Husky pre-commit hooks, a GitHub Actions CI pip
     }
     ```
 
-- [ ] **2.5** Create `.nvmrc`
+- [x] **2.5** Create `.nvmrc`
   - File: `.nvmrc`
   - Content: `20`
 
-- [ ] **2.6** Verify the hook works
+- [x] **2.6** Verify the hook works
   - Create a temporary test: stage a small whitespace change in any `.ts` file, run `npx lint-staged` manually, and confirm it applies formatting. Revert the test change.
 
-- [ ] **2.7** Build + test gate: `npm test` — all existing tests still pass
+- [x] **2.7** Build + test gate: `npm test` — all existing tests still pass
 
 ### Observations
 
-<!-- Agent: write notes here during execution -->
+- Installed husky 9.1.7 and lint-staged 16.4.0 (required `--legacy-peer-deps` due to React 19 peer dep conflicts — same as Phase 1).
+- `npx husky init` created `.husky/pre-commit` with `npm test` and added `"prepare": "husky"` to package.json scripts — both expected.
+- Overwrote `.husky/pre-commit` to run `npx lint-staged` instead of `npm test`.
+- lint-staged verification: staged a whitespace change to `constants/theme.ts`, ran `npx lint-staged` — eslint and prettier both ran successfully. The "empty commit" error was expected since prettier reverted the whitespace addition.
+- All 155 tests pass across 20 suites.
+- `.nvmrc` set to `20` (major version only per design doc).
 
 ---
 
