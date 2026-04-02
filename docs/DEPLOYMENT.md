@@ -72,3 +72,11 @@ Update the user-facing version in `app.config.ts` (`version` field) before major
 - "No matching provisioning profile" — Run `eas credentials` to regenerate
 - "App record not found" — Create it in App Store Connect first
 - Build succeeds but not in TestFlight — Check App Store Connect for compliance issues
+
+## Branch Protection (one-time setup)
+
+After CI is stable, configure in GitHub Settings > Branches > `main`:
+
+- Require status checks: `Lint & Format`, `Type Check`, `Unit Tests`
+- Require branches to be up to date before merging
+- Do NOT require E2E (manual-trigger only)
