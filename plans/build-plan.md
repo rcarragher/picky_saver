@@ -52,12 +52,9 @@ Reference docs: `plans/implementation-plan.md`, `plans/ui-design.md`
     preset: 'jest-expo',
     setupFilesAfterEnv: ['<rootDir>/jest-setup.js'],
     transformIgnorePatterns: [
-      'node_modules/(?!((jest-)?react-native|@react-native(-community)?|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|react-native-svg))'
+      'node_modules/(?!((jest-)?react-native|@react-native(-community)?|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|react-native-svg))',
     ],
-    testMatch: [
-      '**/__tests__/**/*.{ts,tsx}',
-      '**/*.{test,spec}.{ts,tsx}'
-    ],
+    testMatch: ['**/__tests__/**/*.{ts,tsx}', '**/*.{test,spec}.{ts,tsx}'],
   };
   ```
 - [ ] Create `jest-setup.js`:
@@ -174,7 +171,7 @@ Reference docs: `plans/implementation-plan.md`, `plans/ui-design.md`
   - Swipe left (delete) → call `markForDeletion()` (stub for now), advance
   - Undo button (centered below card): reverses last swipe, animates card back
   - Tap buttons: X button (left, 48x48, delete color) and checkmark button (right, 48x48, keep color) as swipe alternatives
-  - Hint text "← DELETE    KEEP →" below card, secondary color, fades after 5 swipes (use AsyncStorage to track)
+  - Hint text "← DELETE KEEP →" below card, secondary color, fades after 5 swipes (use AsyncStorage to track)
   - When all photos swiped → navigate to summary with session stats
   - Loading state: shimmer card placeholder
   - Reduce Motion: replace rotation + fly-off with simple fade transitions
@@ -425,22 +422,22 @@ Reference docs: `plans/implementation-plan.md`, `plans/ui-design.md`
 
 ## Quick Reference: What's Built At Each Step
 
-| Step | Screens/Components | Services/Hooks | Tests |
-|------|-------------------|----------------|-------|
-| 1 | Placeholder routes, _layout | — | — |
-| 2 | — | — | Jest config, smoke test |
-| 3 | — | useTheme | theme.ts, types |
-| 4 | PermissionGate | usePermissions | 2 test files |
-| 5 | DatePicker, MonthTile | photoService, usePhotos | 4 test files |
-| 6 | PhotoCard, SwipeOverlay, Swipe screen | — | 2 test files |
-| 7 | OnboardingOverlay | — | 1 test file |
-| 8 | — | deletionAlbumService, useDeletionAlbum | 2 test files |
-| 9 | Summary screen | — | 1 test file |
-| 10 | PhotoGrid, Deletion Review, Photo Preview | — | 1 test file |
-| 11 | Home screen | — | 1 test file |
-| 12 | (polish existing) | (edge case handling) | — |
-| 13 | (theme all screens) | useTheme | 1 test file |
-| 14 | (accessibility attrs) | — | — |
-| 15 | (icon, splash, animations) | — | — |
-| 16 | — | — | 4 Maestro E2E flows |
-| 17 | — | — | Real device testing |
+| Step | Screens/Components                        | Services/Hooks                         | Tests                   |
+| ---- | ----------------------------------------- | -------------------------------------- | ----------------------- |
+| 1    | Placeholder routes, \_layout              | —                                      | —                       |
+| 2    | —                                         | —                                      | Jest config, smoke test |
+| 3    | —                                         | useTheme                               | theme.ts, types         |
+| 4    | PermissionGate                            | usePermissions                         | 2 test files            |
+| 5    | DatePicker, MonthTile                     | photoService, usePhotos                | 4 test files            |
+| 6    | PhotoCard, SwipeOverlay, Swipe screen     | —                                      | 2 test files            |
+| 7    | OnboardingOverlay                         | —                                      | 1 test file             |
+| 8    | —                                         | deletionAlbumService, useDeletionAlbum | 2 test files            |
+| 9    | Summary screen                            | —                                      | 1 test file             |
+| 10   | PhotoGrid, Deletion Review, Photo Preview | —                                      | 1 test file             |
+| 11   | Home screen                               | —                                      | 1 test file             |
+| 12   | (polish existing)                         | (edge case handling)                   | —                       |
+| 13   | (theme all screens)                       | useTheme                               | 1 test file             |
+| 14   | (accessibility attrs)                     | —                                      | —                       |
+| 15   | (icon, splash, animations)                | —                                      | —                       |
+| 16   | —                                         | —                                      | 4 Maestro E2E flows     |
+| 17   | —                                         | —                                      | Real device testing     |

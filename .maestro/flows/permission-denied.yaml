@@ -1,6 +1,5 @@
 appId: com.pickysaver.app
 ---
-
 # Permission Denied Flow
 # Verify the "Photo Access Required" screen when permissions are denied.
 #
@@ -12,8 +11,8 @@ appId: com.pickysaver.app
 
 # PermissionGate should show the denied state
 - extendedWaitUntil:
-    visible: "Photo Access Required"
+    visible: 'Photo Access Required'
     timeout: 10000
 
 # Verify the "Open Settings" button is visible
-- assertVisible: "Open device settings"
+- assertVisible: 'Open device settings'

@@ -1,6 +1,5 @@
 appId: com.pickysaver.app
 ---
-
 # Organize Month Flow
 # Home → tap Start Organizing → pick first month → swipe 3 photos right, 2 left
 # → verify summary shows 5 reviewed, 2 marked
@@ -8,51 +7,51 @@ appId: com.pickysaver.app
 - launchApp
 
 # Verify we're on the home screen
-- assertVisible: "Picky Saver"
+- assertVisible: 'Picky Saver'
 
 # Navigate to date picker
-- tapOn: "Start organizing your photos"
+- tapOn: 'Start organizing your photos'
 
 # Verify date picker is visible
-- assertVisible: "Pick a Month"
+- assertVisible: 'Pick a Month'
 
 # Wait for months to load and tap the first month tile
 - extendedWaitUntil:
-    visible: ".*photos.*"
+    visible: '.*photos.*'
     timeout: 10000
 
 # Tap the first available month tile
 - tapOn:
-    text: ".*photos.*"
+    text: '.*photos.*'
     index: 0
 
 # Dismiss onboarding overlay if it appears
 - tapOn:
-    text: ".*Dismiss onboarding.*"
+    text: '.*Dismiss onboarding.*'
     optional: true
 
 # Swipe 2 photos left (delete) FIRST to ensure they are marked
 - swipe:
-    id: "photo-card"
-    direction: "LEFT"
+    id: 'photo-card'
+    direction: 'LEFT'
     duration: 500
 - swipe:
-    id: "photo-card"
-    direction: "LEFT"
+    id: 'photo-card'
+    direction: 'LEFT'
     duration: 500
 
 # Swipe 3 photos right (keep)
 - swipe:
-    id: "photo-card"
-    direction: "RIGHT"
+    id: 'photo-card'
+    direction: 'RIGHT'
     duration: 500
 - swipe:
-    id: "photo-card"
-    direction: "RIGHT"
+    id: 'photo-card'
+    direction: 'RIGHT'
     duration: 500
 - swipe:
-    id: "photo-card"
-    direction: "RIGHT"
+    id: 'photo-card'
+    direction: 'RIGHT'
     duration: 500
 
 # If the month had exactly 5 photos, we should see the summary

@@ -1,6 +1,5 @@
 appId: com.pickysaver.app
 ---
-
 # Grant Permissions Flow
 # Verify that with granted permissions, the home screen loads correctly
 # with the "Start Organizing" button visible.
@@ -11,11 +10,11 @@ appId: com.pickysaver.app
 
 # Verify home screen is visible with permissions granted
 - extendedWaitUntil:
-    visible: "Picky Saver"
+    visible: 'Picky Saver'
     timeout: 10000
 
 # Verify the main CTA is visible
-- assertVisible: ".*Start Organizing.*"
+- assertVisible: '.*Start Organizing.*'
 
 # Verify subtitle text
-- assertVisible: ".*Organize your photos.*"
+- assertVisible: '.*Organize your photos.*'

@@ -35,6 +35,7 @@ Picky Saver is a React Native + Expo app for decluttering photo libraries via sw
 **Navigation:** Expo Router with file-based Stack routing (`app/` directory). Five screens: Home → Date Picker → Swipe (`app/swipe/[year]/[month].tsx`) → Summary → To Delete review.
 
 **Data layer:** Two services in `services/` wrap `expo-media-library`:
+
 - `photoService.ts` — fetches and groups photos by month
 - `deletionAlbumService.ts` — manages a native "Picky Saver - To Delete" album for staging deletions
 

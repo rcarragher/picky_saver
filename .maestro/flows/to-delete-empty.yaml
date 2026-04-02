@@ -1,6 +1,5 @@
 appId: com.pickysaver.app
 ---
-
 # To Delete Empty State Flow
 # Verify that when no photos are marked for deletion,
 # the home screen does NOT show the "To Be Deleted" button.
@@ -13,17 +12,17 @@ appId: com.pickysaver.app
 
 # Dismiss any lingering OS dialogs
 - tapOn:
-    text: "Cancel"
+    text: 'Cancel'
     optional: true
 
 # Wait for home screen to fully load
 - extendedWaitUntil:
-    visible: "Picky Saver"
+    visible: 'Picky Saver'
     timeout: 10000
 
 # Verify "Start Organizing" is visible (home screen loaded)
-- assertVisible: ".*Start Organizing.*"
+- assertVisible: '.*Start Organizing.*'
 
 # The "marked for deletion" button should NOT be visible
 # when there are no photos marked for deletion
-- assertNotVisible: ".*marked for deletion.*"
+- assertNotVisible: '.*marked for deletion.*'

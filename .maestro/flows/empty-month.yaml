@@ -1,6 +1,5 @@
 appId: com.pickysaver.app
 ---
-
 # Empty Month Flow
 # Navigate to a month with no photos, verify empty state UI.
 #
@@ -13,13 +12,13 @@ appId: com.pickysaver.app
 - launchApp
 
 # Home screen
-- assertVisible: "Picky Saver"
-- tapOn: "Start organizing your photos"
+- assertVisible: 'Picky Saver'
+- tapOn: 'Start organizing your photos'
 
 # Date picker
-- assertVisible: "Pick a Month"
+- assertVisible: 'Pick a Month'
 - extendedWaitUntil:
-    visible: ".*photos.*"
+    visible: '.*photos.*'
     timeout: 10000
 
 # Select a month — after swipe-all-photos has cleared March,
@@ -28,11 +27,11 @@ appId: com.pickysaver.app
 # if any month was fully swiped, re-entering it shows empty.
 - tapOn:
     index: 0
-    text: ".*photos.*"
+    text: '.*photos.*'
 
 # Dismiss onboarding if shown
 - tapOn:
-    text: ".*Dismiss onboarding.*"
+    text: '.*Dismiss onboarding.*'
     optional: true
 
 # If the month has photos, this flow verifies photo-card is visible.
@@ -40,5 +39,5 @@ appId: com.pickysaver.app
 # has cleared a month.
 # Verify either the photo card or the empty state appears
 - extendedWaitUntil:
-    visible: ".*"
+    visible: '.*'
     timeout: 5000

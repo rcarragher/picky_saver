@@ -1,6 +1,5 @@
 appId: com.pickysaver.app
 ---
-
 # Back Navigation Flow
 # Test back button navigation through the app's screens:
 # Home → Date Picker → (back) → Home
@@ -9,47 +8,47 @@ appId: com.pickysaver.app
 - launchApp
 
 # Verify home screen
-- assertVisible: "Picky Saver"
+- assertVisible: 'Picky Saver'
 
 # Navigate to date picker
-- tapOn: "Start organizing your photos"
-- assertVisible: "Pick a Month"
+- tapOn: 'Start organizing your photos'
+- assertVisible: 'Pick a Month'
 
 # Go back to home
-- tapOn: "Go back"
+- tapOn: 'Go back'
 - extendedWaitUntil:
-    visible: "Picky Saver"
+    visible: 'Picky Saver'
     timeout: 5000
 
 # Navigate to date picker again, then into a month
-- tapOn: "Start organizing your photos"
-- assertVisible: "Pick a Month"
+- tapOn: 'Start organizing your photos'
+- assertVisible: 'Pick a Month'
 - extendedWaitUntil:
-    visible: ".*photos.*"
+    visible: '.*photos.*'
     timeout: 10000
 - tapOn:
     index: 0
-    text: ".*photos.*"
+    text: '.*photos.*'
 
 # Dismiss onboarding if shown
 - tapOn:
-    text: ".*Dismiss onboarding.*"
+    text: '.*Dismiss onboarding.*'
     optional: true
 
 # Verify we're on the swipe screen (photo card or month name visible)
 - extendedWaitUntil:
     visible:
-      id: "photo-card"
+      id: 'photo-card'
     timeout: 5000
 
 # Go back to date picker
-- tapOn: "Go back"
+- tapOn: 'Go back'
 - extendedWaitUntil:
-    visible: "Pick a Month"
+    visible: 'Pick a Month'
     timeout: 5000
 
 # Go back to home
-- tapOn: "Go back"
+- tapOn: 'Go back'
 - extendedWaitUntil:
-    visible: "Picky Saver"
+    visible: 'Picky Saver'
     timeout: 5000

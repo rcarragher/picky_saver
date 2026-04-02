@@ -15,28 +15,28 @@ A neutral, photo-friendly palette with one warm accent. Background stays muted s
 
 ### Light Mode (default)
 
-| Role | Color | Hex | Usage |
-|------|-------|-----|-------|
-| Background | Warm white | `#FAFAF8` | Screen backgrounds |
-| Surface | Soft cream | `#F2F0EC` | Cards, date picker tiles |
-| Text Primary | Charcoal | `#1C1C1E` | Headings, body text |
-| Text Secondary | Warm grey | `#6B6B6B` | Captions, counts, labels |
-| Accent | Coral | `#E8725A` | Primary buttons, active states |
-| Keep / Save | Soft green | `#4CAF7D` | Right-swipe overlay, save indicator |
-| Delete | Soft red | `#E05555` | Left-swipe overlay, delete indicator |
-| Border | Light grey | `#E5E3DF` | Subtle dividers, card outlines |
+| Role           | Color      | Hex       | Usage                                |
+| -------------- | ---------- | --------- | ------------------------------------ |
+| Background     | Warm white | `#FAFAF8` | Screen backgrounds                   |
+| Surface        | Soft cream | `#F2F0EC` | Cards, date picker tiles             |
+| Text Primary   | Charcoal   | `#1C1C1E` | Headings, body text                  |
+| Text Secondary | Warm grey  | `#6B6B6B` | Captions, counts, labels             |
+| Accent         | Coral      | `#E8725A` | Primary buttons, active states       |
+| Keep / Save    | Soft green | `#4CAF7D` | Right-swipe overlay, save indicator  |
+| Delete         | Soft red   | `#E05555` | Left-swipe overlay, delete indicator |
+| Border         | Light grey | `#E5E3DF` | Subtle dividers, card outlines       |
 
 ### Dark Mode
 
-| Role | Color | Hex |
-|------|-------|-----|
-| Background | Near black | `#141414` |
-| Surface | Dark grey | `#1E1E1E` |
-| Text Primary | Off white | `#F0F0F0` |
-| Text Secondary | Medium grey | `#9A9A9A` |
-| Accent | Coral (same) | `#E8725A` |
-| Keep / Save | Soft green | `#5BC88A` |
-| Delete | Soft red | `#E86060` |
+| Role           | Color        | Hex       |
+| -------------- | ------------ | --------- |
+| Background     | Near black   | `#141414` |
+| Surface        | Dark grey    | `#1E1E1E` |
+| Text Primary   | Off white    | `#F0F0F0` |
+| Text Secondary | Medium grey  | `#9A9A9A` |
+| Accent         | Coral (same) | `#E8725A` |
+| Keep / Save    | Soft green   | `#5BC88A` |
+| Delete         | Soft red     | `#E86060` |
 
 **Why coral accent:** Warm, energetic, stands out against both light and dark neutrals without clashing with photo content. Meets 4.5:1 contrast on both backgrounds.
 
@@ -45,20 +45,21 @@ A neutral, photo-friendly palette with one warm accent. Background stays muted s
 ## Typography
 
 Use **system fonts** — San Francisco on iOS, Roboto on Android. No custom fonts needed. This ensures:
+
 - Native feel on each platform
 - No font loading delay
 - Automatic support for Dynamic Type / font scaling
 
 ### Type Scale
 
-| Style | Size | Weight | Line Height | Usage |
-|-------|------|--------|-------------|-------|
-| H1 | 28px | Bold (700) | 34px | Screen titles ("Your Photos") |
-| H2 | 22px | Semibold (600) | 28px | Section headers ("March 2024") |
-| Body | 17px | Regular (400) | 24px | Descriptions, instructions |
-| Body Bold | 17px | Semibold (600) | 24px | Counts, emphasis |
-| Caption | 14px | Regular (400) | 20px | Photo dates, secondary info |
-| Small | 12px | Medium (500) | 16px | Badges, labels |
+| Style     | Size | Weight         | Line Height | Usage                          |
+| --------- | ---- | -------------- | ----------- | ------------------------------ |
+| H1        | 28px | Bold (700)     | 34px        | Screen titles ("Your Photos")  |
+| H2        | 22px | Semibold (600) | 28px        | Section headers ("March 2024") |
+| Body      | 17px | Regular (400)  | 24px        | Descriptions, instructions     |
+| Body Bold | 17px | Semibold (600) | 24px        | Counts, emphasis               |
+| Caption   | 14px | Regular (400)  | 20px        | Photo dates, secondary info    |
+| Small     | 12px | Medium (500)   | 16px        | Badges, labels                 |
 
 All sizes scale with system accessibility settings via React Native's `allowFontScaling`.
 
@@ -68,14 +69,14 @@ All sizes scale with system accessibility settings via React Native's `allowFont
 
 8px base grid. All spacing is a multiple of 8.
 
-| Token | Value | Usage |
-|-------|-------|-------|
-| `xs` | 4px | Tight gaps (icon + label) |
-| `sm` | 8px | Between closely related items |
-| `md` | 16px | Standard content padding, list gaps |
-| `lg` | 24px | Section separation, card padding |
-| `xl` | 32px | Major section breaks |
-| `2xl` | 48px | Screen-level vertical padding |
+| Token | Value | Usage                               |
+| ----- | ----- | ----------------------------------- |
+| `xs`  | 4px   | Tight gaps (icon + label)           |
+| `sm`  | 8px   | Between closely related items       |
+| `md`  | 16px  | Standard content padding, list gaps |
+| `lg`  | 24px  | Section separation, card padding    |
+| `xl`  | 32px  | Major section breaks                |
+| `2xl` | 48px  | Screen-level vertical padding       |
 
 **Screen margins:** 20px horizontal on all screens.
 
@@ -117,6 +118,7 @@ All interactive elements: minimum **48x48px** touch area (meets WCAG 2.2 AA and 
 ```
 
 **Key decisions:**
+
 - No tab bar — the app flow is linear (home → pick month → swipe → done). Tabs add complexity for no benefit with only 2 entry points.
 - Stack navigation with a clear back path on every screen.
 - Large, obvious buttons. User can't get lost.
@@ -149,6 +151,7 @@ All interactive elements: minimum **48x48px** touch area (meets WCAG 2.2 AA and 
 ```
 
 **Key decisions:**
+
 - Simple scrollable list, not a calendar widget. Easier to scan and tap.
 - Each row shows month/year + photo count — user knows what they're getting into.
 - Sorted newest-first (most relevant months at top).
@@ -183,6 +186,7 @@ All interactive elements: minimum **48x48px** touch area (meets WCAG 2.2 AA and 
 ```
 
 **During a swipe (card tilted right):**
+
 ```
 ┌─────────────────────────────┐
 │  ←  March 2024    24/156    │
@@ -202,6 +206,7 @@ All interactive elements: minimum **48x48px** touch area (meets WCAG 2.2 AA and 
 ```
 
 **During a swipe (card tilted left):**
+
 ```
      Same but mirrored:
      - Card rotates opposite direction
@@ -209,6 +214,7 @@ All interactive elements: minimum **48x48px** touch area (meets WCAG 2.2 AA and 
 ```
 
 **Key decisions:**
+
 - Photo takes up ~70% of screen. It's the focus.
 - Progress counter ("24/156") always visible — user knows how far along they are.
 - "DELETE" / "KEEP" hint text below the card at rest. Disappears after first few swipes (user has learned).
@@ -246,6 +252,7 @@ All interactive elements: minimum **48x48px** touch area (meets WCAG 2.2 AA and 
 ```
 
 **Key decisions:**
+
 - Satisfying completion moment. User sees the impact of their work.
 - Clear next actions: review what they marked, or go home.
 - No dead ends.
@@ -277,6 +284,7 @@ All interactive elements: minimum **48x48px** touch area (meets WCAG 2.2 AA and 
 ```
 
 **Tap a photo → full-screen preview:**
+
 ```
 ┌─────────────────────────────┐
 │  ✕                          │  Close button top-left
@@ -295,6 +303,7 @@ All interactive elements: minimum **48x48px** touch area (meets WCAG 2.2 AA and 
 ```
 
 **Key decisions:**
+
 - Familiar 3-column grid (same as iOS Photos, Google Photos).
 - Tap any thumbnail for full-screen view with restore option.
 - "Delete All" is red and pinned to the bottom — destructive action is visible but requires deliberate tap.
@@ -328,6 +337,7 @@ Shown only once, on first app open. Not a separate flow — it overlays the swip
 ```
 
 **Key decisions:**
+
 - One screen, not a multi-step tutorial. Swipe left/right is the only thing to learn.
 - Uses the user's actual first photo, not a stock image.
 - "Got it!" dismisses. "Skip" also dismisses. Both paths lead to the same place.
@@ -355,29 +365,31 @@ Home ──→ Date Picker ──→ Swipe ──→ Summary
 
 ## Animations & Micro-interactions
 
-| Interaction | Animation | Duration |
-|------------|-----------|----------|
-| Card swipe | Translate X + rotate (max 15deg) + opacity overlay | Follows finger, 200ms spring on release |
-| Card exit | Fly off screen in swipe direction | 300ms ease-out |
-| Next card | Scale from 0.95 → 1.0, opacity 0 → 1 | 200ms ease-out |
-| Undo | Card flies back from off-screen | 300ms spring |
-| Button press | Scale 0.97 + slight opacity | 100ms |
-| Screen transition | Slide from right (forward) / left (back) | 250ms native transition |
-| Delete overlay | Opacity 0 → 0.6 based on swipe distance | Continuous (follows gesture) |
-| Keep overlay | Same as delete, green instead of red | Continuous |
-| Haptic | Light impact on swipe threshold crossing | Instant |
+| Interaction       | Animation                                          | Duration                                |
+| ----------------- | -------------------------------------------------- | --------------------------------------- |
+| Card swipe        | Translate X + rotate (max 15deg) + opacity overlay | Follows finger, 200ms spring on release |
+| Card exit         | Fly off screen in swipe direction                  | 300ms ease-out                          |
+| Next card         | Scale from 0.95 → 1.0, opacity 0 → 1               | 200ms ease-out                          |
+| Undo              | Card flies back from off-screen                    | 300ms spring                            |
+| Button press      | Scale 0.97 + slight opacity                        | 100ms                                   |
+| Screen transition | Slide from right (forward) / left (back)           | 250ms native transition                 |
+| Delete overlay    | Opacity 0 → 0.6 based on swipe distance            | Continuous (follows gesture)            |
+| Keep overlay      | Same as delete, green instead of red               | Continuous                              |
+| Haptic            | Light impact on swipe threshold crossing           | Instant                                 |
 
 ---
 
 ## Empty & Loading States
 
 **Loading photos:**
+
 - Shimmer placeholders on date picker (grey rectangles pulsing).
 - Swipe screen: single shimmer card while first photo loads.
 
 **No photos for a month:** (shouldn't happen — we hide empty months)
 
 **No photos on device:**
+
 ```
 Home screen shows:
 "No photos found on this device."
@@ -385,6 +397,7 @@ Home screen shows:
 ```
 
 **Empty deletion queue:**
+
 - "To Be Deleted" button hidden on home screen.
 - If user navigates to deletion review directly (shouldn't happen):
   "Nothing here yet. Start organizing to mark photos for deletion."

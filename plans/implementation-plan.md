@@ -5,6 +5,7 @@
 Build a mobile app (iOS + Android) that helps users declutter their photo library. Users pick a month/year, then swipe through photos one at a time — right to keep, left to mark for deletion. Deleted photos go to a "To Be Deleted" album for later permanent removal. The app will be a paid upfront purchase in both app stores (no subscriptions, no in-app purchases).
 
 **Framework: React Native with Expo** — chosen because:
+
 - You have existing (if dated) JS/React Native experience — Dart/Flutter would mean learning a new language
 - Expo's managed workflow handles 90% of native config, signing, and app store submission via EAS
 - For single-card swipe interactions (not infinite scroll), React Native performance is more than adequate
@@ -57,15 +58,15 @@ picky-saver/
 
 ## Key Packages
 
-| Package | Purpose |
-|---------|---------|
-| `expo` ~52 | Managed workflow, EAS build/submit |
-| `expo-router` | File-based navigation |
-| `expo-media-library` | Photo library access, album creation, deletion |
-| `react-native-gesture-handler` | Swipe gesture recognition (UI thread) |
-| `react-native-reanimated` | 60fps swipe animations |
-| `react-native-screens` | Native screen transitions |
-| `expo-haptics` | Haptic feedback on swipe |
+| Package                        | Purpose                                        |
+| ------------------------------ | ---------------------------------------------- |
+| `expo` ~52                     | Managed workflow, EAS build/submit             |
+| `expo-router`                  | File-based navigation                          |
+| `expo-media-library`           | Photo library access, album creation, deletion |
+| `react-native-gesture-handler` | Swipe gesture recognition (UI thread)          |
+| `react-native-reanimated`      | 60fps swipe animations                         |
+| `react-native-screens`         | Native screen transitions                      |
+| `expo-haptics`                 | Haptic feedback on swipe                       |
 
 **Note on photo library:** Using `expo-media-library` over `@react-native-camera-roll/camera-roll` because it integrates cleanly with Expo's managed workflow and supports album creation (`createAlbumAsync`), asset fetching with sorting by date, and deletion (`deleteAssetsAsync`).
 
@@ -144,6 +145,7 @@ iOS 14+ Limited Library: `expo-media-library` handles this. If user grants limit
 ## Platform Configuration
 
 ### iOS (`app.json` / `app.config.ts`)
+
 ```json
 {
   "ios": {
@@ -156,6 +158,7 @@ iOS 14+ Limited Library: `expo-media-library` handles this. If user grants limit
 ```
 
 ### Android
+
 - `expo-media-library` handles permissions automatically via config plugin
 - Android 13+: `READ_MEDIA_IMAGES` requested automatically
 - Android 10-12: `READ_EXTERNAL_STORAGE` requested automatically
@@ -164,6 +167,7 @@ iOS 14+ Limited Library: `expo-media-library` handles this. If user grants limit
 ## Implementation Order
 
 ### Phase 1: Project Setup
+
 - `npx create-expo-app picky-saver` with TypeScript template
 - Install all packages
 - Set up expo-router with placeholder screens
@@ -171,17 +175,20 @@ iOS 14+ Limited Library: `expo-media-library` handles this. If user grants limit
 - Set up theme constants
 
 ### Phase 2: Permissions + Photo Loading
+
 - Implement `usePermissions` hook and `PermissionGate` component
 - Implement `photoService.ts` — fetch assets by date range
 - Implement `usePhotos` hook
 - Test on both platforms: verify photo access and date filtering
 
 ### Phase 3: Date Picker Screen
+
 - Build month/year list showing photo counts per month
 - Show only months with photos
 - Tap a month → navigate to swipe screen with year/month params
 
 ### Phase 4: Swipe Screen (Core Feature)
+
 - Build `PhotoCard` with pan gesture + reanimated animations
 - Add KEEP/DELETE overlay indicators
 - Wire swipe-left to `deletionAlbumService.markForDeletion()`
@@ -191,6 +198,7 @@ iOS 14+ Limited Library: `expo-media-library` handles this. If user grants limit
 - Handle batch completion → navigate to summary
 
 ### Phase 5: Deletion Album + Review Screen
+
 - Implement `deletionAlbumService.ts`
 - Build deletion review grid
 - Tap to preview with restore option
@@ -198,6 +206,7 @@ iOS 14+ Limited Library: `expo-media-library` handles this. If user grants limit
 - Handle system deletion dialogs on both platforms
 
 ### Phase 6: Home Screen + Polish
+
 - Wire up home screen with photo count badges
 - Empty states for all screens
 - Loading states and error handling
@@ -205,6 +214,7 @@ iOS 14+ Limited Library: `expo-media-library` handles this. If user grants limit
 - Smooth transitions between screens
 
 ### Phase 7: App Store Preparation
+
 - EAS Build configuration (`eas.json`)
 - Test builds on real devices via EAS
 - App Store Connect setup (iOS)
@@ -216,17 +226,18 @@ iOS 14+ Limited Library: `expo-media-library` handles this. If user grants limit
 
 ### Testing Stack
 
-| Layer | Tool | Purpose |
-|-------|------|---------|
-| Unit tests | `jest-expo` + Jest 30 | Service logic, hooks, utilities |
-| Component/UI tests | `@testing-library/react-native` | Screen rendering, user interactions, state changes |
-| Gesture tests | `react-native-gesture-handler/jestUtils` | Swipe gesture simulation via `fireGestureHandler` |
-| Navigation tests | `expo-router/testing-library` | Route transitions via `renderRouter()` |
-| E2E tests | Maestro (via EAS Workflows) | Full user flows on real devices |
+| Layer              | Tool                                     | Purpose                                            |
+| ------------------ | ---------------------------------------- | -------------------------------------------------- |
+| Unit tests         | `jest-expo` + Jest 30                    | Service logic, hooks, utilities                    |
+| Component/UI tests | `@testing-library/react-native`          | Screen rendering, user interactions, state changes |
+| Gesture tests      | `react-native-gesture-handler/jestUtils` | Swipe gesture simulation via `fireGestureHandler`  |
+| Navigation tests   | `expo-router/testing-library`            | Route transitions via `renderRouter()`             |
+| E2E tests          | Maestro (via EAS Workflows)              | Full user flows on real devices                    |
 
 ### Test Infrastructure Setup (Phase 1 task)
 
 **Dev dependencies:**
+
 ```
 jest-expo ~52.0.0
 jest ^30.0.0
@@ -234,21 +245,20 @@ jest ^30.0.0
 ```
 
 **jest.config.js:**
+
 ```javascript
 module.exports = {
   preset: 'jest-expo',
   setupFilesAfterEnv: ['<rootDir>/jest-setup.js'],
   transformIgnorePatterns: [
-    'node_modules/(?!((jest-)?react-native|@react-native(-community)?|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|react-native-svg))'
+    'node_modules/(?!((jest-)?react-native|@react-native(-community)?|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|react-native-svg))',
   ],
-  testMatch: [
-    '**/__tests__/**/*.{ts,tsx}',
-    '**/*.{test,spec}.{ts,tsx}'
-  ],
+  testMatch: ['**/__tests__/**/*.{ts,tsx}', '**/*.{test,spec}.{ts,tsx}'],
 };
 ```
 
 **jest-setup.js:**
+
 ```javascript
 import 'react-native-gesture-handler/jestSetup';
 import { setUpTests } from 'react-native-reanimated';
@@ -256,12 +266,13 @@ setUpTests({ fps: 60 });
 ```
 
 **Global mock — `__mocks__/expo-media-library.ts`:**
+
 ```typescript
 export const requestPermissionsAsync = jest.fn(() =>
-  Promise.resolve({ granted: true, canAskAgain: true, status: 'granted' })
+  Promise.resolve({ granted: true, canAskAgain: true, status: 'granted' }),
 );
 export const getAssetsAsync = jest.fn(() =>
-  Promise.resolve({ assets: [], hasNextPage: false, endCursor: '', totalCount: 0 })
+  Promise.resolve({ assets: [], hasNextPage: false, endCursor: '', totalCount: 0 }),
 );
 export const getAlbumAsync = jest.fn(() => Promise.resolve(null));
 export const createAlbumAsync = jest.fn(() => Promise.resolve({ id: 'mock-album' }));
@@ -276,27 +287,27 @@ export const deleteAssetsAsync = jest.fn(() => Promise.resolve(true));
 
 Test the service layer logic in isolation with mocked expo-media-library.
 
-| Test file | What it covers |
-|-----------|---------------|
-| `__tests__/services/photoService.test.ts` | `getAvailableMonths()` groups assets by month correctly; `getPhotosForMonth()` passes correct date range params; handles empty results; handles pagination |
+| Test file                                         | What it covers                                                                                                                                                                                                                                  |
+| ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `__tests__/services/photoService.test.ts`         | `getAvailableMonths()` groups assets by month correctly; `getPhotosForMonth()` passes correct date range params; handles empty results; handles pagination                                                                                      |
 | `__tests__/services/deletionAlbumService.test.ts` | `getOrCreateAlbum()` creates album on first call, returns cached on second; `markForDeletion()` calls `addAssetsToAlbumAsync`; `restore()` calls `removeAssetsFromAlbumAsync`; `permanentlyDelete()` calls `deleteAssetsAsync` with correct IDs |
-| `__tests__/hooks/usePermissions.test.ts` | Returns correct state for granted/denied/undetermined; triggers request on mount |
-| `__tests__/hooks/usePhotos.test.ts` | Loads photos for given month; handles loading/error states; paginates correctly |
-| `__tests__/hooks/useDeletionAlbum.test.ts` | Tracks marked photos count; mark/restore update state; permanent delete clears list |
+| `__tests__/hooks/usePermissions.test.ts`          | Returns correct state for granted/denied/undetermined; triggers request on mount                                                                                                                                                                |
+| `__tests__/hooks/usePhotos.test.ts`               | Loads photos for given month; handles loading/error states; paginates correctly                                                                                                                                                                 |
+| `__tests__/hooks/useDeletionAlbum.test.ts`        | Tracks marked photos count; mark/restore update state; permanent delete clears list                                                                                                                                                             |
 
 ### UI / Component Tests
 
 Test screens and components render correctly and respond to user interaction.
 
-| Test file | What it covers |
-|-----------|---------------|
-| `__tests__/components/PhotoCard.test.tsx` | Renders image from asset URI; shows KEEP overlay on right drag; shows DELETE overlay on left drag (using `fireGestureHandler`) |
-| `__tests__/components/PermissionGate.test.tsx` | Shows children when granted; shows request prompt when undetermined; shows denied message with settings link when denied |
-| `__tests__/components/MonthTile.test.tsx` | Displays month name, year, photo count; calls onPress with correct params |
-| `__tests__/screens/home.test.tsx` | Renders both action buttons; shows deletion count badge; navigates to correct routes on press |
-| `__tests__/screens/datePicker.test.tsx` | Renders months with photos; hides months with 0 photos; navigates to swipe screen on tap |
-| `__tests__/screens/swipe.test.tsx` | Shows current photo; updates progress counter on swipe; calls markForDeletion on left swipe; calls undo correctly; shows summary when batch complete |
-| `__tests__/screens/toDelete.test.tsx` | Renders grid of marked photos; restore removes from grid; delete all triggers confirmation; empty state when no photos marked |
+| Test file                                      | What it covers                                                                                                                                       |
+| ---------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `__tests__/components/PhotoCard.test.tsx`      | Renders image from asset URI; shows KEEP overlay on right drag; shows DELETE overlay on left drag (using `fireGestureHandler`)                       |
+| `__tests__/components/PermissionGate.test.tsx` | Shows children when granted; shows request prompt when undetermined; shows denied message with settings link when denied                             |
+| `__tests__/components/MonthTile.test.tsx`      | Displays month name, year, photo count; calls onPress with correct params                                                                            |
+| `__tests__/screens/home.test.tsx`              | Renders both action buttons; shows deletion count badge; navigates to correct routes on press                                                        |
+| `__tests__/screens/datePicker.test.tsx`        | Renders months with photos; hides months with 0 photos; navigates to swipe screen on tap                                                             |
+| `__tests__/screens/swipe.test.tsx`             | Shows current photo; updates progress counter on swipe; calls markForDeletion on left swipe; calls undo correctly; shows summary when batch complete |
+| `__tests__/screens/toDelete.test.tsx`          | Renders grid of marked photos; restore removes from grid; delete all triggers confirmation; empty state when no photos marked                        |
 
 ### Gesture Testing Details
 
@@ -326,14 +337,15 @@ Maestro flows test complete user journeys on real devices via EAS Workflows.
 
 **Directory:** `.maestro/flows/`
 
-| Flow file | Scenario |
-|-----------|----------|
-| `grant-permissions.yaml` | App launch → grant photo access → see home screen |
-| `organize-month.yaml` | Home → pick a month → swipe through 5 photos → see summary |
-| `delete-flow.yaml` | Mark photos → go to To Be Deleted → confirm deletion |
-| `restore-flow.yaml` | Go to To Be Deleted → restore a photo → verify it's removed from list |
+| Flow file                | Scenario                                                              |
+| ------------------------ | --------------------------------------------------------------------- |
+| `grant-permissions.yaml` | App launch → grant photo access → see home screen                     |
+| `organize-month.yaml`    | Home → pick a month → swipe through 5 photos → see summary            |
+| `delete-flow.yaml`       | Mark photos → go to To Be Deleted → confirm deletion                  |
+| `restore-flow.yaml`      | Go to To Be Deleted → restore a photo → verify it's removed from list |
 
 **EAS Workflow config (`.eas/workflows/e2e.yml`):**
+
 ```yaml
 build:
   name: Build for E2E

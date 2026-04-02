@@ -21,15 +21,15 @@ npm run android    # Launch on Android emulator/device
 
 ## Scripts
 
-| Command | Description |
-|---------|-------------|
-| `npm start` | Start Expo dev server |
-| `npm run ios` | Launch on iOS simulator |
-| `npm run android` | Launch on Android emulator/device |
-| `npm test` | Run Jest unit tests |
-| `npm run test:watch` | Tests in watch mode |
-| `npm run test:coverage` | Coverage report |
-| `npm run test:e2e` | Run Maestro E2E test suite |
+| Command                 | Description                       |
+| ----------------------- | --------------------------------- |
+| `npm start`             | Start Expo dev server             |
+| `npm run ios`           | Launch on iOS simulator           |
+| `npm run android`       | Launch on Android emulator/device |
+| `npm test`              | Run Jest unit tests               |
+| `npm run test:watch`    | Tests in watch mode               |
+| `npm run test:coverage` | Coverage report                   |
+| `npm run test:e2e`      | Run Maestro E2E test suite        |
 
 ## Architecture
 
