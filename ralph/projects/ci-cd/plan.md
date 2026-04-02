@@ -2,7 +2,7 @@
 
 > **Design document:** [design.md](./design.md)
 > **Status:** In progress
-> **Current phase:** Phase 4
+> **Current phase:** Phase 5
 
 ---
 
@@ -181,23 +181,27 @@ This plan adds ESLint, Prettier, Husky pre-commit hooks, a GitHub Actions CI pip
 
 ### Tasks
 
-- [ ] **4.1** Create `.github/workflows/` directory
+- [x] **4.1** Create `.github/workflows/` directory
   - Run: `mkdir -p .github/workflows`
 
-- [ ] **4.2** Create `.github/workflows/ci.yml`
+- [x] **4.2** Create `.github/workflows/ci.yml`
   - File: `.github/workflows/ci.yml`
   - Content from design doc: three parallel jobs (`lint`, `type-check`, `test`) on `ubuntu-latest`, using `node-version-file: '.nvmrc'`, `npm ci`, concurrency group with cancel-in-progress.
   - The `test` job runs `npm run test:coverage -- --ci --reporters=default` and uploads coverage as an artifact (retention: 7 days).
 
-- [ ] **4.3** Validate the workflow YAML
+- [x] **4.3** Validate the workflow YAML
   - Run: `npx yaml-lint .github/workflows/ci.yml` or use `python3 -c "import yaml; yaml.safe_load(open('.github/workflows/ci.yml'))"` to verify valid YAML.
   - No integration test possible locally — the workflow will be validated when pushed to GitHub.
 
-- [ ] **4.4** Build + test gate: `npm run lint && npm run format:check && npm run type-check && npm test`
+- [x] **4.4** Build + test gate: `npm run lint && npm run format:check && npm run type-check && npm test`
 
 ### Observations
 
-<!-- Agent: write notes here during execution -->
+- Created `.github/workflows/ci.yml` with three parallel jobs (`lint`, `type-check`, `test`) matching the design doc exactly.
+- YAML validated via Node.js `yaml` package and Ruby `YAML.safe_load`.
+- `python3 -c "import yaml"` not available on this machine (no PyYAML installed) — used alternatives.
+- Full gate passes: lint, format:check, type-check, and all 155 tests across 20 suites.
+- No code changes outside the new workflow file — this phase is configuration only.
 
 ---
 
