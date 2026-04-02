@@ -2,7 +2,7 @@
 
 > **Design document:** [design.md](./design.md)
 > **Status:** In progress
-> **Current phase:** Phase 5
+> **Current phase:** Phase 6
 
 ---
 
@@ -211,22 +211,26 @@ This plan adds ESLint, Prettier, Husky pre-commit hooks, a GitHub Actions CI pip
 
 ### Tasks
 
-- [ ] **5.1** Create `.github/workflows/e2e.yml`
+- [x] **5.1** Create `.github/workflows/e2e.yml`
   - File: `.github/workflows/e2e.yml`
   - Content from design doc: `workflow_dispatch` trigger, single job `trigger-eas-e2e` on `ubuntu-latest`, runs `npx eas-cli workflow:run e2e --non-interactive` with `EXPO_TOKEN` secret, 45-minute timeout.
 
-- [ ] **5.2** Create `.github/dependabot.yml`
+- [x] **5.2** Create `.github/dependabot.yml`
   - File: `.github/dependabot.yml`
   - Content from design doc: npm ecosystem (weekly Monday, 5 PR limit, grouped updates for expo/react-native/testing, ignore major react/react-native bumps) + github-actions ecosystem (weekly).
 
-- [ ] **5.3** Validate both YAML files
+- [x] **5.3** Validate both YAML files
   - Run: `python3 -c "import yaml; yaml.safe_load(open('.github/workflows/e2e.yml')); yaml.safe_load(open('.github/dependabot.yml')); print('OK')"` to verify valid YAML.
 
-- [ ] **5.4** Build + test gate: `npm run lint && npm run format:check && npm run type-check && npm test`
+- [x] **5.4** Build + test gate: `npm run lint && npm run format:check && npm run type-check && npm test`
 
 ### Observations
 
-<!-- Agent: write notes here during execution -->
+- Created `.github/workflows/e2e.yml` matching the design doc exactly — `workflow_dispatch` trigger, single `trigger-eas-e2e` job on `ubuntu-latest`, 45-minute timeout, `EXPO_TOKEN` secret.
+- Created `.github/dependabot.yml` matching the design doc — npm (weekly Monday, 5 PR limit, grouped expo/react-native/testing updates, ignore major react/react-native) + github-actions (weekly).
+- YAML validation used Node.js `yaml` package (same as Phase 4) since `python3 -c "import yaml"` is unavailable on this machine.
+- Prettier reformatted `dependabot.yml` (double quotes → single quotes per `.prettierrc`). Ran `prettier --write` before the gate.
+- Full gate passes: lint, format:check, type-check, and all 155 tests across 20 suites.
 
 ---
 

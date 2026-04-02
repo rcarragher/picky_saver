@@ -1,0 +1,24 @@
+name: E2E Tests
+
+on:
+  workflow_dispatch:
+
+jobs:
+  trigger-eas-e2e:
+    name: Trigger EAS E2E
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+
+      - run: npm ci
+
+      - name: Run EAS workflow
+        run: npx eas-cli workflow:run e2e --non-interactive
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
