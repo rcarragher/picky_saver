@@ -1,0 +1,302 @@
+# CI/CD Pipeline — Execution Plan
+
+> **Design document:** [design.md](./design.md)
+> **Status:** In progress
+> **Current phase:** Phase 1
+
+---
+
+## How to Use This Plan
+
+This plan is designed for the Ralph loop. Each phase:
+
+1. Has **checkboxes** for every discrete task — mark `[x]` when done.
+2. Has an **Observations** section — write notes, surprises, or decisions made during that iteration.
+3. Is scoped so one phase fits comfortably in a single loop iteration.
+4. Includes tests for all new logic introduced in that phase.
+5. Ends with a **build + test gate** — confirm the project builds and all tests pass before moving on.
+
+**After each loop iteration:** update the "Current phase" field at the top and record observations.
+
+**Build + test gate (mandatory at the end of every phase):**
+
+*Baseline (every phase):* `npx expo export --platform ios 2>&1 | head -5 && npm test`
+
+Phases that add or modify integration/E2E tests must also run them. Include any prerequisites (deployment, environment setup) as tasks before the gate, and add the integration test run command to the gate itself. The gate command may differ between phases — it must cover all tests that validate the phase's work.
+
+A phase is **not complete** until the gate succeeds and **all** tests written or modified in that phase have been executed. Fix failures before marking the phase done.
+
+---
+
+## Summary
+
+This plan adds ESLint, Prettier, Husky pre-commit hooks, a GitHub Actions CI pipeline, Dependabot, an EAS-triggered E2E workflow, and a TestFlight deployment guide. The result: every push/PR is automatically linted, type-checked, and tested; E2E can be triggered manually via EAS; and a deployment guide is ready for when TestFlight setup is complete.
+
+---
+
+## Phase 1: ESLint & Prettier — Install and Configure
+
+**Goal:** Install linting/formatting dependencies and create config files. Verify they run against the codebase (but do NOT auto-fix yet — that's Phase 3).
+
+### Tasks
+
+- [x] **1.1** Install ESLint and Prettier devDependencies
+  - Run: `npm install --save-dev eslint eslint-config-expo prettier eslint-config-prettier`
+
+- [x] **1.2** Create `eslint.config.mjs`
+  - File: `eslint.config.mjs`
+  - Content from design doc: flat config extending `eslint-config-expo/flat` and `eslint-config-prettier`, with ignores for `node_modules/`, `.expo/`, `dist/`, `e2e/fixtures/`, `ralph/`
+
+- [x] **1.3** Create `.prettierrc`
+  - File: `.prettierrc`
+  - Content: `{ "singleQuote": true, "trailingComma": "all", "semi": true, "printWidth": 100, "tabWidth": 2 }`
+
+- [x] **1.4** Create `.prettierignore`
+  - File: `.prettierignore`
+  - Content: `node_modules/`, `.expo/`, `dist/`, `e2e/fixtures/`, `ralph/`, `*.json`
+
+- [x] **1.5** Add scripts to `package.json`
+  - In the `"scripts"` section, add:
+    - `"lint": "eslint ."`
+    - `"lint:fix": "eslint . --fix"`
+    - `"format": "prettier --write ."`
+    - `"format:check": "prettier --check ."`
+    - `"type-check": "tsc --noEmit"`
+
+- [x] **1.6** Smoke test: run `npm run lint` and `npm run format:check`
+  - These will likely report violations — that's expected. The goal is to verify the tools run without crashing (exit code doesn't matter yet, just no configuration errors).
+  - Also run `npm run type-check` to verify it works.
+
+- [x] **1.7** Build + test gate: `npm test` — all existing tests still pass
+  - No new tests in this phase — this is configuration only.
+
+### Observations
+
+- **Import path fix:** `eslint-config-expo/flat` (directory import) failed at runtime. Changed to `eslint-config-expo/flat.js` which works correctly. The design doc's import path is wrong — future phases should use the `.js` suffix.
+- **ESLint smoke test:** 21 problems (4 errors, 17 warnings) — expected, will be fixed in Phase 3.
+- **Prettier smoke test:** 60 files with formatting issues — expected, will be fixed in Phase 3.
+- **Type-check:** Pre-existing errors in `__tests__/services/reviewService.test.ts` and `__tests__/smoke.test.ts` — missing `@types/jest`. These are pre-existing and don't affect `npm test` (Jest has its own globals). Should be addressed in Phase 3 if needed.
+- **All 155 tests pass** across 20 test suites.
+- Installed versions: eslint 9.39.4, eslint-config-expo 55.0.0, eslint-config-prettier 10.1.8, prettier 3.8.1.
+
+---
+
+## Phase 2: Pre-commit Hooks (Husky + lint-staged)
+
+**Goal:** Install Husky and lint-staged so that commits automatically lint and format staged files.
+
+### Tasks
+
+- [ ] **2.1** Install Husky and lint-staged
+  - Run: `npm install --save-dev husky lint-staged`
+
+- [ ] **2.2** Initialize Husky
+  - Run: `npx husky init`
+  - This creates `.husky/` directory and adds `"prepare": "husky"` to `package.json` scripts.
+
+- [ ] **2.3** Configure the pre-commit hook
+  - File: `.husky/pre-commit` (created by `husky init` — overwrite its contents)
+  - Content: `npx lint-staged`
+
+- [ ] **2.4** Add lint-staged config to `package.json`
+  - Add at the top level of `package.json` (not inside `scripts`):
+    ```json
+    "lint-staged": {
+      "*.{ts,tsx}": ["eslint --fix", "prettier --write"],
+      "*.{json,md,yml,yaml}": ["prettier --write"]
+    }
+    ```
+
+- [ ] **2.5** Create `.nvmrc`
+  - File: `.nvmrc`
+  - Content: `20`
+
+- [ ] **2.6** Verify the hook works
+  - Create a temporary test: stage a small whitespace change in any `.ts` file, run `npx lint-staged` manually, and confirm it applies formatting. Revert the test change.
+
+- [ ] **2.7** Build + test gate: `npm test` — all existing tests still pass
+
+### Observations
+
+<!-- Agent: write notes here during execution -->
+
+---
+
+## Phase 3: Auto-fix Codebase & Verify Clean Lint
+
+**Goal:** Run the auto-fixers across the entire codebase and resolve any remaining lint errors that can't be auto-fixed. After this phase, `npm run lint` and `npm run format:check` both exit 0.
+
+### Tasks
+
+- [ ] **3.1** Run Prettier auto-fix
+  - Run: `npm run format`
+  - This reformats all source files (whitespace, quotes, trailing commas). No logic changes.
+
+- [ ] **3.2** Run ESLint auto-fix
+  - Run: `npm run lint:fix`
+  - This fixes auto-fixable lint violations (unused imports, formatting rules, etc.).
+
+- [ ] **3.3** Manually fix remaining lint errors
+  - Run: `npm run lint`
+  - If any errors remain that couldn't be auto-fixed, fix them manually. Common issues:
+    - Unused variables → remove or prefix with `_`
+    - Missing return types → add explicit return types
+    - Any-typed values → add proper types
+  - **Important:** Only fix lint errors. Do NOT refactor, rename, or change behavior.
+
+- [ ] **3.4** Verify clean lint and format
+  - Run: `npm run lint && npm run format:check`
+  - Both must exit 0.
+
+- [ ] **3.5** Verify type-check passes
+  - Run: `npm run type-check`
+  - Must exit 0. If there are type errors, fix them (these are pre-existing, not caused by this work).
+
+- [ ] **3.6** Build + test gate: `npm run lint && npm run format:check && npm run type-check && npm test`
+  - All four must pass. This is the first phase where the full quality gate runs.
+
+### Observations
+
+<!-- Agent: write notes here during execution -->
+
+---
+
+## Phase 4: GitHub Actions — CI Workflow
+
+**Goal:** Create the main CI workflow that runs lint, type-check, and unit tests on every push/PR to `main`.
+
+### Tasks
+
+- [ ] **4.1** Create `.github/workflows/` directory
+  - Run: `mkdir -p .github/workflows`
+
+- [ ] **4.2** Create `.github/workflows/ci.yml`
+  - File: `.github/workflows/ci.yml`
+  - Content from design doc: three parallel jobs (`lint`, `type-check`, `test`) on `ubuntu-latest`, using `node-version-file: '.nvmrc'`, `npm ci`, concurrency group with cancel-in-progress.
+  - The `test` job runs `npm run test:coverage -- --ci --reporters=default` and uploads coverage as an artifact (retention: 7 days).
+
+- [ ] **4.3** Validate the workflow YAML
+  - Run: `npx yaml-lint .github/workflows/ci.yml` or use `python3 -c "import yaml; yaml.safe_load(open('.github/workflows/ci.yml'))"` to verify valid YAML.
+  - No integration test possible locally — the workflow will be validated when pushed to GitHub.
+
+- [ ] **4.4** Build + test gate: `npm run lint && npm run format:check && npm run type-check && npm test`
+
+### Observations
+
+<!-- Agent: write notes here during execution -->
+
+---
+
+## Phase 5: GitHub Actions — E2E Workflow & Dependabot
+
+**Goal:** Create the manual-trigger E2E workflow (triggers EAS) and Dependabot configuration.
+
+### Tasks
+
+- [ ] **5.1** Create `.github/workflows/e2e.yml`
+  - File: `.github/workflows/e2e.yml`
+  - Content from design doc: `workflow_dispatch` trigger, single job `trigger-eas-e2e` on `ubuntu-latest`, runs `npx eas-cli workflow:run e2e --non-interactive` with `EXPO_TOKEN` secret, 45-minute timeout.
+
+- [ ] **5.2** Create `.github/dependabot.yml`
+  - File: `.github/dependabot.yml`
+  - Content from design doc: npm ecosystem (weekly Monday, 5 PR limit, grouped updates for expo/react-native/testing, ignore major react/react-native bumps) + github-actions ecosystem (weekly).
+
+- [ ] **5.3** Validate both YAML files
+  - Run: `python3 -c "import yaml; yaml.safe_load(open('.github/workflows/e2e.yml')); yaml.safe_load(open('.github/dependabot.yml')); print('OK')"` to verify valid YAML.
+
+- [ ] **5.4** Build + test gate: `npm run lint && npm run format:check && npm run type-check && npm test`
+
+### Observations
+
+<!-- Agent: write notes here during execution -->
+
+---
+
+## Phase 6: Deployment Guide
+
+**Goal:** Create the TestFlight deployment documentation.
+
+### Tasks
+
+- [ ] **6.1** Create `docs/` directory
+  - Run: `mkdir -p docs`
+
+- [ ] **6.2** Create `docs/DEPLOYMENT.md`
+  - File: `docs/DEPLOYMENT.md`
+  - Content from design doc: prerequisites (Apple Developer Program, App Store Connect, EAS credentials), manual deployment command (`eas build --platform ios --profile production --auto-submit`), automated deployment workflow reference (`.github/workflows/deploy.yml` — to be created later), version management notes, troubleshooting section.
+
+- [ ] **6.3** Build + test gate: `npm run lint && npm run format:check && npm run type-check && npm test`
+
+### Observations
+
+<!-- Agent: write notes here during execution -->
+
+---
+
+## Phase 7: Final Verification & Cleanup
+
+**Goal:** Review all changes for design compliance, verify everything works end-to-end, and document the branch protection setup.
+
+### Tasks
+
+- [ ] **7.1** Design compliance check
+  - Re-read `design.md` and verify every file listed in "Files Changed" has been created or modified as specified.
+  - Verify no files listed in "Files NOT modified" were accidentally changed (other than formatting).
+
+- [ ] **7.2** Verify all new scripts work
+  - Run each script and confirm it exits successfully:
+    - `npm run lint`
+    - `npm run format:check`
+    - `npm run type-check`
+    - `npm test`
+    - `npx lint-staged` (with no staged changes — should be a no-op)
+
+- [ ] **7.3** Verify `.nvmrc` is correct
+  - Run: `node -v` and confirm it matches the major version in `.nvmrc` (20.x).
+
+- [ ] **7.4** Add branch protection reminder to `docs/DEPLOYMENT.md`
+  - Append a section to `docs/DEPLOYMENT.md`:
+    ```markdown
+    ## Branch Protection (one-time setup)
+
+    After CI is stable, configure in GitHub Settings > Branches > `main`:
+    - Require status checks: `Lint & Format`, `Type Check`, `Unit Tests`
+    - Require branches to be up to date before merging
+    - Do NOT require E2E (manual-trigger only)
+    ```
+
+- [ ] **7.5** Final build + test gate: `npm run lint && npm run format:check && npm run type-check && npm test`
+
+### Observations
+
+<!-- Agent: write notes here during execution -->
+
+---
+
+## Files Changed Summary
+
+### New Files
+| File | Phase | Purpose |
+|------|-------|---------|
+| `eslint.config.mjs` | 1 | ESLint flat config (expo + prettier) |
+| `.prettierrc` | 1 | Prettier configuration |
+| `.prettierignore` | 1 | Files excluded from Prettier |
+| `.nvmrc` | 2 | Node version lock (20) |
+| `.husky/pre-commit` | 2 | Pre-commit hook running lint-staged |
+| `.github/workflows/ci.yml` | 4 | CI pipeline (lint, type-check, test) |
+| `.github/workflows/e2e.yml` | 5 | Manual-trigger E2E via EAS |
+| `.github/dependabot.yml` | 5 | Automated dependency update PRs |
+| `docs/DEPLOYMENT.md` | 6 | TestFlight deployment guide |
+
+### Modified Files
+| File | Phases | Changes |
+|------|--------|---------|
+| `package.json` | 1, 2 | Add scripts (lint, format, type-check), devDependencies (eslint, prettier, husky, lint-staged), lint-staged config, prepare script |
+| `app/**/*.{ts,tsx}` | 3 | Formatting auto-fixes only |
+| `components/**/*.{ts,tsx}` | 3 | Formatting auto-fixes only |
+| `hooks/**/*.{ts,tsx}` | 3 | Formatting auto-fixes only |
+| `services/**/*.{ts,tsx}` | 3 | Formatting auto-fixes only |
+| `constants/**/*.ts` | 3 | Formatting auto-fixes only |
+| `types/**/*.ts` | 3 | Formatting auto-fixes only |
+| `__tests__/**/*.{ts,tsx}` | 3 | Formatting auto-fixes only |
+| `jest.config.js` | 3 | Formatting only |

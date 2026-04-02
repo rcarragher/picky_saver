@@ -1,0 +1,6 @@
+node_modules/
+.expo/
+dist/
+e2e/fixtures/
+ralph/
+*.json
