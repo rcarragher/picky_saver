@@ -22,13 +22,13 @@ const Easing = {
 const useEvent = (_callback: any, _events: any, _rebuild: any) => ({});
 const setGestureState = () => {};
 
-const AnimatedView = React.forwardRef((props: any, ref: any) =>
-  React.createElement(View, { ...props, ref }),
-);
+const AnimatedView = React.forwardRef(function AnimatedView(props: any, ref: any) {
+  return React.createElement(View, { ...props, ref });
+});
 
-const AnimatedText = React.forwardRef((props: any, ref: any) =>
-  React.createElement(Text, { ...props, ref }),
-);
+const AnimatedText = React.forwardRef(function AnimatedText(props: any, ref: any) {
+  return React.createElement(Text, { ...props, ref });
+});
 
 const Animated = {
   View: AnimatedView,

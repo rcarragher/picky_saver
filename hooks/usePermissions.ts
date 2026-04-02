@@ -22,7 +22,9 @@ export function usePermissions() {
         setIsLoading(false);
       }
     });
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const requestPermission = useCallback(async () => {

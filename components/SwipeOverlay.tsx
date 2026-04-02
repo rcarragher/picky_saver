@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text } from 'react-native';
 import Animated, { useAnimatedStyle, type SharedValue } from 'react-native-reanimated';
 import { useTheme } from '../hooks/useTheme';
 import { fontSize, fontWeight } from '../constants/theme';
@@ -30,7 +30,11 @@ export function SwipeOverlay({ animatedOpacity, direction }: Props) {
   return (
     <>
       <Animated.View
-        style={[styles.overlay, isKeep ? styles.keepPosition : styles.deletePosition, animatedStyle]}
+        style={[
+          styles.overlay,
+          isKeep ? styles.keepPosition : styles.deletePosition,
+          animatedStyle,
+        ]}
         pointerEvents="none"
       >
         <Text style={[styles.label, { color }]}>{label}</Text>

@@ -17,10 +17,7 @@ export function useDeletionAlbum() {
   const refresh = useCallback(async () => {
     setIsLoading(true);
     try {
-      const [assets, count] = await Promise.all([
-        getMarkedAssets(),
-        getMarkedCount(),
-      ]);
+      const [assets, count] = await Promise.all([getMarkedAssets(), getMarkedCount()]);
       setMarkedPhotos(assets);
       setMarkedCount(count);
     } catch {
@@ -34,23 +31,17 @@ export function useDeletionAlbum() {
     refresh();
   }, [refresh]);
 
-  const markForDeletion = useCallback(
-    async (asset: MediaLibrary.Asset) => {
-      await markService(asset);
-      setMarkedCount((c) => c + 1);
-      setMarkedPhotos((prev) => [...prev, asset]);
-    },
-    [],
-  );
+  const markForDeletion = useCallback(async (asset: MediaLibrary.Asset) => {
+    await markService(asset);
+    setMarkedCount((c) => c + 1);
+    setMarkedPhotos((prev) => [...prev, asset]);
+  }, []);
 
-  const restore = useCallback(
-    async (asset: MediaLibrary.Asset) => {
-      await restoreService(asset);
-      setMarkedCount((c) => Math.max(0, c - 1));
-      setMarkedPhotos((prev) => prev.filter((a) => a.id !== asset.id));
-    },
-    [],
-  );
+  const restore = useCallback(async (asset: MediaLibrary.Asset) => {
+    await restoreService(asset);
+    setMarkedCount((c) => Math.max(0, c - 1));
+    setMarkedPhotos((prev) => prev.filter((a) => a.id !== asset.id));
+  }, []);
 
   const restoreAll = useCallback(async () => {
     await restoreAllService(markedPhotos);

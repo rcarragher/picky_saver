@@ -35,9 +35,7 @@ export function MonthTile({ year, month, count, onPress, reviewed }: Props) {
         </Text>
         <Text style={[styles.caption, { color: colors.textSecondary }]}>
           {photoText}
-          {reviewed && (
-            <Text style={{ color: colors.keep }}> · ✓ Reviewed</Text>
-          )}
+          {reviewed && <Text style={{ color: colors.keep }}> · ✓ Reviewed</Text>}
         </Text>
       </View>
       <Text style={[styles.chevron, { color: colors.textSecondary }]}>→</Text>

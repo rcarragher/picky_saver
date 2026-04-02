@@ -1,11 +1,5 @@
 import React, { useState } from 'react';
-import {
-  Modal,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import { Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 import { Image } from 'expo-image';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -88,7 +82,12 @@ function ToDeleteContent() {
         >
           <Text style={[styles.backArrow, { color: colors.textPrimary }]}>←</Text>
         </Pressable>
-        <Text style={[styles.headerTitle, { color: colors.textPrimary }]} accessibilityRole="header">To Be Deleted</Text>
+        <Text
+          style={[styles.headerTitle, { color: colors.textPrimary }]}
+          accessibilityRole="header"
+        >
+          To Be Deleted
+        </Text>
         {markedCount > 0 && (
           <View style={[styles.countBadge, { backgroundColor: colors.delete }]}>
             <Text style={styles.countBadgeText}>{markedCount}</Text>

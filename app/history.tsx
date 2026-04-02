@@ -8,12 +8,17 @@ import { PermissionGate } from '../components/PermissionGate';
 import { HistoryTile } from '../components/HistoryTile';
 import { AnimatedPressable } from '../components/AnimatedPressable';
 import { getMonthName } from '../services/photoService';
-import { borderRadius, fontSize, fontWeight, screenMargin, spacing, touchTarget } from '../constants/theme';
+import {
+  borderRadius,
+  fontSize,
+  fontWeight,
+  screenMargin,
+  spacing,
+  touchTarget,
+} from '../constants/theme';
 import type { ReviewRecord } from '../types';
 
-type HistorySection =
-  | { type: 'header'; year: number }
-  | { type: 'record'; data: ReviewRecord };
+type HistorySection = { type: 'header'; year: number } | { type: 'record'; data: ReviewRecord };
 
 function buildSections(records: ReviewRecord[]): HistorySection[] {
   const sections: HistorySection[] = [];
@@ -94,7 +99,7 @@ function HistoryContent() {
     return (
       <View style={[styles.summaryBanner, { backgroundColor: colors.surface }]}>
         <Text style={[styles.summaryTitle, { color: colors.textPrimary }]}>
-          🎯  {totalMonths} {totalMonths === 1 ? 'month' : 'months'} reviewed
+          🎯 {totalMonths} {totalMonths === 1 ? 'month' : 'months'} reviewed
         </Text>
         <Text style={[styles.summaryStats, { color: colors.textSecondary }]}>
           <Text style={{ color: colors.keep }}>{totalKept} kept</Text>
@@ -117,7 +122,10 @@ function HistoryContent() {
           >
             <Text style={[styles.backArrow, { color: colors.textPrimary }]}>←</Text>
           </Pressable>
-          <Text style={[styles.headerTitle, { color: colors.textPrimary }]} accessibilityRole="header">
+          <Text
+            style={[styles.headerTitle, { color: colors.textPrimary }]}
+            accessibilityRole="header"
+          >
             Review History
           </Text>
         </View>
@@ -149,7 +157,10 @@ function HistoryContent() {
         >
           <Text style={[styles.backArrow, { color: colors.textPrimary }]}>←</Text>
         </Pressable>
-        <Text style={[styles.headerTitle, { color: colors.textPrimary }]} accessibilityRole="header">
+        <Text
+          style={[styles.headerTitle, { color: colors.textPrimary }]}
+          accessibilityRole="header"
+        >
           Review History
         </Text>
       </View>
@@ -164,16 +175,15 @@ function HistoryContent() {
         contentContainerStyle={styles.listContent}
         ListHeaderComponent={renderHeader}
         refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-            tintColor={colors.accent}
-          />
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.accent} />
         }
         renderItem={({ item }) => {
           if (item.type === 'header') {
             return (
-              <Text style={[styles.yearHeader, { color: colors.textSecondary }]} accessibilityRole="header">
+              <Text
+                style={[styles.yearHeader, { color: colors.textSecondary }]}
+                accessibilityRole="header"
+              >
                 {item.year}
               </Text>
             );

@@ -38,8 +38,8 @@ describe('photoService', () => {
       const result = await getAvailableMonths();
 
       expect(result).toEqual([
-        { year: 2024, month: 3, count: 1 },  // March = 3 (1-based)
-        { year: 2024, month: 1, count: 2 },  // January = 1 (1-based)
+        { year: 2024, month: 3, count: 1 }, // March = 3 (1-based)
+        { year: 2024, month: 1, count: 2 }, // January = 1 (1-based)
       ]);
     });
 
@@ -94,9 +94,7 @@ describe('photoService', () => {
 
       expect(mockGetAssets).toHaveBeenCalledTimes(2);
       // Second call should include the cursor
-      expect(mockGetAssets).toHaveBeenLastCalledWith(
-        expect.objectContaining({ after: '1' }),
-      );
+      expect(mockGetAssets).toHaveBeenLastCalledWith(expect.objectContaining({ after: '1' }));
       expect(result).toHaveLength(2);
     });
   });

@@ -82,9 +82,7 @@ describe('HomeScreen', () => {
   it('renders title and tagline', () => {
     const { getByText } = render(<HomeScreen />);
     expect(getByText('Picky Saver')).toBeTruthy();
-    expect(
-      getByText('Organize your photos, one swipe at a time'),
-    ).toBeTruthy();
+    expect(getByText('Organize your photos, one swipe at a time')).toBeTruthy();
   });
 
   it('shows both buttons when there are photos and marked deletions', () => {
@@ -162,7 +160,16 @@ describe('HomeScreen', () => {
 
   it('shows Review History button when records exist', () => {
     mockUseReviewHistory.mockReturnValue({
-      records: [{ year: 2024, month: 3, kept: 18, deleted: 7, total: 25, reviewedAt: '2024-03-15T10:00:00.000Z' }],
+      records: [
+        {
+          year: 2024,
+          month: 3,
+          kept: 18,
+          deleted: 7,
+          total: 25,
+          reviewedAt: '2024-03-15T10:00:00.000Z',
+        },
+      ],
       isLoading: false,
       refresh: jest.fn(),
       saveReview: jest.fn(),
@@ -181,7 +188,16 @@ describe('HomeScreen', () => {
 
   it('navigates to /history on Review History press', () => {
     mockUseReviewHistory.mockReturnValue({
-      records: [{ year: 2024, month: 3, kept: 18, deleted: 7, total: 25, reviewedAt: '2024-03-15T10:00:00.000Z' }],
+      records: [
+        {
+          year: 2024,
+          month: 3,
+          kept: 18,
+          deleted: 7,
+          total: 25,
+          reviewedAt: '2024-03-15T10:00:00.000Z',
+        },
+      ],
       isLoading: false,
       refresh: jest.fn(),
       saveReview: jest.fn(),

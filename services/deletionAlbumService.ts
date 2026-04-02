@@ -106,13 +106,9 @@ export async function getMarkedCount(): Promise<number> {
  * Permanently delete the given assets. The OS will show a confirmation dialog.
  * Returns true if the deletion was successful.
  */
-export async function permanentlyDelete(
-  assets: MediaLibrary.Asset[],
-): Promise<boolean> {
+export async function permanentlyDelete(assets: MediaLibrary.Asset[]): Promise<boolean> {
   if (assets.length === 0) return true;
-  const result = await MediaLibrary.deleteAssetsAsync(
-    assets.map((a) => a.id),
-  );
+  const result = await MediaLibrary.deleteAssetsAsync(assets.map((a) => a.id));
   return result;
 }
 

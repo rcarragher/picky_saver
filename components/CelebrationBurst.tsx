@@ -28,21 +28,15 @@ function EmojiParticle({ emoji, index }: { emoji: string; index: number }) {
     translateX.value = withDelay(index * 50, withTiming(targetX, { duration: 1200 }));
     translateY.value = withDelay(index * 50, withTiming(targetY, { duration: 1200 }));
     opacity.value = withDelay(index * 50, withTiming(0, { duration: 1500 }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const animatedStyle = useAnimatedStyle(() => ({
-    transform: [
-      { translateX: translateX.value },
-      { translateY: translateY.value },
-    ],
+    transform: [{ translateX: translateX.value }, { translateY: translateY.value }],
     opacity: opacity.value,
   }));
 
-  return (
-    <Animated.Text style={[styles.emoji, animatedStyle]}>
-      {emoji}
-    </Animated.Text>
-  );
+  return <Animated.Text style={[styles.emoji, animatedStyle]}>{emoji}</Animated.Text>;
 }
 
 export function CelebrationBurst() {
@@ -51,6 +45,7 @@ export function CelebrationBurst() {
 
   useEffect(() => {
     checkScale.value = withSpring(1, { damping: 8, stiffness: 120 });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const checkAnimatedStyle = useAnimatedStyle(() => ({

@@ -63,9 +63,7 @@ describe('HistoryTile', () => {
 
   it('Clear button calls onClear with correct year and month', () => {
     const onClear = jest.fn();
-    const { getByLabelText } = render(
-      <HistoryTile {...defaultProps} onClear={onClear} />,
-    );
+    const { getByLabelText } = render(<HistoryTile {...defaultProps} onClear={onClear} />);
     fireEvent.press(getByLabelText('Clear'));
     expect(onClear).toHaveBeenCalledWith(2026, 3);
   });

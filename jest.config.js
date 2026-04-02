@@ -9,8 +9,5 @@ module.exports = {
     '@react-native-async-storage/async-storage':
       '<rootDir>/node_modules/@react-native-async-storage/async-storage/jest/async-storage-mock.js',
   },
-  testMatch: [
-    '**/__tests__/**/*.{ts,tsx}',
-    '**/*.{test,spec}.{ts,tsx}',
-  ],
+  testMatch: ['**/__tests__/**/*.{ts,tsx}', '**/*.{test,spec}.{ts,tsx}'],
 };

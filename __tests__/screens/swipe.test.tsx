@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent, act } from '@testing-library/react-native';
+import { render, fireEvent } from '@testing-library/react-native';
 import SwipeScreen from '../../app/swipe/[year]/[month]';
 import { useMonthPhotos } from '../../hooks/usePhotos';
 
@@ -178,9 +178,7 @@ describe('SwipeScreen', () => {
     fireEvent.press(getByLabelText('Keep this photo'));
     fireEvent.press(getByLabelText('Delete this photo'));
 
-    expect(mockReplace).toHaveBeenCalledWith(
-      '/summary?total=2&kept=1&deleted=1&year=2024&month=3',
-    );
+    expect(mockReplace).toHaveBeenCalledWith('/summary?total=2&kept=1&deleted=1&year=2024&month=3');
   });
 
   it('navigates back when back arrow is pressed', () => {

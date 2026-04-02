@@ -146,11 +146,7 @@ describe('useReviewHistory', () => {
       total: 12,
       reviewedAt: '2025-12-31T23:59:00.000Z',
     };
-    mockService.getReviewRecords.mockResolvedValue([
-      fakeRecord1,
-      fakeRecord2,
-      newRecord,
-    ]);
+    mockService.getReviewRecords.mockResolvedValue([fakeRecord1, fakeRecord2, newRecord]);
 
     await act(async () => {
       await result.current.refresh();

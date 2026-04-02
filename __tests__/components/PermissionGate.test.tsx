@@ -1,9 +1,8 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
-import { Linking } from 'react-native';
+import { Linking, Text } from 'react-native';
 import { PermissionGate } from '../../components/PermissionGate';
 import { usePermissions } from '../../hooks/usePermissions';
-import { Text } from 'react-native';
 
 jest.mock('../../hooks/usePermissions');
 jest.mock('../../hooks/useTheme', () => ({
@@ -22,7 +21,10 @@ jest.mock('../../hooks/useTheme', () => ({
 const mockUsePermissions = usePermissions as jest.MockedFunction<typeof usePermissions>;
 const mockRequestPermission = jest.fn();
 
-function setPermissionState(status: 'granted' | 'denied' | 'undetermined' | 'limited', isLoading = false) {
+function setPermissionState(
+  status: 'granted' | 'denied' | 'undetermined' | 'limited',
+  isLoading = false,
+) {
   mockUsePermissions.mockReturnValue({
     status,
     requestPermission: mockRequestPermission,

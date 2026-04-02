@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dimensions, FlatList, Pressable, StyleSheet, View } from 'react-native';
+import { Dimensions, FlatList, Pressable, StyleSheet } from 'react-native';
 import { Image } from 'expo-image';
 import * as MediaLibrary from 'expo-media-library';
 import { spacing } from '../constants/theme';

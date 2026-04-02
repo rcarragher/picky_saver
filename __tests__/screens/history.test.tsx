@@ -157,9 +157,7 @@ describe('HistoryScreen', () => {
 
     // Simulate pressing the destructive "Clear" button
     const alertCall = (Alert.alert as jest.Mock).mock.calls[0];
-    const destructiveButton = alertCall[2].find(
-      (b: any) => b.style === 'destructive',
-    );
+    const destructiveButton = alertCall[2].find((b: any) => b.style === 'destructive');
     destructiveButton.onPress();
     expect(mockClearReview).toHaveBeenCalledWith(2026, 3);
   });

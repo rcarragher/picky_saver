@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../hooks/useTheme';
@@ -45,6 +45,7 @@ export default function SummaryScreen() {
       deleted,
       total,
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -58,7 +59,9 @@ export default function SummaryScreen() {
       <CelebrationBurst />
 
       {/* Title */}
-      <Text style={[styles.title, { color: colors.textPrimary }]} accessibilityRole="header">Month Complete!</Text>
+      <Text style={[styles.title, { color: colors.textPrimary }]} accessibilityRole="header">
+        Month Complete!
+      </Text>
 
       {/* Subtitle */}
       <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
@@ -101,9 +104,7 @@ export default function SummaryScreen() {
         accessibilityLabel="Back to home"
         accessibilityRole="button"
       >
-        <Text style={[styles.homeButtonText, { color: colors.textSecondary }]}>
-          Back to Home
-        </Text>
+        <Text style={[styles.homeButtonText, { color: colors.textSecondary }]}>Back to Home</Text>
       </AnimatedPressable>
 
       <View style={{ height: insets.bottom + spacing.md }} />

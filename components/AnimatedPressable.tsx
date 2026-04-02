@@ -9,7 +9,13 @@ type AnimatedPressableProps = PressableProps & {
  * A Pressable wrapper that adds a subtle scale + opacity press animation.
  * Scale 0.97, opacity 0.85, 100ms duration.
  */
-export function AnimatedPressable({ style, onPressIn, onPressOut, children, ...rest }: AnimatedPressableProps) {
+export function AnimatedPressable({
+  style,
+  onPressIn,
+  onPressOut,
+  children,
+  ...rest
+}: AnimatedPressableProps) {
   const scale = useRef(new Animated.Value(1)).current;
   const opacity = useRef(new Animated.Value(1)).current;
 
@@ -37,12 +43,7 @@ export function AnimatedPressable({ style, onPressIn, onPressOut, children, ...r
 
   return (
     <Animated.View style={[{ transform: [{ scale }], opacity }]}>
-      <Pressable
-        {...rest}
-        style={style}
-        onPressIn={handlePressIn}
-        onPressOut={handlePressOut}
-      >
+      <Pressable {...rest} style={style} onPressIn={handlePressIn} onPressOut={handlePressOut}>
         {children}
       </Pressable>
     </Animated.View>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dimensions, StyleSheet, View } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
   runOnJS,
@@ -99,15 +99,10 @@ export function PhotoCard({ asset, onSwipeLeft, onSwipeRight }: Props) {
     .withTestId('photo-pan');
 
   const cardStyle = useAnimatedStyle(() => {
-    const rotation = reduceMotion
-      ? 0
-      : (translateX.value / SCREEN_WIDTH) * MAX_ROTATION;
+    const rotation = reduceMotion ? 0 : (translateX.value / SCREEN_WIDTH) * MAX_ROTATION;
 
     return {
-      transform: [
-        { translateX: translateX.value },
-        { rotate: `${rotation}deg` },
-      ],
+      transform: [{ translateX: translateX.value }, { rotate: `${rotation}deg` }],
     };
   });
 

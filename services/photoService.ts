@@ -4,8 +4,18 @@ import type { MonthBatch } from '../types';
 const PAGE_SIZE = 500;
 
 const MONTH_NAMES = [
-  'January', 'February', 'March', 'April', 'May', 'June',
-  'July', 'August', 'September', 'October', 'November', 'December',
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
 ];
 
 /** Returns the display name for a 1-based month number. */

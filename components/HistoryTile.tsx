@@ -24,9 +24,7 @@ export function HistoryTile({ record, onReviewAgain, onClear }: HistoryTileProps
       <Text style={[styles.title, { color: colors.textPrimary }]}>
         {getMonthName(record.month)}
       </Text>
-      <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
-        Reviewed {reviewDate}
-      </Text>
+      <Text style={[styles.subtitle, { color: colors.textSecondary }]}>Reviewed {reviewDate}</Text>
       <Text style={[styles.stats, { color: colors.textSecondary }]}>
         <Text style={{ color: colors.keep }}>{record.kept} kept</Text>
         {' · '}
@@ -39,9 +37,7 @@ export function HistoryTile({ record, onReviewAgain, onClear }: HistoryTileProps
           accessibilityRole="button"
           accessibilityLabel="Review Again"
         >
-          <Text style={[styles.reviewAgainText, { color: colors.textPrimary }]}>
-            Review Again
-          </Text>
+          <Text style={[styles.reviewAgainText, { color: colors.textPrimary }]}>Review Again</Text>
         </AnimatedPressable>
         <AnimatedPressable
           style={styles.clearButton}
@@ -49,9 +45,7 @@ export function HistoryTile({ record, onReviewAgain, onClear }: HistoryTileProps
           accessibilityRole="button"
           accessibilityLabel="Clear"
         >
-          <Text style={[styles.clearText, { color: colors.textSecondary }]}>
-            Clear
-          </Text>
+          <Text style={[styles.clearText, { color: colors.textSecondary }]}>Clear</Text>
         </AnimatedPressable>
       </View>
     </View>

@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import React, { useCallback } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 import { useFocusEffect, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../hooks/useTheme';
@@ -52,10 +52,7 @@ export default function HomeScreen() {
       >
         <View style={styles.content}>
           <Text style={[styles.icon, { color: colors.accent }]}>📷</Text>
-          <Text
-            style={[styles.title, { color: colors.textPrimary }]}
-            accessibilityRole="header"
-          >
+          <Text style={[styles.title, { color: colors.textPrimary }]} accessibilityRole="header">
             Picky Saver
           </Text>
           <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
@@ -86,20 +83,12 @@ export default function HomeScreen() {
 
               {markedCount > 0 && (
                 <AnimatedPressable
-                  style={[
-                    styles.secondaryButton,
-                    { backgroundColor: colors.surface },
-                  ]}
+                  style={[styles.secondaryButton, { backgroundColor: colors.surface }]}
                   onPress={() => router.push('/to-delete')}
                   accessibilityRole="button"
                   accessibilityLabel={`Review ${markedCount} photos marked for deletion`}
                 >
-                  <Text
-                    style={[
-                      styles.secondaryButtonText,
-                      { color: colors.textPrimary },
-                    ]}
-                  >
+                  <Text style={[styles.secondaryButtonText, { color: colors.textPrimary }]}>
                     To Be Deleted ({markedCount} photos)
                   </Text>
                 </AnimatedPressable>

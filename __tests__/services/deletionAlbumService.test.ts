@@ -22,7 +22,9 @@ jest.mock('expo-media-library');
 const mockGetAlbum = getAlbumAsync as jest.MockedFunction<typeof getAlbumAsync>;
 const mockCreateAlbum = createAlbumAsync as jest.MockedFunction<typeof createAlbumAsync>;
 const mockAddAssets = addAssetsToAlbumAsync as jest.MockedFunction<typeof addAssetsToAlbumAsync>;
-const mockRemoveAssets = removeAssetsFromAlbumAsync as jest.MockedFunction<typeof removeAssetsFromAlbumAsync>;
+const mockRemoveAssets = removeAssetsFromAlbumAsync as jest.MockedFunction<
+  typeof removeAssetsFromAlbumAsync
+>;
 const mockDeleteAssets = deleteAssetsAsync as jest.MockedFunction<typeof deleteAssetsAsync>;
 const mockGetAssets = getAssetsAsync as jest.MockedFunction<typeof getAssetsAsync>;
 

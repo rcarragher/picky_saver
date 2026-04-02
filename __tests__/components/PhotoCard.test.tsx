@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react-native';
+import { render } from '@testing-library/react-native';
 import { PhotoCard } from '../../components/PhotoCard';
 
 jest.mock('../../hooks/useTheme', () => ({
@@ -56,26 +56,20 @@ describe('PhotoCard', () => {
 
   it('accepts onSwipeLeft callback', () => {
     const onSwipeLeft = jest.fn();
-    const { getByTestId } = render(
-      <PhotoCard {...defaultProps} onSwipeLeft={onSwipeLeft} />,
-    );
+    const { getByTestId } = render(<PhotoCard {...defaultProps} onSwipeLeft={onSwipeLeft} />);
     // Component renders with gesture detector
     expect(getByTestId('photo-card')).toBeTruthy();
   });
 
   it('accepts onSwipeRight callback', () => {
     const onSwipeRight = jest.fn();
-    const { getByTestId } = render(
-      <PhotoCard {...defaultProps} onSwipeRight={onSwipeRight} />,
-    );
+    const { getByTestId } = render(<PhotoCard {...defaultProps} onSwipeRight={onSwipeRight} />);
     expect(getByTestId('photo-card')).toBeTruthy();
   });
 
   it('uses default aspect ratio when dimensions are 0', () => {
     const zeroAsset = { ...mockAsset, width: 0, height: 0 };
-    const { getByTestId } = render(
-      <PhotoCard {...defaultProps} asset={zeroAsset} />,
-    );
+    const { getByTestId } = render(<PhotoCard {...defaultProps} asset={zeroAsset} />);
     const image = getByTestId('photo-image');
     const flatStyle = Array.isArray(image.props.style)
       ? Object.assign({}, ...image.props.style)

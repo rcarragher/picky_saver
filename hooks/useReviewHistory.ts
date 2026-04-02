@@ -1,10 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { ReviewRecord } from '../types';
-import {
-  getReviewRecords,
-  saveReviewRecord,
-  clearReviewRecord,
-} from '../services/reviewService';
+import { getReviewRecords, saveReviewRecord, clearReviewRecord } from '../services/reviewService';
 
 export function useReviewHistory() {
   const [records, setRecords] = useState<ReviewRecord[]>([]);
@@ -14,10 +10,7 @@ export function useReviewHistory() {
     setIsLoading(true);
     try {
       const all = await getReviewRecords();
-      all.sort(
-        (a, b) =>
-          new Date(b.reviewedAt).getTime() - new Date(a.reviewedAt).getTime(),
-      );
+      all.sort((a, b) => new Date(b.reviewedAt).getTime() - new Date(a.reviewedAt).getTime());
       setRecords(all);
     } catch {
       // Silently handle — storage may be empty or corrupt

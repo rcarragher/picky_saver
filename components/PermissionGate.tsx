@@ -1,9 +1,16 @@
 import React from 'react';
 import { ActivityIndicator, Linking, Pressable, StyleSheet, Text, View } from 'react-native';
-import { usePermissions, type PermissionStatus } from '../hooks/usePermissions';
+import { usePermissions } from '../hooks/usePermissions';
 import { useTheme } from '../hooks/useTheme';
 import { AnimatedPressable } from './AnimatedPressable';
-import { borderRadius, fontSize, fontWeight, screenMargin, spacing, touchTarget } from '../constants/theme';
+import {
+  borderRadius,
+  fontSize,
+  fontWeight,
+  screenMargin,
+  spacing,
+  touchTarget,
+} from '../constants/theme';
 
 type Props = {
   children: React.ReactNode;
@@ -51,7 +58,8 @@ export function PermissionGate({ children }: Props) {
       <View style={[styles.container, { backgroundColor: colors.background }]}>
         <Text style={[styles.title, { color: colors.textPrimary }]}>Access Your Photos</Text>
         <Text style={[styles.body, { color: colors.textSecondary }]}>
-          Picky Saver needs access to your photo library to help you organize and clean up your photos.
+          Picky Saver needs access to your photo library to help you organize and clean up your
+          photos.
         </Text>
         <AnimatedPressable
           style={[styles.button, { backgroundColor: colors.accent }]}

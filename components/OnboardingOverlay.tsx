@@ -46,9 +46,7 @@ export function OnboardingOverlay({ onDismiss }: Props) {
         </View>
 
         {/* Caption */}
-        <Text style={[styles.caption, { color: colors.textSecondary }]}>
-          You can undo anytime
-        </Text>
+        <Text style={[styles.caption, { color: colors.textSecondary }]}>You can undo anytime</Text>
 
         {/* Got it button */}
         <Pressable

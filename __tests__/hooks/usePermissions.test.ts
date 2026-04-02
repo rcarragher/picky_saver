@@ -5,7 +5,9 @@ import { usePermissions } from '../../hooks/usePermissions';
 jest.mock('expo-media-library');
 
 const mockGetPermissions = getPermissionsAsync as jest.MockedFunction<typeof getPermissionsAsync>;
-const mockRequestPermissions = requestPermissionsAsync as jest.MockedFunction<typeof requestPermissionsAsync>;
+const mockRequestPermissions = requestPermissionsAsync as jest.MockedFunction<
+  typeof requestPermissionsAsync
+>;
 
 type MockPermissionResponse = {
   status: string;
@@ -37,9 +39,7 @@ describe('usePermissions', () => {
   });
 
   it('returns granted when permissions are granted', async () => {
-    mockGetPermissions.mockResolvedValue(
-      makeResponse({ granted: true, status: 'granted' }),
-    );
+    mockGetPermissions.mockResolvedValue(makeResponse({ granted: true, status: 'granted' }));
     const { result } = renderHook(() => usePermissions());
     await waitFor(() => expect(result.current.isLoading).toBe(false));
     expect(result.current.status).toBe('granted');
@@ -55,9 +55,7 @@ describe('usePermissions', () => {
   });
 
   it('returns undetermined when not yet asked', async () => {
-    mockGetPermissions.mockResolvedValue(
-      makeResponse({ granted: false, canAskAgain: true }),
-    );
+    mockGetPermissions.mockResolvedValue(makeResponse({ granted: false, canAskAgain: true }));
     const { result } = renderHook(() => usePermissions());
     await waitFor(() => expect(result.current.isLoading).toBe(false));
     expect(result.current.status).toBe('undetermined');
@@ -74,9 +72,7 @@ describe('usePermissions', () => {
 
   it('calls requestPermissionsAsync and updates status', async () => {
     mockGetPermissions.mockResolvedValue(makeResponse());
-    mockRequestPermissions.mockResolvedValue(
-      makeResponse({ granted: true, status: 'granted' }),
-    );
+    mockRequestPermissions.mockResolvedValue(makeResponse({ granted: true, status: 'granted' }));
 
     const { result } = renderHook(() => usePermissions());
     await waitFor(() => expect(result.current.isLoading).toBe(false));

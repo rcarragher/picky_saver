@@ -88,7 +88,6 @@ export default function SwipeScreen() {
 
   const currentPhoto = photos[currentIndex];
   const isComplete = currentIndex >= photos.length && photos.length > 0;
-  const total = kept + deleted;
 
   const handleSwipeRight = useCallback(() => {
     setHistory((prev) => [...prev, { index: currentIndex, action: 'keep' }]);
@@ -138,18 +137,20 @@ export default function SwipeScreen() {
 
   if (!isValidParams) {
     return (
-      <View style={[styles.container, { backgroundColor: colors.background, paddingTop: insets.top }]}>
+      <View
+        style={[styles.container, { backgroundColor: colors.background, paddingTop: insets.top }]}
+      >
         <Text style={[styles.errorText, { color: colors.textPrimary }]}>Invalid parameters</Text>
       </View>
     );
   }
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background, paddingTop: insets.top }]}>
+    <View
+      style={[styles.container, { backgroundColor: colors.background, paddingTop: insets.top }]}
+    >
       {/* Onboarding overlay */}
-      {showOnboarding && (
-        <OnboardingOverlay onDismiss={() => setShowOnboarding(false)} />
-      )}
+      {showOnboarding && <OnboardingOverlay onDismiss={() => setShowOnboarding(false)} />}
 
       {/* Header */}
       <View style={styles.header}>
@@ -162,7 +163,11 @@ export default function SwipeScreen() {
         >
           <Text style={[styles.backArrow, { color: colors.textPrimary }]}>←</Text>
         </Pressable>
-        <Text style={[styles.headerTitle, { color: colors.textPrimary }]} numberOfLines={1} accessibilityRole="header">
+        <Text
+          style={[styles.headerTitle, { color: colors.textPrimary }]}
+          numberOfLines={1}
+          accessibilityRole="header"
+        >
           {headerTitle}
         </Text>
         {!isLoading && photos.length > 0 && (
@@ -179,16 +184,12 @@ export default function SwipeScreen() {
             <ActivityIndicator size="large" color={colors.accent} />
           </View>
         ) : error ? (
-          <Text style={[styles.errorText, { color: colors.delete }]}>
-            Failed to load photos
-          </Text>
+          <Text style={[styles.errorText, { color: colors.delete }]}>Failed to load photos</Text>
         ) : !currentPhoto && photos.length === 0 ? (
           <View style={styles.emptyState}>
-            <Text style={[styles.emptyTitle, { color: colors.textPrimary }]}>
-              No photos found
-            </Text>
+            <Text style={[styles.emptyTitle, { color: colors.textPrimary }]}>No photos found</Text>
             <Text style={[styles.emptyBody, { color: colors.textSecondary }]}>
-              This month doesn't have any photos to organize.
+              This month doesn&apos;t have any photos to organize.
             </Text>
             <Pressable
               onPress={() => router.back()}
@@ -213,9 +214,7 @@ export default function SwipeScreen() {
 
       {/* Hint text */}
       {showHint && !isLoading && currentPhoto && (
-        <Text style={[styles.hintText, { color: colors.textSecondary }]}>
-          ← DELETE    KEEP →
-        </Text>
+        <Text style={[styles.hintText, { color: colors.textSecondary }]}>← DELETE KEEP →</Text>
       )}
 
       {/* Bottom controls */}

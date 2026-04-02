@@ -2,7 +2,7 @@
 
 > **Design document:** [design.md](./design.md)
 > **Status:** In progress
-> **Current phase:** Phase 2
+> **Current phase:** Phase 4
 
 ---
 
@@ -133,15 +133,15 @@ This plan adds ESLint, Prettier, Husky pre-commit hooks, a GitHub Actions CI pip
 
 ### Tasks
 
-- [ ] **3.1** Run Prettier auto-fix
+- [x] **3.1** Run Prettier auto-fix
   - Run: `npm run format`
   - This reformats all source files (whitespace, quotes, trailing commas). No logic changes.
 
-- [ ] **3.2** Run ESLint auto-fix
+- [x] **3.2** Run ESLint auto-fix
   - Run: `npm run lint:fix`
   - This fixes auto-fixable lint violations (unused imports, formatting rules, etc.).
 
-- [ ] **3.3** Manually fix remaining lint errors
+- [x] **3.3** Manually fix remaining lint errors
   - Run: `npm run lint`
   - If any errors remain that couldn't be auto-fixed, fix them manually. Common issues:
     - Unused variables → remove or prefix with `_`
@@ -149,20 +149,29 @@ This plan adds ESLint, Prettier, Husky pre-commit hooks, a GitHub Actions CI pip
     - Any-typed values → add proper types
   - **Important:** Only fix lint errors. Do NOT refactor, rename, or change behavior.
 
-- [ ] **3.4** Verify clean lint and format
+- [x] **3.4** Verify clean lint and format
   - Run: `npm run lint && npm run format:check`
   - Both must exit 0.
 
-- [ ] **3.5** Verify type-check passes
+- [x] **3.5** Verify type-check passes
   - Run: `npm run type-check`
   - Must exit 0. If there are type errors, fix them (these are pre-existing, not caused by this work).
 
-- [ ] **3.6** Build + test gate: `npm run lint && npm run format:check && npm run type-check && npm test`
+- [x] **3.6** Build + test gate: `npm run lint && npm run format:check && npm run type-check && npm test`
   - All four must pass. This is the first phase where the full quality gate runs.
 
 ### Observations
 
-<!-- Agent: write notes here during execution -->
+- **Prettier auto-fix:** Reformatted ~40 source files (whitespace, quotes, trailing commas). No logic changes.
+- **ESLint auto-fix:** Fixed some auto-fixable issues, but 19 problems remained (4 errors, 15 warnings).
+- **Manual fixes applied:**
+  - 4 `react/display-name` errors in mocks — converted arrow functions to named functions in `forwardRef` calls (`__mocks__/expo-image.ts`, `__mocks__/react-native-reanimated.ts`).
+  - 11 `@typescript-eslint/no-unused-vars` warnings — removed unused imports from `app/index.tsx` (`useEffect`, `useState`, `Pressable`), `app/summary.tsx` (`Pressable`), `components/PermissionGate.tsx` (`PermissionStatus`), `components/PhotoCard.tsx` (`View`), `components/PhotoGrid.tsx` (`View`), `components/SwipeOverlay.tsx` (`View`), `__tests__/components/PhotoCard.test.tsx` (`fireEvent`), `__tests__/screens/swipe.test.tsx` (`act`), `__tests__/screens/toDelete.test.tsx` (`waitFor`). Removed unused `total` variable from `app/swipe/[year]/[month].tsx`.
+  - 1 `react/no-unescaped-entities` error — escaped apostrophe in `app/swipe/[year]/[month].tsx` (`doesn't` → `doesn&apos;t`).
+  - 3 `react-hooks/exhaustive-deps` warnings — added `eslint-disable-next-line` comments for intentional mount-only effects in `app/summary.tsx` and `components/CelebrationBurst.tsx` (2 instances).
+- **Type-check fix:** Installed `@types/jest` (devDependency) to resolve pre-existing `TS2708: Cannot use namespace 'jest' as a value` and `TS2582: Cannot find name 'describe'` errors across all test and mock files. Required `--legacy-peer-deps` (same React 19 peer dep situation as earlier phases).
+- **Full gate passes:** `npm run lint`, `npm run format:check`, `npm run type-check`, and `npm test` (155 tests, 20 suites) all exit 0.
+- Pre-existing `act(...)` console warnings in swipe tests remain — these are test warnings (not failures) and not caused by this phase's changes.
 
 ---
 

@@ -8,18 +8,18 @@ import { useReviewHistory } from '../hooks/useReviewHistory';
 import { useAppStateRefresh } from '../hooks/useAppStateRefresh';
 import { PermissionGate } from '../components/PermissionGate';
 import { MonthTile } from '../components/MonthTile';
-import { borderRadius, fontSize, fontWeight, screenMargin, spacing, touchTarget } from '../constants/theme';
+import {
+  borderRadius,
+  fontSize,
+  fontWeight,
+  screenMargin,
+  spacing,
+  touchTarget,
+} from '../constants/theme';
 import type { MonthBatch } from '../types';
 
 function ShimmerTile({ colors }: { colors: ReturnType<typeof useTheme> }) {
-  return (
-    <View
-      style={[
-        styles.shimmerTile,
-        { backgroundColor: colors.surface },
-      ]}
-    />
-  );
+  return <View style={[styles.shimmerTile, { backgroundColor: colors.surface }]} />;
 }
 
 type YearSection = { type: 'header'; year: number } | { type: 'month'; data: MonthBatch };
@@ -78,7 +78,12 @@ function DatePickerContent() {
         >
           <Text style={[styles.backArrow, { color: colors.textPrimary }]}>←</Text>
         </Pressable>
-        <Text style={[styles.headerTitle, { color: colors.textPrimary }]} accessibilityRole="header">Pick a Month</Text>
+        <Text
+          style={[styles.headerTitle, { color: colors.textPrimary }]}
+          accessibilityRole="header"
+        >
+          Pick a Month
+        </Text>
       </View>
 
       {isLoading ? (
@@ -91,7 +96,9 @@ function DatePickerContent() {
         <FlatList
           data={sections}
           keyExtractor={(item, index) =>
-            item.type === 'header' ? `header-${item.year}` : `month-${item.data.year}-${item.data.month}`
+            item.type === 'header'
+              ? `header-${item.year}`
+              : `month-${item.data.year}-${item.data.month}`
           }
           contentContainerStyle={styles.listContent}
           refreshControl={
@@ -104,7 +111,10 @@ function DatePickerContent() {
           renderItem={({ item }) => {
             if (item.type === 'header') {
               return (
-                <Text style={[styles.yearHeader, { color: colors.textSecondary }]} accessibilityRole="header">
+                <Text
+                  style={[styles.yearHeader, { color: colors.textSecondary }]}
+                  accessibilityRole="header"
+                >
                   {item.year}
                 </Text>
               );
